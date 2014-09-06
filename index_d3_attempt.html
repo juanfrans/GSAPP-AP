@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<!-- This is a comment in html -->
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>GSAPP-AP</title>
+		<link rel="stylesheet" type="text/css" href="style.css">
+		<script type="text/javascript" src="d3/d3.v3.js"></script>
+		<style>
+			.degreesChart div{
+				background-color: steelblue;
+				text-align: right;
+				padding: 3px;
+				margin: 1px;
+				color: white;
+			}
+		</style>
+	</head>
+
+	<body>
+		This is the project page for the GSAPP Alumni Project, a work in progress by Juan Francisco Saldarriaga and Steven Sanchez.<br>
+		All rights reserved.<br>
+		<h1>
+			GSAPP Alumni Project
+		</h1>
+
+		<div id="degreesChart"></div>
+		<script type="text/javascript">
+
+			var data = d3.csv.parse("data/Degrees.csv");
+			var barValue = function(d) { return parseFloat(d['Total']);};
+			var barLabel = function(d) { return d['Degree'];};
+
+			var x = d3.scale.linear()
+    		    .domain([0, d3.max(data, barValue)])
+    			.range([0, 420]);
+
+			d3.select(".degreesChart")
+			  .selectAll("div")
+			  .data(data)
+			  .enter().append("div")
+			  .style("width", function(d){ return barValue * 10 + "px"; })
+			  .text(function(d) { return barLabel; });
+		</script>
+
+
+	</body>
+
+</htlm>
