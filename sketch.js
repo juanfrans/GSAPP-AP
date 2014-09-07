@@ -1,4 +1,6 @@
 var column = 1;
+var nodes; //Declare the object
+var nodeNetwork = [];
 
 function preload(){
 	result = loadTable('data/Degrees.csv');
@@ -6,11 +8,35 @@ function preload(){
 
 function setup() {
 	createCanvas(640, 480);
+	for(var i = 0; i<2000; i++){
+		nodes = new node(random(width), random(height), 5);
+		nodeNetwork[i] = nodes;
+	}
+	print(nodeNetwork);
 	//print(result);
+}
+
+//node Class
+function node(x, y, diameter){
+	this.x = x;
+	this.y = y;
+	this.diameter = diameter;
+}
+
+node.prototype.display = function(){
+	ellipse(this.x, this.y, this.diameter, this.diameter);
 }
 
 function draw() {
 	background(51,51,51);
+	fill(200);
+	for (var i = 0; i<200; i++){
+		noStroke();
+		nodeNetwork[floor(random(0, nodeNetwork.length))].display();
+		strokeWeight(0.5);
+		stroke(150);
+		line(nodeNetwork[floor(random(0, nodeNetwork.length))].x, nodeNetwork[floor(random(0, nodeNetwork.length))].y, nodeNetwork[floor(random(0, nodeNetwork.length))].x, nodeNetwork[floor(random(0, nodeNetwork.length))].y)
+	}
 	//background(0);
 	barChart();
 }
@@ -48,6 +74,7 @@ function barChart(){
 	var spaceBetween = 25;
 	var maxValue = 0;
 	var totalYear = 0;
+	var maxLength = 400;
 	for (var i=1; i<result.getRowCount(); i++){
 		maxValue = max(maxValue, result.getColumn(column)[i]);
 		totalYear = totalYear + parseInt(result.getColumn(column)[i]);
@@ -55,13 +82,12 @@ function barChart(){
 	textAlign(LEFT);
 	textSize(8);
 	for(var i=1; i<result.getRowCount(); i++){
-		stroke(0);
-		strokeWeight(1);
+		noStroke();
 		fill(255);
-		rect(0, startY+spaceBetween*i, map(result.getColumn(column)[i], 0, maxValue, 0, 300), 10);
+		rect(0, startY+spaceBetween*i, map(result.getColumn(column)[i], 0, maxValue, 0, maxLength), 10);
 		noStroke();
 		fill(200);
-		text((round(result.getColumn(column)[i]/totalYear*100)).toString()+"%", 3+map(result.getColumn(column)[i], 0, maxValue, 0, 300), startY+spaceBetween*i+9);
+		text((round(result.getColumn(column)[i]/totalYear*100)).toString()+"%", 3+map(result.getColumn(column)[i], 0, maxValue, 0, maxLength), startY+spaceBetween*i+9);
 		text(result.getColumn(0)[i], 0, startY+spaceBetween*i-2);
 	}
 }
