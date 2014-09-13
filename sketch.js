@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-//ok this is the new comment
-=======
-//hello heellllooo
->>>>>>> juan_test
 var column = 1;
 var nodes; //Declare the object
 var nodeNetwork = [];
