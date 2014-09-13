@@ -1,3 +1,4 @@
+// this is just a comment to see if the changes are working or not
 var column = 1;
 var nodes; //Declare the object
 var nodeNetwork = [];
