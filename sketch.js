@@ -1,4 +1,3 @@
-var test = 1;
 var column = 1;
 var nodes; //Declare the object
 var nodeNetwork = [];
