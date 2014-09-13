@@ -1,3 +1,5 @@
+var test2 = 0;
+var test1 = 0;
 var column = 1;
 var nodes; //Declare the object
 var nodeNetwork = [];
