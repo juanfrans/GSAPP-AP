@@ -2,9 +2,11 @@ var column = 1;
 var nodes; //Declare the object
 var nodeNetwork = [];
 var startX = 200;
+var graph = 1;
 
 function preload(){
 	result = loadTable('data/Degrees.csv');
+	totalGraduates = loadTable('data/Total_Graduates.csv');
 }
 
 function setup() {
@@ -15,8 +17,6 @@ function setup() {
 		nodes = new node(random(width), random(height), 5);
 		nodeNetwork[i] = nodes;
 	}
-	print(nodeNetwork);
-	//print(result);
 }
 
 //node Class
@@ -42,13 +42,30 @@ function draw() {
 	strokeWeight(1);
 	line(0, 45, 180, 45);
 	line(0, 2, 180, 2);
-	line(startX, 2, 675, 2);
+	line(200, 2, 700, 2);
 
 	//Description
 	noStroke();
 	textSize(12);
 	fill(0, 0, 60);
 	text("Here is where we describe what's happening with this data, how many people responded, what percentage it is of the whole GSAPP, etc, etc, etc. Just a brief description to explain this dashboard and make an interesting point...", 0, 45, 175, 500);
+	
+	//Left hand side toggles
+	fill(0, 0, 40);
+	noStroke();
+	rect(0, 200+30*graph, 175, 20);
+	noFill();
+	stroke(200);
+	strokeWeight(1);
+	for(var i=0; i<4; i++){
+		rect(0, 200+30*i, 175, 20);
+	}
+	fill(0, 0, 60);
+	noStroke();
+	textAlign(CENTER);
+	text("Respondents per Degree", 87, 215);
+	text("Proportion per Class", 87, 245);
+
 	/*for (var i = 0; i<200; i++){
 		noStroke();
 		nodeNetwork[floor(random(0, nodeNetwork.length))].display();
@@ -57,11 +74,56 @@ function draw() {
 		line(nodeNetwork[floor(random(0, nodeNetwork.length))].x, nodeNetwork[floor(random(0, nodeNetwork.length))].y, nodeNetwork[floor(random(0, nodeNetwork.length))].x, nodeNetwork[floor(random(0, nodeNetwork.length))].y)
 	}*/
 	//background(0);
-	barChart();
+	if (graph == 0){
+		barChart();
+	}
+	if (graph ==1){
+		circleChart();
+	}
+}
+
+function circleChart(){
+	var circleStartY = 70;
+	var circleStartX = 290;
+	noFill();
+	strokeWeight(1);
+	stroke(200);
+	for(var i=0; i<6; i++){
+		for(var j=0; j<7; j++){
+			ellipse(circleStartX+75*i, circleStartY+75*j, 50, 50);
+		}
+	}
+	fill(180, 100, 80);;
+	strokeWeight(1);
+	stroke(200);
+	for(var i=0; i<6; i++){
+		for(var j=0; j<7; j++){
+			ellipse(circleStartX+75*i, circleStartY+75*j, totalGraduates.getColumn(i+1)[j+10], totalGraduates.getColumn(i+1)[j+10]);
+		}
+	}
+	textAlign(LEFT);
+	fill(0, 0, 60);
+	noStroke();
+	for(var i=0; i<7; i++){
+		text(totalGraduates.getColumn(0)[i+1], circleStartX-85, circleStartY+75*i);
+	}
+	textAlign(CENTER);
+	for(var i=0; i<6; i++){
+		text(totalGraduates.getColumn(i+1)[0], circleStartX+75*i, circleStartY-45);
+	}
+	textAlign(LEFT);
+	textSize(8);
+	for(var i=0; i<6; i++){
+		for(var j=0; j<7; j++){
+			text(floor(100*result.getColumn(i+1)[j+1]/totalGraduates.getColumn(i+1)[j+1])+"%", circleStartX+25+75*i, circleStartY+25+75*j);
+		}
+	}
 }
 
 function barChart(){
+
 	//Title
+	textAlign(LEFT);
 	textSize(14);
 	noStroke();
 	fill(0, 0, 60);
@@ -139,5 +201,11 @@ function mousePressed(){
 	if (mouseX > startX+300 && mouseX < startX+340 && mouseY > 25 && mouseY < 45){
 		column = 6;
 		//print("hello 2009");
+	}
+	if (mouseX > 0 && mouseX < 175 && mouseY > 200 && mouseY < 220){
+		graph = 0;
 	}	
+	if (mouseX > 0 && mouseX < 175 && mouseY > 230 && mouseY < 250){
+		graph = 1;
+	}
 }
