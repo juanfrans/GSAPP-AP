@@ -2,7 +2,7 @@ var column = 1;
 var nodes; //Declare the object
 var nodeNetwork = [];
 var startX = 200;
-var graph = 1;
+var graph = 2;
 
 function preload(){
 	result = loadTable('data/Degrees.csv');
@@ -80,6 +80,25 @@ function draw() {
 	if (graph ==1){
 		circleChart();
 	}
+	if (graph == 2){
+		pieChart();
+	}
+}
+
+function pieChart(){
+	var circleStartY = 125;
+	var circleStartX = 290;
+	var angles = [30, 10, 45, 35, 60, 38, 75, 67];
+	var lastAngle = 0;
+	stroke(0);
+	strokeWeight(1);
+	noFill();
+	for(var i=0; i<angles.length; i++){
+		arc(circleStartX, circleStartY, 200, 200, lastAngle, lastAngle+radians(angles[i]), PIE);
+		lastAngle += radians(angles[i]);
+	}
+	fill(0, 0, 20);
+	ellipse(circleStartX, circleStartY, 125, 125);
 }
 
 function circleChart(){
