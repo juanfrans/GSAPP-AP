@@ -1,6 +1,4 @@
 var column = 1;
-var nodes; //Declare the object
-var nodeNetwork = [];
 var startX = 200;
 var graph = 2;
 
@@ -10,30 +8,16 @@ function preload(){
 }
 
 function setup() {
-	createCanvas(1280, 720);
+	createCanvas(1024, 768);
 	colorMode(HSB, 360, 100, 100, 100);
-	textFont("Gotham");
-	for(var i = 0; i<2000; i++){
-		nodes = new node(random(width), random(height), 5);
-		nodeNetwork[i] = nodes;
-	}
+	textFont("effra");
 }
 
-//node Class
-function node(x, y, diameter){
-	this.x = x;
-	this.y = y;
-	this.diameter = diameter;
-}
-
-node.prototype.display = function(){
-	ellipse(this.x, this.y, this.diameter, this.diameter);
-}
 
 function draw() {
-	background(0,0,20);
+	background(360);
 	noStroke();
-	fill(0,0,90);
+	fill(0);
 	//Title
 	textSize(20);
 	text("DESCRIPTIVE", 0, 20);

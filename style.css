@@ -1,23 +1,23 @@
 body {
-	background-color: rgb(51,51,51);
-	color: #FFFFFF;
-	font-family: "proxima-nova", sans-serif;
+	background-color: rgb(255);
+	color: #000000;
+	font-family: "effra", helvetica, sans-serif;
 	font-size: 14px;
-	max-width: 720px;
+	max-width: 1024px;
 	font-weight: 200;
 }
 
 .top-note{
-	color: #FFFFFF;
-	font-family: "proxima-nova", sans-serif;
+	color: #000000;
+	font-family: "effra", helvetica, sans-serif;
 	font-size: 10px;
 	font-weight: 200;
 }
 
 .title h1 {
-	color: #FFFFFF;
-	font-weight: 200;
-	font-family: "trajan-sans-pro", sans-serif;
+	color: #000000;
+	font-weight: 700;
+	font-family: "effra", helvetica, sans-serif;
 	font-size: 48px;
 	text-align: center;
 	padding-bottom: 0px;
@@ -34,9 +34,9 @@ body {
 }
 
 .title h2 {
-	color: #FFFFFF;
+	color: #000000;
 	font-weight: 400;
-	font-family: "trajan-sans-pro", sans-serif;
+	font-family: "effra", helvetica, sans-serif;
 	font-size: 14px;
 	text-align: center;
 	padding-top: 0px;
@@ -45,9 +45,9 @@ body {
 }
 
 .title h3 {
-	color: #FFFFFF;
+	color: #000000;
 	font-weight: 400;
-	font-family: "trajan-sans-pro", sans-serif;
+	font-family: "effra", helvetica, sans-serif;
 	font-size: 12px;
 	text-align: center;
 	padding-top: 0px;
@@ -57,7 +57,7 @@ body {
 
 /* unvisited link */
 a:link {
-    color: #FFFFFF;
+    color: #000000;
 }
 
 a:hover{
@@ -66,5 +66,5 @@ a:hover{
 
 /* visited link */
 a:visited {
-    color: #FFFFFF;
+    color: #000000;
 }
