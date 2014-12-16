@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<script src="//use.typekit.net/hgl4qxi.js"></script>
+	<script>try{Typekit.load();}catch(e){}</script>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<script type="text/javascript" src="p5/p5.js"></script>
+	<style>
+	html, body{
+		overflow: hidden;
+		margin: 0;
+		padding: 0;
+		background: white;
+	}
+	</style>
+</head>
+<script type="text/javascript">
+
+var WIDTH = 1024;
+var HEIGHT = 700;
+var leftMargin = 20;
+var column = 1;
+var data = 0;
+var buttonX = 26;
+var buttonY = 75;
+var buttonSpacing = 110;
+
+function preload(){
+	totalGraduatesTable = loadTable('data/Total_Graduates.csv');
+	surveyGraduatesTable = loadTable('data/Degrees.csv');
+	console.log('done loading data');
+}
+
+function setup(){
+	createCanvas(WIDTH, HEIGHT);
+	colorMode(HSB, 360, 100, 100, 100);
+	textFont("effra");
+}
+
+function draw(){
+	background(0, 0, 100);
+
+	//Text
+	fill(0);
+	noStroke();
+	textStyle(BOLD);
+	textSize(36);
+	text("GSAPP", leftMargin, 30);
+	textStyle(NORMAL);
+	textSize(18);
+	text("ALUMNI PROJECT", leftMargin, 50);
+	textSize(18);
+	textLeading(20);
+	text("OVERALL STATISTICS", 190, 3, 100, 100);
+	stroke(0);
+	strokeWeight(1);
+	line(178, 3, 178, 50);
+	textSize(20);
+
+	//Buttons
+	textSize(12);
+	noFill();
+	stroke(0);
+	strokeWeight(3);
+	for (var i = 0; i < 3; i++) {
+		ellipse(buttonX+buttonSpacing*i, buttonY, 12, 12);
+	};
+	for (var i = 0; i < 6; i++) {
+		ellipse(buttonX+buttonSpacing*i, buttonY+30, 12, 12);
+	};
+
+	fill(0);
+	noStroke();
+	textStyle(NORMAL);
+	text("GSAPP", buttonX+10, buttonY+3);
+	text("OUR SURVEY", buttonX+buttonSpacing+10, buttonY+3);
+	text("COMPARISON", buttonX+buttonSpacing*2+10, buttonY+3);
+	ellipse(buttonX+buttonSpacing*(column-1), buttonY+30, 7, 7);
+	textStyle(NORMAL);
+	for (var i = 1; i < 7; i++) {
+		text(totalGraduatesTable.getColumn(i)[0], buttonX+10+buttonSpacing*(i-1), buttonY+33);
+	};
+
+	circleChart();
+}
+
+function circleChart(){
+	var circleStartY = 200;
+	var circleStartX = 50;
+	var maxCircleRadius = 75;
+	var circleRaidus = 0;
+	var maxGraduates = 0;
+	var major;
+	var totalGraduates = 0;
+
+	for (var i = 1; i < 8; i++) {
+		maxGraduates = max(maxGraduates, totalGraduatesTable.getColumn(column)[i]);
+	};
+	for (var i = 1; i < 8; i++) {
+		totalGraduates = totalGraduates + totalGraduatesTable.getColumn(column)[i]*1;
+	};
+
+	fill(0);
+	noStroke();
+	textSize(12);
+	textAlign(CENTER);
+	for (var i = 1; i < 8; i++) {
+		major = totalGraduatesTable.getColumn(0)[i];
+		text(major.toUpperCase(), circleStartX+100*(i-1), circleStartY-50);
+		text(totalGraduatesTable.getColumn(column)[i], circleStartX+100*(i-1), circleStartY+55);
+		text("("+round(totalGraduatesTable.getColumn(column)[i]/totalGraduates*100)+"%)", circleStartX+100*(i-1), circleStartY+70);
+	};
+
+	noFill();
+	stroke(0);
+	strokeWeight(0.5);
+	for (var i = 0; i < 7; i++) {
+		line(circleStartX+100*i-25, circleStartY-45, circleStartX+100*i+25, circleStartY-45);
+	};
+	fill(180, 64, 76);
+	noStroke();
+	for (var i = 1; i < 8; i++) {
+		circleRaidus = map(totalGraduatesTable.getColumn(column)[i], 0, maxGraduates, 0, maxCircleRadius);
+		ellipse(circleStartX+100*(i-1), circleStartY, circleRaidus, circleRaidus);
+	};
+}
+
+function mousePressed(){
+	if (mouseX > buttonX-6 && mouseX < buttonX+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
+		data = 0;
+		console.log("data = 0");
+	}
+	if (mouseX > buttonX+buttonSpacing-6 && mouseX < buttonX+buttonSpacing+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
+		data = 1;
+		console.log("data = 1");
+	}
+	if (mouseX > buttonX+buttonSpacing*2-6 && mouseX < buttonX+buttonSpacing*2+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
+		data = 2;
+		console.log("data = 2");
+	}
+	if (mouseX > buttonX-6 && mouseX < buttonX+6 && mouseY > buttonY+30-6 && mouseY < buttonY+30+6){
+		column = 1;
+		console.log("1");
+	}
+	if (mouseX > buttonX+buttonSpacing-6 && mouseX < buttonX+buttonSpacing+6 && mouseY > buttonY+30-6 && mouseY < buttonY+30+6){
+		column = 2;
+		console.log("2");
+	}
+	if (mouseX > buttonX+buttonSpacing*2-6 && mouseX < buttonX+buttonSpacing*2+6 && mouseY > buttonY+30-6 && mouseY < buttonY+30+6){
+		column = 3;
+		console.log("3");
+	}
+	if (mouseX > buttonX+buttonSpacing*3-6 && mouseX < buttonX+buttonSpacing*3+6 && mouseY > buttonY+30-6 && mouseY < buttonY+30+6){
+		column = 4;
+		console.log("4");
+	}
+	if (mouseX > buttonX+buttonSpacing*4-6 && mouseX < buttonX+buttonSpacing*4+6 && mouseY > buttonY+30-6 && mouseY < buttonY+30+6){
+		column = 5;
+		console.log("5");
+	}
+	if (mouseX > buttonX+buttonSpacing*5-6 && mouseX < buttonX+buttonSpacing*5+6 && mouseY > buttonY+30-6 && mouseY < buttonY+30+6){
+		column = 6;
+		console.log("6");
+	}
+}
+
+</script>
