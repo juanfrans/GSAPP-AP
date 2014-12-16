@@ -23,8 +23,10 @@ var leftMargin = 20;
 var column = 1;
 var data = 0;
 var buttonX = 26;
-var buttonY = 75;
+var buttonY = 80;
 var buttonSpacing = 110;
+var fillGSAPP;
+var fillAP;
 
 function preload(){
 	totalGraduatesTable = loadTable('data/Total_Graduates.csv');
@@ -35,6 +37,10 @@ function preload(){
 function setup(){
 	createCanvas(WIDTH, HEIGHT);
 	colorMode(HSB, 360, 100, 100, 100);
+	fillGSAPP = color(180, 64, 76);
+	//fillAP = color(3, 78, 95);
+	fillAP = color(8, 48, 94);
+
 	textFont("effra");
 }
 
@@ -52,7 +58,7 @@ function draw(){
 	text("ALUMNI PROJECT", leftMargin, 50);
 	textSize(18);
 	textLeading(20);
-	text("OVERALL STATISTICS", 190, 3, 100, 100);
+	text("NUMBER OF PARTICIPANTS", 190, 3, 150, 100);
 	stroke(0);
 	strokeWeight(1);
 	line(178, 3, 178, 50);
@@ -77,22 +83,31 @@ function draw(){
 	text("OUR SURVEY", buttonX+buttonSpacing+10, buttonY+3);
 	text("COMPARISON", buttonX+buttonSpacing*2+10, buttonY+3);
 	ellipse(buttonX+buttonSpacing*(column-1), buttonY+30, 7, 7);
+	ellipse(buttonX+buttonSpacing*(data), buttonY, 7, 7);
 	textStyle(NORMAL);
 	for (var i = 1; i < 7; i++) {
 		text(totalGraduatesTable.getColumn(i)[0], buttonX+10+buttonSpacing*(i-1), buttonY+33);
 	};
 
-	circleChart();
+	if (data < 2){
+		circleChart();
+	}
+	else{
+		circleChart2();
+	}
 }
 
-function circleChart(){
+function circleChart2(){
 	var circleStartY = 200;
 	var circleStartX = 50;
 	var maxCircleRadius = 75;
-	var circleRaidus = 0;
+	var maxArea = PI*pow((maxCircleRadius/2),2);
+	var cirlceArea = 0;
+	var circleRadius = 0;
 	var maxGraduates = 0;
 	var major;
 	var totalGraduates = 0;
+	var circleBottom = 0;
 
 	for (var i = 1; i < 8; i++) {
 		maxGraduates = max(maxGraduates, totalGraduatesTable.getColumn(column)[i]);
@@ -107,22 +122,77 @@ function circleChart(){
 	textAlign(CENTER);
 	for (var i = 1; i < 8; i++) {
 		major = totalGraduatesTable.getColumn(0)[i];
-		text(major.toUpperCase(), circleStartX+100*(i-1), circleStartY-50);
-		text(totalGraduatesTable.getColumn(column)[i], circleStartX+100*(i-1), circleStartY+55);
-		text("("+round(totalGraduatesTable.getColumn(column)[i]/totalGraduates*100)+"%)", circleStartX+100*(i-1), circleStartY+70);
+		text(major.toUpperCase(), circleStartX+90*(i-1), circleStartY-50);
+		text(totalGraduatesTable.getColumn(column)[i+8]+"/"+totalGraduatesTable.getColumn(column)[i], circleStartX+90*(i-1), circleStartY+55);
+		text("("+round(totalGraduatesTable.getColumn(column)[i+8]/totalGraduatesTable.getColumn(column)[i]*100)+"%)", circleStartX+90*(i-1), circleStartY+70);
 	};
 
 	noFill();
 	stroke(0);
 	strokeWeight(0.5);
 	for (var i = 0; i < 7; i++) {
-		line(circleStartX+100*i-25, circleStartY-45, circleStartX+100*i+25, circleStartY-45);
+		line(circleStartX+90*i-25, circleStartY-45, circleStartX+90*i+25, circleStartY-45);
 	};
-	fill(180, 64, 76);
 	noStroke();
 	for (var i = 1; i < 8; i++) {
-		circleRaidus = map(totalGraduatesTable.getColumn(column)[i], 0, maxGraduates, 0, maxCircleRadius);
-		ellipse(circleStartX+100*(i-1), circleStartY, circleRaidus, circleRaidus);
+		fill(fillGSAPP);
+		circleArea = map(totalGraduatesTable.getColumn(column)[i], 0, maxGraduates, 0, maxArea);
+		ellipse(circleStartX+90*(i-1), circleStartY, sqrt(circleArea/PI)*2, sqrt(circleArea/PI)*2);
+		circleBottom = circleStartY + sqrt(circleArea/PI);
+		//fill(0, 0, 100);
+		//fill(182, 29, 85);
+		fill(fillAP);
+		circleArea = map(totalGraduatesTable.getColumn(column)[i+8], 0, maxGraduates, 0, maxArea);
+		ellipse(circleStartX+90*(i-1), circleBottom - sqrt(circleArea/PI), sqrt(circleArea/PI)*2, sqrt(circleArea/PI)*2);
+	};
+
+}
+
+function circleChart(){
+	var circleStartY = 200;
+	var circleStartX = 50;
+	var maxCircleRadius = 75;
+	var maxArea = PI*pow((maxCircleRadius/2),2);
+	var cirlceArea = 0;
+	var maxGraduates = 0;
+	var major;
+	var totalGraduates = 0;
+	var GSAPP = 8*data;
+
+	for (var i = 1; i < 8; i++) {
+		maxGraduates = max(maxGraduates, totalGraduatesTable.getColumn(column)[i+GSAPP]);
+	};
+	for (var i = 1; i < 8; i++) {
+		totalGraduates = totalGraduates + totalGraduatesTable.getColumn(column)[i+GSAPP]*1;
+	};
+
+	fill(0);
+	noStroke();
+	textSize(12);
+	textAlign(CENTER);
+	for (var i = 1; i < 8; i++) {
+		major = totalGraduatesTable.getColumn(0)[i];
+		text(major.toUpperCase(), circleStartX+90*(i-1), circleStartY-50);
+		text(totalGraduatesTable.getColumn(column)[i+GSAPP], circleStartX+90*(i-1), circleStartY+55);
+		text("("+round(totalGraduatesTable.getColumn(column)[i+GSAPP]/totalGraduates*100)+"%)", circleStartX+90*(i-1), circleStartY+70);
+	};
+
+	noFill();
+	stroke(0);
+	strokeWeight(0.5);
+	for (var i = 0; i < 7; i++) {
+		line(circleStartX+90*i-25, circleStartY-45, circleStartX+90*i+25, circleStartY-45);
+	};
+	if (data == 0){
+		fill(fillGSAPP);
+	}
+	else {
+		fill(fillAP);
+	}
+	noStroke();
+	for (var i = 1; i < 8; i++) {
+		circleArea = map(totalGraduatesTable.getColumn(column)[i+GSAPP], 0, maxGraduates, 0, maxArea);
+		ellipse(circleStartX+90*(i-1), circleStartY, sqrt(circleArea/PI)*2, sqrt(circleArea/PI)*2);
 	};
 }
 
