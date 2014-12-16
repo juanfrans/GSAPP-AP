@@ -20,6 +20,7 @@
 var WIDTH = 1024;
 var HEIGHT = 700;
 var leftMargin = 20;
+var column = 1;
 
 function preload(){
 	totalGraduatesTable = loadTable('data/Total_Graduates.csv');
@@ -52,6 +53,23 @@ function draw(){
 	strokeWeight(1);
 	line(178, 3, 178, 50);
 	textSize(20);
+
+	//Buttons
+	noFill();
+	stroke(0);
+	strokeWeight(3);
+	for (var i = 0; i < 6; i++) {
+		ellipse(50+100*i, 75, 12, 12);
+	};
+	fill(0);
+	noStroke();
+	ellipse(50+100*(column-1), 75, 7, 7);
+	textSize(12);
+	for (var i = 1; i < 7; i++) {
+		text(totalGraduatesTable.getColumn(i)[0], 62+100*(i-1), 78);
+	};
+
+
 	//text("GSAPP", leftMargin, 60);
 	//text("Our Survey", leftMargin, 80);
 
@@ -62,47 +80,81 @@ function draw(){
 	var maxGraduates = 0;
 	var totalGraduates = 0;
 	for(var i=1; i<8; i++){
-		maxGraduates = max(maxGraduates, totalGraduatesTable.getColumn(1)[i]*1);
-		totalGraduates = totalGraduates + totalGraduatesTable.getColumn(1)[i]*1;
+		maxGraduates = max(maxGraduates, totalGraduatesTable.getColumn(column)[i]*1);
+		totalGraduates = totalGraduates + totalGraduatesTable.getColumn(column)[i]*1;
 	}
 	for(var i=1; i<8; i++){
 		fill(180, 64, 76);
 		noStroke();
-		rect(startBar, 80+i*40, map(totalGraduatesTable.getColumn(1)[i], 0, maxGraduates, 0, maxLength), 10);
+		rect(startBar, 80+i*40, map(totalGraduatesTable.getColumn(column)[i], 0, maxGraduates, 0, maxLength), 10);
 		fill(0);
 		textSize(12);
 		text(totalGraduatesTable.getColumn(0)[i], startBar, 78+i*40);
 		textSize(10);
-		text(totalGraduatesTable.getColumn(1)[i]+" ("+round(totalGraduatesTable.getColumn(1)[i]/totalGraduates*100)+"%)", startBar+map(totalGraduatesTable.getColumn(1)[i], 0, maxGraduates, 0, maxLength)+3, 88+i*40);
+		text(totalGraduatesTable.getColumn(column)[i]+" ("+round(totalGraduatesTable.getColumn(column)[i]/totalGraduates*100)+"%)", startBar+map(totalGraduatesTable.getColumn(column)[i], 0, maxGraduates, 0, maxLength)+3, 88+i*40);
 	}
 	maxGraduates = 0;
 	totalGraduates = 0;
 	for(var i=1; i<8; i++){
-		maxGraduates = max(maxGraduates, surveyGraduatesTable.getColumn(1)[i]*1);
-		totalGraduates = totalGraduates + surveyGraduatesTable.getColumn(1)[i]*1;
+		maxGraduates = max(maxGraduates, surveyGraduatesTable.getColumn(column)[i]*1);
+		totalGraduates = totalGraduates + surveyGraduatesTable.getColumn(column)[i]*1;
 	}
 	for(var i=1; i<8; i++){
 		fill(3, 78, 95);
 		noStroke();
-		rect(startBar, 92+i*40, map(surveyGraduatesTable.getColumn(1)[i], 0, maxGraduates, 0, maxLength), 10);
+		rect(startBar, 92+i*40, map(surveyGraduatesTable.getColumn(column)[i], 0, maxGraduates, 0, maxLength), 10);
 		fill(0);
-		text(surveyGraduatesTable.getColumn(1)[i]+" ("+round(surveyGraduatesTable.getColumn(1)[i]/totalGraduates*100)+"%)", startBar+map(surveyGraduatesTable.getColumn(1)[i], 0, maxGraduates, 0, maxLength)+3, 100+i*40);
+		text(surveyGraduatesTable.getColumn(column)[i]+" ("+round(surveyGraduatesTable.getColumn(column)[i]/totalGraduates*100)+"%)", startBar+map(surveyGraduatesTable.getColumn(column)[i], 0, maxGraduates, 0, maxLength)+3, 100+i*40);
 	}
 
-	/*
-	textSize(12);
-	var startPosition = startBar;
-	for(var i=1; i<8; i++){
-		noFill();
-		stroke(0);
-		var thisMajor = map(totalGraduatesTable.getColumn(1)[i]*1, 0, totalGraduates, 0, barLength);
-		rect(startPosition, 80, thisMajor, 20);
-		noStroke();
-		fill(0);
-		text(totalGraduatesTable.getColumn(0)[i] + " - " + round(thisMajor/barLength*100) + "%", startPosition, 115);
-		startPosition = startPosition + thisMajor;
+	if(mouseX > 44 && mouseX < 56 && mouseY > 69 && mouseY < 81){
+		cursor(HAND);
 	}
-	*/
+	else if(mouseX > 144 && mouseX < 156 && mouseY > 69 && mouseY < 81){
+		cursor(HAND);
+	}
+	else if(mouseX > 244 && mouseX < 256 && mouseY > 69 && mouseY < 81){
+		cursor(HAND);
+	}
+	else if(mouseX > 344 && mouseX < 356 && mouseY > 69 && mouseY < 81){
+		cursor(HAND);
+	}
+	else if(mouseX > 444 && mouseX < 456 && mouseY > 69 && mouseY < 81){
+		cursor(HAND);
+	}
+	else if(mouseX > 544 && mouseX < 556 && mouseY > 69 && mouseY < 81){
+		cursor(HAND);
+	}
+	else{
+		cursor(ARROW);
+	}
+}
+
+function mousePressed(){
+	if (mouseX > 44 && mouseX < 56 && mouseY > 69 && mouseY < 81){
+		column = 1;
+		console.log("1");
+	}
+	if (mouseX > 144 && mouseX < 156 && mouseY > 69 && mouseY < 81){
+		column = 2;
+		console.log("2");
+	}
+	if (mouseX > 244 && mouseX < 256 && mouseY > 69 && mouseY < 81){
+		column = 3;
+		console.log("3");
+	}
+	if (mouseX > 344 && mouseX < 356 && mouseY > 69 && mouseY < 81){
+		column = 4;
+		console.log("4");
+	}
+	if (mouseX > 444 && mouseX < 456 && mouseY > 69 && mouseY < 81){
+		column = 5;
+		console.log("5");
+	}
+	if (mouseX > 544 && mouseX < 556 && mouseY > 69 && mouseY < 81){
+		column = 6;
+		console.log("6");
+	}
 }
 
 /*
