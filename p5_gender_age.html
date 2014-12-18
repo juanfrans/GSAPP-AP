@@ -31,6 +31,16 @@ var barHeight = 15;
 var midPoint = 350;
 var midSpace = 25;
 var endY = 300;
+var valuesAFemale = [];
+var valuesBFemale = [];
+var valuesCFemale = [];
+var valuesAMale = [];
+var valuesBMale = [];
+var valuesCMale = [];
+var startFrame, endFrame;
+var transitionFrames = 100;
+var framesRemaining = 0;
+var maxLength = 225;
 
 function preload(){
 	genderTable = loadTable('data/Gender_Age.csv');
@@ -43,8 +53,20 @@ function setup(){
 	fillGSAPP = color(180, 64, 76);
 	//fillAP = color(3, 78, 95);
 	fillAP = color(8, 48, 94);
-
 	textFont("effra");
+
+	// Setup initial values
+	var maxValue = 0;
+	var rectLength = 0;
+	var totalPeeps = 0
+	for (var i = 1; i < 13; i++) {
+		maxValue = max(genderTable.getColumn(column)[i], maxValue);
+		totalPeeps = totalPeeps + genderTable.getColumn(column)[i]*1;
+	};
+	for (var i = 1; i < 7; i++) {
+		valuesCFemale[i] = map(genderTable.getColumn(column)[i], 0, maxValue, 0, maxLength)*(-1);
+		valuesCMale[i] = map(genderTable.getColumn(column)[i+6], 0, maxValue, 0, maxLength);
+	};
 }
 
 function draw(){
@@ -83,16 +105,19 @@ function draw(){
 		text(genderTable.getColumn(i)[0], buttonX+10+buttonSpacing*(i-1), buttonY+3);
 	};
 
-	agePyramid();
+	if(frameCount > 0){
+		agePyramid();
+	}
+
+	framesRemaining = frameCount - startFrame;
+	if (framesRemaining < transitionFrames){
+		updateValues();
+	}
 }
 
 function agePyramid(){
-	var maxLength = 250;
-	var maxValue = 0;
-	var rectLength = 0;
 	var totalPeeps = 0
 	for (var i = 1; i < 13; i++) {
-		maxValue = max(genderTable.getColumn(column)[i], maxValue);
 		totalPeeps = totalPeeps + genderTable.getColumn(column)[i]*1;
 	};
 	noStroke();
@@ -109,53 +134,163 @@ function agePyramid(){
 	noStroke();
 	for (var i = 1; i < 7; i++) {
 		fill(fillGSAPP);
-		rectLength = map(genderTable.getColumn(column)[i], 0, maxValue, 0, maxLength);
-		rect(midPoint-midSpace, endY-i*spacing, rectLength*(-1), barHeight);
+		rect(midPoint-midSpace, endY-i*spacing, valuesCFemale[i], barHeight);
 		textAlign(RIGHT);
 		fill(0);
 		if(genderTable.getColumn(column)[i]>0){
-			text(nfc((genderTable.getColumn(column)[i]/totalPeeps*100),1)+"%", midPoint-midSpace-5-rectLength, endY-i*spacing+10);
+			text(nfc((genderTable.getColumn(column)[i]/totalPeeps*100),1)+"%", midPoint-midSpace-5 + valuesCFemale[i], endY-i*spacing+10);
 		}
 		fill(fillAP);
-		rectLength = map(genderTable.getColumn(column)[i+6], 0, maxValue, 0, maxLength);
-		rect(midPoint+midSpace, endY-i*spacing, rectLength, barHeight);
+		rect(midPoint+midSpace, endY-i*spacing, valuesCMale[i], barHeight);
 		textAlign(LEFT);
 		fill(0);
 		if(genderTable.getColumn(column)[i+6]>0){
-
-			text(nfc((genderTable.getColumn(column)[i+6]/totalPeeps*100),1)+"%", midPoint+midSpace+5+rectLength, endY-i*spacing+10);
+			text(nfc((genderTable.getColumn(column)[i+6]/totalPeeps*100),1)+"%", midPoint+midSpace+5+ valuesCMale[i], endY-i*spacing+10);
 		}
 		textAlign(CENTER);
 		text(genderTable.getColumn(0)[i], midPoint, endY-i*spacing+10);
-
 	};
+}
+
+function updateValues(){
+	for (var i=0; i<valuesCFemale.length; i++){
+		valuesCFemale[i] = lerp(valuesAFemale[i], valuesBFemale[i], (framesRemaining/transitionFrames));
+		valuesCMale[i] = lerp(valuesAMale[i], valuesBMale[i], (framesRemaining/transitionFrames));
+	}
 }
 
 function mousePressed(){
 	if (mouseX > buttonX-6 && mouseX < buttonX+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
+		startFrame = frameCount;
 		column = 1;
+		valuesAFemale = valuesCFemale;
+		console.log(valuesCFemale[1]);
+		valuesAMale = valuesCMale;
+		var maxValue = 0;
+		var rectLength = 0;
+		var totalPeeps = 0
+		for (var i = 1; i < 13; i++) {
+			maxValue = max(genderTable.getColumn(column)[i], maxValue);
+			totalPeeps = totalPeeps + genderTable.getColumn(column)[i]*1;
+		};
+		for (var i = 1; i < 7; i++) {
+			valuesBFemale[i] = map(genderTable.getColumn(column)[i], 0, maxValue, 0, maxLength)*(-1);
+			valuesBMale[i] = map(genderTable.getColumn(column)[i+6], 0, maxValue, 0, maxLength);
+		};
 	}
 	if (mouseX > buttonX+buttonSpacing-6 && mouseX < buttonX+buttonSpacing+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
+		startFrame = frameCount;
 		column = 2;
+		valuesAFemale = valuesCFemale;
+		valuesAMale = valuesCMale;
+		var maxValue = 0;
+		var rectLength = 0;
+		var totalPeeps = 0
+		for (var i = 1; i < 13; i++) {
+			maxValue = max(genderTable.getColumn(column)[i], maxValue);
+			totalPeeps = totalPeeps + genderTable.getColumn(column)[i]*1;
+		};
+		for (var i = 1; i < 7; i++) {
+			valuesBFemale[i] = map(genderTable.getColumn(column)[i], 0, maxValue, 0, maxLength)*(-1);
+			valuesBMale[i] = map(genderTable.getColumn(column)[i+6], 0, maxValue, 0, maxLength);
+		};	
 	}
 	if (mouseX > buttonX+buttonSpacing*2-6 && mouseX < buttonX+buttonSpacing*2+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
+		startFrame = frameCount;
 		column = 3;
-	}
+		valuesAFemale = valuesCFemale;
+		valuesAMale = valuesCMale;
+		var maxValue = 0;
+		var rectLength = 0;
+		var totalPeeps = 0
+		for (var i = 1; i < 13; i++) {
+			maxValue = max(genderTable.getColumn(column)[i], maxValue);
+			totalPeeps = totalPeeps + genderTable.getColumn(column)[i]*1;
+		};
+		for (var i = 1; i < 7; i++) {
+			valuesBFemale[i] = map(genderTable.getColumn(column)[i], 0, maxValue, 0, maxLength)*(-1);
+			valuesBMale[i] = map(genderTable.getColumn(column)[i+6], 0, maxValue, 0, maxLength);
+		};		}
 	if (mouseX > buttonX+buttonSpacing*3-6 && mouseX < buttonX+buttonSpacing*3+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
+		startFrame = frameCount;
 		column = 4;
-	}
+		valuesAFemale = valuesCFemale;
+		valuesAMale = valuesCMale;
+		var maxValue = 0;
+		var rectLength = 0;
+		var totalPeeps = 0
+		for (var i = 1; i < 13; i++) {
+			maxValue = max(genderTable.getColumn(column)[i], maxValue);
+			totalPeeps = totalPeeps + genderTable.getColumn(column)[i]*1;
+		};
+		for (var i = 1; i < 7; i++) {
+			valuesBFemale[i] = map(genderTable.getColumn(column)[i], 0, maxValue, 0, maxLength)*(-1);
+			valuesBMale[i] = map(genderTable.getColumn(column)[i+6], 0, maxValue, 0, maxLength);
+		};		}
 	if (mouseX > buttonX+buttonSpacing*4-6 && mouseX < buttonX+buttonSpacing*4+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
+		startFrame = frameCount;
 		column = 5;
-	}
+		valuesAFemale = valuesCFemale;
+		valuesAMale = valuesCMale;
+		var maxValue = 0;
+		var rectLength = 0;
+		var totalPeeps = 0
+		for (var i = 1; i < 13; i++) {
+			maxValue = max(genderTable.getColumn(column)[i], maxValue);
+			totalPeeps = totalPeeps + genderTable.getColumn(column)[i]*1;
+		};
+		for (var i = 1; i < 7; i++) {
+			valuesBFemale[i] = map(genderTable.getColumn(column)[i], 0, maxValue, 0, maxLength)*(-1);
+			valuesBMale[i] = map(genderTable.getColumn(column)[i+6], 0, maxValue, 0, maxLength);
+		};		}
 	if (mouseX > buttonX+buttonSpacing*5-6 && mouseX < buttonX+buttonSpacing*5+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
+		startFrame = frameCount;
 		column = 6;
-	}
+		valuesAFemale = valuesCFemale;
+		valuesAMale = valuesCMale;
+		var maxValue = 0;
+		var rectLength = 0;
+		var totalPeeps = 0
+		for (var i = 1; i < 13; i++) {
+			maxValue = max(genderTable.getColumn(column)[i], maxValue);
+			totalPeeps = totalPeeps + genderTable.getColumn(column)[i]*1;
+		};
+		for (var i = 1; i < 7; i++) {
+			valuesBFemale[i] = map(genderTable.getColumn(column)[i], 0, maxValue, 0, maxLength)*(-1);
+			valuesBMale[i] = map(genderTable.getColumn(column)[i+6], 0, maxValue, 0, maxLength);
+		};		}
 	if (mouseX > buttonX+buttonSpacing*6-6 && mouseX < buttonX+buttonSpacing*6+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
+		startFrame = frameCount;
 		column = 7;
-	}
+		valuesAFemale = valuesCFemale;
+		valuesAMale = valuesCMale;
+		var maxValue = 0;
+		var rectLength = 0;
+		var totalPeeps = 0
+		for (var i = 1; i < 13; i++) {
+			maxValue = max(genderTable.getColumn(column)[i], maxValue);
+			totalPeeps = totalPeeps + genderTable.getColumn(column)[i]*1;
+		};
+		for (var i = 1; i < 7; i++) {
+			valuesBFemale[i] = map(genderTable.getColumn(column)[i], 0, maxValue, 0, maxLength)*(-1);
+			valuesBMale[i] = map(genderTable.getColumn(column)[i+6], 0, maxValue, 0, maxLength);
+		};		}
 	if (mouseX > buttonX+buttonSpacing*7-6 && mouseX < buttonX+buttonSpacing*7+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
+		startFrame = frameCount;
 		column = 8;
-	}
+		valuesAFemale = valuesCFemale;
+		valuesAMale = valuesCMale;
+		var maxValue = 0;
+		var rectLength = 0;
+		var totalPeeps = 0
+		for (var i = 1; i < 13; i++) {
+			maxValue = max(genderTable.getColumn(column)[i], maxValue);
+			totalPeeps = totalPeeps + genderTable.getColumn(column)[i]*1;
+		};
+		for (var i = 1; i < 7; i++) {
+			valuesBFemale[i] = map(genderTable.getColumn(column)[i], 0, maxValue, 0, maxLength)*(-1);
+			valuesBMale[i] = map(genderTable.getColumn(column)[i+6], 0, maxValue, 0, maxLength);
+		};		}
 }
 
 </script>

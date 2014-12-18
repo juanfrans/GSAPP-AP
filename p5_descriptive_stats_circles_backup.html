@@ -77,8 +77,6 @@ function setup(){
 		circleArea = map(totalGraduatesTable.getColumn(column)[i+8], 0, maxGraduates, 0, maxArea);
 		valueSurveyC[i-1] = sqrt(circleArea/PI)*2;
 	};
-	console.log('valueGSAPPC = ' + valueGSAPPC);
-	console.log('valueSurveyC = ' + valueSurveyC);
 }
 
 function draw(){
@@ -308,7 +306,6 @@ function mousePressed(){
 			circleArea = map(totalGraduatesTable.getColumn(column)[i+8], 0, maxGraduates, 0, maxArea);
 			valueSurveyB[i-1] = sqrt(circleArea/PI)*2;
 		};
-		console.log("data = 1");
 	}
 
 	if (mouseX > buttonX+buttonSpacing*2-6 && mouseX < buttonX+buttonSpacing*2+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
@@ -331,7 +328,6 @@ function mousePressed(){
 			circleArea = map(totalGraduatesTable.getColumn(column)[i+8], 0, maxGraduates, 0, maxArea);
 			valueSurveyB[i-1] = sqrt(circleArea/PI)*2;
 		};
-		console.log("data = 2");
 	}
 
 	if (mouseX > buttonX-6 && mouseX < buttonX+6 && mouseY > buttonY+30-6 && mouseY < buttonY+30+6){
