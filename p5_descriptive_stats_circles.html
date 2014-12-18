@@ -26,6 +26,8 @@ var buttonY = 80;
 var buttonSpacing = 110;
 var fillGSAPP;
 var fillAP;
+var valueA, valueB, valueC, startFrame, endFrame;
+var transitionFrames = 100;
 
 function preload(){
 	totalGraduatesTable = loadTable('data/Total_Graduates.csv');
@@ -39,7 +41,6 @@ function setup(){
 	fillGSAPP = color(180, 64, 76);
 	//fillAP = color(3, 78, 95);
 	fillAP = color(8, 48, 94);
-
 	textFont("effra");
 }
 
@@ -88,11 +89,13 @@ function draw(){
 		text(totalGraduatesTable.getColumn(i)[0], buttonX+10+buttonSpacing*(i-1), buttonY+33);
 	};
 
-	if (data < 2){
-		circleChart();
-	}
-	else{
-		circleChart2();
+	if(frameCount > 0){
+		if (data < 2){
+			circleChart();
+		}
+		else{
+			circleChart2();
+		}
 	}
 }
 
