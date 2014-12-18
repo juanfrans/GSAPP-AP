@@ -2,9 +2,29 @@ body {
 	background-color: rgb(255);
 	color: #000000;
 	font-family: "effra", helvetica, sans-serif;
-	font-size: 14px;
-	max-width: 700px;
+	font-size: 16px;
+	max-width: 75%;
 	font-weight: 200;
+	text-align: left;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+p.description {
+	-webkit-columns: 300px 2;
+	-moz-columns: 300px 2;
+	columns: 300px 2;
+}
+
+.p5_chart{
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+	overflow: hidden;
+}
+
+iframe.p5_chart{
+	overflow: hidden;
 }
 
 .top-note{
@@ -19,7 +39,7 @@ body {
 	font-weight: 700;
 	font-family: "effra", helvetica, sans-serif;
 	font-size: 48px;
-	text-align: left;
+	text-align: center;
 	padding-bottom: 0px;
 	margin-bottom: 0px;
 	line-height: 90%;
@@ -38,7 +58,7 @@ body {
 	font-weight: 400;
 	font-family: "effra", helvetica, sans-serif;
 	font-size: 14px;
-	text-align: left;
+	text-align: center;
 	padding-top: 0px;
 	margin-bottom: 0px;
 	line-height: 100%;
@@ -49,7 +69,7 @@ body {
 	font-weight: 400;
 	font-family: "effra", helvetica, sans-serif;
 	font-size: 12px;
-	text-align: left;
+	text-align: center;
 	padding-top: 0px;
 	margin-bottom: 0px;
 	line-height: 50%;
