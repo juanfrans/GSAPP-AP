@@ -40,7 +40,7 @@ var maxLength = 450;
 var startX;
 
 function preload(){
-	undergradMajorTable = loadTable('data/Undergrad_by_Major.csv');
+	dataTable = loadTable('data/Years_of_Experience_Before.csv');
 	console.log('done loading data');
 }
 
@@ -58,11 +58,11 @@ function setup(){
 	var rectLength = 0;
 	var totalPeeps = 0
 	for (var i = 1; i < 5; i++) {
-		maxValue = max(undergradMajorTable.getColumn(column)[i], maxValue);
-		totalPeeps = totalPeeps + undergradMajorTable.getColumn(column)[i]*1;
+		maxValue = max(dataTable.getColumn(column)[i], maxValue);
+		totalPeeps = totalPeeps + dataTable.getColumn(column)[i]*1;
 	};
 	for (var i = 1; i < 5; i++) {
-		drawValues[i] = map(undergradMajorTable.getColumn(column)[i], 0, maxValue, 0, maxLength);
+		drawValues[i] = map(dataTable.getColumn(column)[i], 0, maxValue, 0, maxLength);
 	};
 }
 
@@ -80,7 +80,7 @@ function draw(){
 	text("ALUMNI PROJECT", leftMargin, 50);
 	textSize(18);
 	textLeading(20);
-	text("UNDERGRADUATE FIELD OF STUDY", 190, 3, 200, 100);
+	text("YEARS OF PROFESSIONAL EXPERIENCE BEFORE GSAPP", 190, 3, 250, 100);
 	stroke(0);
 	strokeWeight(1);
 	line(178, 3, 178, 50);
@@ -98,7 +98,7 @@ function draw(){
 	ellipse(buttonX+buttonSpacing*(column-1), buttonY, 7, 7);
 	textStyle(NORMAL);
 	for (var i = 1; i < 9; i++) {
-		text(undergradMajorTable.getColumn(i)[0], buttonX+10+buttonSpacing*(i-1), buttonY+3);
+		text(dataTable.getColumn(i)[0], buttonX+10+buttonSpacing*(i-1), buttonY+3);
 	};
 
 	if(frameCount > 0){
@@ -114,7 +114,7 @@ function draw(){
 function undergradMajorGraph(){
 	var totalPeeps = 0
 	for (var i = 1; i < 5; i++) {
-		totalPeeps = totalPeeps + undergradMajorTable.getColumn(column)[i]*1;
+		totalPeeps = totalPeeps + dataTable.getColumn(column)[i]*1;
 	};
 	noStroke();
 	textSize(12);
@@ -123,11 +123,11 @@ function undergradMajorGraph(){
 		rect(startX, endY-i*spacing, drawValues[i], barHeight);
 		textAlign(LEFT);
 		fill(0);
-		if(undergradMajorTable.getColumn(column)[i]>0){
-			text(nfc((undergradMajorTable.getColumn(column)[i]/totalPeeps*100),1)+"%", leftMargin + startX + drawValues[i] + 5, endY-i*spacing+11);
+		if(dataTable.getColumn(column)[i]>0){
+			text(nfc((dataTable.getColumn(column)[i]/totalPeeps*100),1)+"%", leftMargin + startX + drawValues[i] + 5, endY-i*spacing+11);
 		}
 		textAlign(RIGHT);
-		text(undergradMajorTable.getColumn(0)[i], startX - 5, endY-i*spacing+11);
+		text(dataTable.getColumn(0)[i], startX - 5, endY-i*spacing+11);
 	};
 }
 
@@ -147,11 +147,11 @@ function mousePressed(){
 		var rectLength = 0;
 		var totalPeeps = 0
 		for (var i = 1; i < 5; i++) {
-			maxValue = max(undergradMajorTable.getColumn(column)[i], maxValue);
-			totalPeeps = totalPeeps + undergradMajorTable.getColumn(column)[i]*1;
+			maxValue = max(dataTable.getColumn(column)[i], maxValue);
+			totalPeeps = totalPeeps + dataTable.getColumn(column)[i]*1;
 		};
 		for (var i = 1; i < 5; i++) {
-			targetValues[i] = map(undergradMajorTable.getColumn(column)[i], 0, maxValue, 0, maxLength);
+			targetValues[i] = map(dataTable.getColumn(column)[i], 0, maxValue, 0, maxLength);
 		};
 	}
 	if (mouseX > buttonX+buttonSpacing-6 && mouseX < buttonX+buttonSpacing+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
@@ -162,11 +162,11 @@ function mousePressed(){
 		var rectLength = 0;
 		var totalPeeps = 0
 		for (var i = 1; i < 5; i++) {
-			maxValue = max(undergradMajorTable.getColumn(column)[i], maxValue);
-			totalPeeps = totalPeeps + undergradMajorTable.getColumn(column)[i]*1;
+			maxValue = max(dataTable.getColumn(column)[i], maxValue);
+			totalPeeps = totalPeeps + dataTable.getColumn(column)[i]*1;
 		};
 		for (var i = 1; i < 5; i++) {
-			targetValues[i] = map(undergradMajorTable.getColumn(column)[i], 0, maxValue, 0, maxLength);
+			targetValues[i] = map(dataTable.getColumn(column)[i], 0, maxValue, 0, maxLength);
 		};	
 	}
 	if (mouseX > buttonX+buttonSpacing*2-6 && mouseX < buttonX+buttonSpacing*2+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
@@ -177,11 +177,11 @@ function mousePressed(){
 		var rectLength = 0;
 		var totalPeeps = 0
 		for (var i = 1; i < 5; i++) {
-			maxValue = max(undergradMajorTable.getColumn(column)[i], maxValue);
-			totalPeeps = totalPeeps + undergradMajorTable.getColumn(column)[i]*1;
+			maxValue = max(dataTable.getColumn(column)[i], maxValue);
+			totalPeeps = totalPeeps + dataTable.getColumn(column)[i]*1;
 		};
 		for (var i = 1; i < 5; i++) {
-			targetValues[i] = map(undergradMajorTable.getColumn(column)[i], 0, maxValue, 0, maxLength);
+			targetValues[i] = map(dataTable.getColumn(column)[i], 0, maxValue, 0, maxLength);
 		};		}
 	if (mouseX > buttonX+buttonSpacing*3-6 && mouseX < buttonX+buttonSpacing*3+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
 		startFrame = frameCount;
@@ -191,11 +191,11 @@ function mousePressed(){
 		var rectLength = 0;
 		var totalPeeps = 0
 		for (var i = 1; i < 5; i++) {
-			maxValue = max(undergradMajorTable.getColumn(column)[i], maxValue);
-			totalPeeps = totalPeeps + undergradMajorTable.getColumn(column)[i]*1;
+			maxValue = max(dataTable.getColumn(column)[i], maxValue);
+			totalPeeps = totalPeeps + dataTable.getColumn(column)[i]*1;
 		};
 		for (var i = 1; i < 5; i++) {
-			targetValues[i] = map(undergradMajorTable.getColumn(column)[i], 0, maxValue, 0, maxLength);
+			targetValues[i] = map(dataTable.getColumn(column)[i], 0, maxValue, 0, maxLength);
 		};		}
 	if (mouseX > buttonX+buttonSpacing*4-6 && mouseX < buttonX+buttonSpacing*4+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
 		startFrame = frameCount;
@@ -205,11 +205,11 @@ function mousePressed(){
 		var rectLength = 0;
 		var totalPeeps = 0
 		for (var i = 1; i < 5; i++) {
-			maxValue = max(undergradMajorTable.getColumn(column)[i], maxValue);
-			totalPeeps = totalPeeps + undergradMajorTable.getColumn(column)[i]*1;
+			maxValue = max(dataTable.getColumn(column)[i], maxValue);
+			totalPeeps = totalPeeps + dataTable.getColumn(column)[i]*1;
 		};
 		for (var i = 1; i < 5; i++) {
-			targetValues[i] = map(undergradMajorTable.getColumn(column)[i], 0, maxValue, 0, maxLength);
+			targetValues[i] = map(dataTable.getColumn(column)[i], 0, maxValue, 0, maxLength);
 		};		}
 	if (mouseX > buttonX+buttonSpacing*5-6 && mouseX < buttonX+buttonSpacing*5+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
 		startFrame = frameCount;
@@ -219,11 +219,11 @@ function mousePressed(){
 		var rectLength = 0;
 		var totalPeeps = 0
 		for (var i = 1; i < 5; i++) {
-			maxValue = max(undergradMajorTable.getColumn(column)[i], maxValue);
-			totalPeeps = totalPeeps + undergradMajorTable.getColumn(column)[i]*1;
+			maxValue = max(dataTable.getColumn(column)[i], maxValue);
+			totalPeeps = totalPeeps + dataTable.getColumn(column)[i]*1;
 		};
 		for (var i = 1; i < 5; i++) {
-			targetValues[i] = map(undergradMajorTable.getColumn(column)[i], 0, maxValue, 0, maxLength);
+			targetValues[i] = map(dataTable.getColumn(column)[i], 0, maxValue, 0, maxLength);
 		};		}
 	if (mouseX > buttonX+buttonSpacing*6-6 && mouseX < buttonX+buttonSpacing*6+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
 		startFrame = frameCount;
@@ -233,11 +233,11 @@ function mousePressed(){
 		var rectLength = 0;
 		var totalPeeps = 0
 		for (var i = 1; i < 5; i++) {
-			maxValue = max(undergradMajorTable.getColumn(column)[i], maxValue);
-			totalPeeps = totalPeeps + undergradMajorTable.getColumn(column)[i]*1;
+			maxValue = max(dataTable.getColumn(column)[i], maxValue);
+			totalPeeps = totalPeeps + dataTable.getColumn(column)[i]*1;
 		};
 		for (var i = 1; i < 5; i++) {
-			targetValues[i] = map(undergradMajorTable.getColumn(column)[i], 0, maxValue, 0, maxLength);
+			targetValues[i] = map(dataTable.getColumn(column)[i], 0, maxValue, 0, maxLength);
 		};		}
 	if (mouseX > buttonX+buttonSpacing*7-6 && mouseX < buttonX+buttonSpacing*7+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
 		startFrame = frameCount;
@@ -247,11 +247,11 @@ function mousePressed(){
 		var rectLength = 0;
 		var totalPeeps = 0
 		for (var i = 1; i < 5; i++) {
-			maxValue = max(undergradMajorTable.getColumn(column)[i], maxValue);
-			totalPeeps = totalPeeps + undergradMajorTable.getColumn(column)[i]*1;
+			maxValue = max(dataTable.getColumn(column)[i], maxValue);
+			totalPeeps = totalPeeps + dataTable.getColumn(column)[i]*1;
 		};
 		for (var i = 1; i < 5; i++) {
-			targetValues[i] = map(undergradMajorTable.getColumn(column)[i], 0, maxValue, 0, maxLength);
+			targetValues[i] = map(dataTable.getColumn(column)[i], 0, maxValue, 0, maxLength);
 		};		
 	}
 }

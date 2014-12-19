@@ -29,7 +29,7 @@ var spacing = 25;
 var barHeight = 15;
 var midPoint = 315;
 var midSpace = 25;
-var endY = 300;
+var endY = 285;
 var valuesAFemale = [];
 var valuesBFemale = [];
 var valuesCFemale = [];
@@ -123,13 +123,13 @@ function agePyramid(){
 	textSize(12);
 	textAlign(CENTER);
 	fill(0);
-	text("Female", midPoint-100, buttonY+50);
-	text("Male", midPoint+100, buttonY+50);
+	text("Female", midPoint-100, buttonY+37);
+	text("Male", midPoint+100, buttonY+37);
 	noFill();
 	strokeWeight(0.5);
 	stroke(0);
-	line(midPoint-125, buttonY+55, midPoint-75, buttonY+55);
-	line(midPoint+125, buttonY+55, midPoint+75, buttonY+55);
+	line(midPoint-125, buttonY+42, midPoint-75, buttonY+42);
+	line(midPoint+125, buttonY+42, midPoint+75, buttonY+42);
 	noStroke();
 	for (var i = 1; i < 7; i++) {
 		fill(fillGSAPP);
