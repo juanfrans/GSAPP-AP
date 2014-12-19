@@ -11,9 +11,9 @@ body {
 }
 
 p.description {
-	-webkit-columns: 300px 2;
-	-moz-columns: 300px 2;
-	columns: 300px 2;
+	-webkit-columns: 300px 3;
+	-moz-columns: 300px 3;
+	columns: 300px 3;
 }
 
 .p5_chart{

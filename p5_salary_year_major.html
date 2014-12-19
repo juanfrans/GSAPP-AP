@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<script src="//use.typekit.net/hgl4qxi.js"></script>
+	<script>try{Typekit.load();}catch(e){}</script>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<script type="text/javascript" src="p5/p5.js"></script>
+	<style>
+	html, body{
+		margin: 0;
+		padding: 0;
+		background: white;
+	}
+	</style>
+</head>
+<script type="text/javascript">
+
+var WIDTH = 1000;
+var HEIGHT = 500;
+var leftMargin = 0;
+var column = 1;
+var buttonX = 26;
+var buttonY = 80;
+var buttonSpacing = 80;
+var fillGSAPP;
+var fillAP;
+var spacing = 25;
+var barHeight = 15;
+var initValues = [];
+var targetValues = [];
+var drawValues = [];
+var startFrame, endFrame;
+var transitionFrames = 100;
+var framesRemaining = 0;
+var maxLength = 450;
+var startX;
+var startY = 115;
+var column2 = 1;
+
+function preload(){
+	dataTable = loadTable('data/Salary_Major_Year.csv');
+	console.log('done loading data');
+}
+
+function setup(){
+	createCanvas(WIDTH, HEIGHT);
+	colorMode(HSB, 360, 100, 100, 100);
+	fillGSAPP = color(180, 64, 76);
+	//fillAP = color(3, 78, 95);
+	fillAP = color(8, 48, 94);
+	textFont("effra");
+	startX = leftMargin + 100;
+
+	// Setup initial values
+	var maxValue = 0;
+	var rectLength = 0;
+	var totalPeeps = 0
+	for (var i = 1; i < 10; i++) {
+		maxValue = max(dataTable.getColumn(column)[i], maxValue);
+		totalPeeps = totalPeeps + dataTable.getColumn(column)[i]*1;
+	};
+	for (var i = 1; i < 10; i++) {
+		drawValues[i] = map(dataTable.getColumn(column)[i], 0, maxValue, 0, maxLength);
+	};
+}
+
+function draw(){
+	background(100);
+
+	//Text
+	fill(0);
+	noStroke();
+	textStyle(BOLD);
+	textSize(36);
+	text("GSAPP", leftMargin, 30);
+	textStyle(NORMAL);
+	textSize(18);
+	text("ALUMNI PROJECT", leftMargin, 50);
+	textSize(18);
+	textLeading(20);
+	text("ANNUAL SALARY BY YEAR OF GRADUATION AND MAJOR", 190, 3, 250, 100);
+	stroke(0);
+	strokeWeight(1);
+	line(178, 3, 178, 50);
+	textSize(12);
+	noStroke();
+	textSize(12);
+	noFill();
+	stroke(0);
+	strokeWeight(1.5);
+	for (var i = 0; i < 8; i++) {
+		ellipse(buttonX+buttonSpacing*i, buttonY, 12, 12);
+	};
+	for (var i = 0; i < 6; i++) {
+		ellipse(buttonX+buttonSpacing*i, buttonY+30, 12, 12);
+	};
+	fill(0);
+	noStroke();
+	ellipse(buttonX+buttonSpacing*((column-1)/6), buttonY, 7, 7);
+	ellipse(buttonX+buttonSpacing*(column2-1), buttonY+30, 7, 7);
+	textStyle(NORMAL);
+	for (var i = 0; i < 9; i++) {
+		text(dataTable.getColumn(i*6+1)[0], buttonX+10+buttonSpacing*(i), buttonY+3);
+	};
+	for (var i = 2; i < 7; i++) {
+		text(dataTable.getColumn(i)[0], buttonX+10+buttonSpacing*(i-1), buttonY+33);
+	};
+	text("All Years", buttonX+10, buttonY+33);
+	if(frameCount > 0){
+		drawGraph();
+	}
+
+	framesRemaining = frameCount - startFrame;
+	if (framesRemaining < transitionFrames){
+		updateValues();
+	}
+}
+
+function drawGraph(){
+	var totalPeeps = 0
+	for (var i = 1; i < 10; i++) {
+		totalPeeps = totalPeeps + dataTable.getColumn(column+column2-1)[i]*1;
+	};
+	noStroke();
+	textSize(12);
+	for (var i = 1; i < 10; i++) {
+		fill(fillGSAPP);
+		rect(startX, startY+i*spacing, drawValues[i], barHeight);
+		textAlign(LEFT);
+		fill(0);
+		if(dataTable.getColumn(column+column2-1)[i]>0){
+			text(nfc((dataTable.getColumn(column+column2-1)[i]/totalPeeps*100),1)+"%", leftMargin + startX + drawValues[i] + 5, startY+i*spacing+11);
+		}
+		textAlign(RIGHT);
+		text(dataTable.getColumn(0)[i], startX - 5, startY+i*spacing+11);
+	};
+}
+
+function updateValues(){
+	for (var i=0; i<drawValues.length; i++){
+		drawValues[i] = lerp(initValues[i], targetValues[i], (framesRemaining/transitionFrames));
+	}
+}
+
+function mousePressed(){
+	if (mouseX > buttonX-6 && mouseX < buttonX+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
+		startFrame = frameCount;
+		column = 1;
+		initValues = drawValues;
+		var maxValue = 0;
+		var rectLength = 0;
+		var totalPeeps = 0
+		for (var i = 1; i < 10; i++) {
+			maxValue = max(dataTable.getColumn(column+column2-1)[i], maxValue);
+			totalPeeps = totalPeeps + dataTable.getColumn(column+column2-1)[i]*1;
+		};
+		for (var i = 1; i < 10; i++) {
+			targetValues[i] = map(dataTable.getColumn(column+column2-1)[i], 0, maxValue, 0, maxLength);
+		};
+	}
+	if (mouseX > buttonX+buttonSpacing-6 && mouseX < buttonX+buttonSpacing+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
+		startFrame = frameCount;
+		column = 7;
+		initValues = drawValues;
+		var maxValue = 0;
+		var rectLength = 0;
+		var totalPeeps = 0
+		for (var i = 1; i < 10; i++) {
+			maxValue = max(dataTable.getColumn(column+column2-1)[i], maxValue);
+			totalPeeps = totalPeeps + dataTable.getColumn(column+column2-1)[i]*1;
+		};
+		for (var i = 1; i < 10; i++) {
+			targetValues[i] = map(dataTable.getColumn(column+column2-1)[i], 0, maxValue, 0, maxLength);
+		};
+	}
+	if (mouseX > buttonX+buttonSpacing*2-6 && mouseX < buttonX+buttonSpacing*2+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
+		startFrame = frameCount;
+		column = 13;
+		initValues = drawValues;
+		var maxValue = 0;
+		var rectLength = 0;
+		var totalPeeps = 0
+		for (var i = 1; i < 10; i++) {
+			maxValue = max(dataTable.getColumn(column+column2-1)[i], maxValue);
+			totalPeeps = totalPeeps + dataTable.getColumn(column+column2-1)[i]*1;
+		};
+		for (var i = 1; i < 10; i++) {
+			targetValues[i] = map(dataTable.getColumn(column+column2-1)[i], 0, maxValue, 0, maxLength);
+		};
+	}
+	if (mouseX > buttonX+buttonSpacing*3-6 && mouseX < buttonX+buttonSpacing*3+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
+		startFrame = frameCount;
+		column = 19;
+		initValues = drawValues;
+		var maxValue = 0;
+		var rectLength = 0;
+		var totalPeeps = 0
+		for (var i = 1; i < 10; i++) {
+			maxValue = max(dataTable.getColumn(column+column2-1)[i], maxValue);
+			totalPeeps = totalPeeps + dataTable.getColumn(column+column2-1)[i]*1;
+		};
+		for (var i = 1; i < 10; i++) {
+			targetValues[i] = map(dataTable.getColumn(column+column2-1)[i], 0, maxValue, 0, maxLength);
+		};	
+	}
+	if (mouseX > buttonX+buttonSpacing*4-6 && mouseX < buttonX+buttonSpacing*4+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
+		startFrame = frameCount;
+		column = 25;
+		initValues = drawValues;
+		var maxValue = 0;
+		var rectLength = 0;
+		var totalPeeps = 0
+		for (var i = 1; i < 10; i++) {
+			maxValue = max(dataTable.getColumn(column+column2-1)[i], maxValue);
+			totalPeeps = totalPeeps + dataTable.getColumn(column+column2-1)[i]*1;
+		};
+		for (var i = 1; i < 10; i++) {
+			targetValues[i] = map(dataTable.getColumn(column+column2-1)[i], 0, maxValue, 0, maxLength);
+		};	
+	}
+	if (mouseX > buttonX+buttonSpacing*5-6 && mouseX < buttonX+buttonSpacing*5+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
+		startFrame = frameCount;
+		column = 31;
+		initValues = drawValues;
+		var maxValue = 0;
+		var rectLength = 0;
+		var totalPeeps = 0
+		for (var i = 1; i < 10; i++) {
+			maxValue = max(dataTable.getColumn(column+column2-1)[i], maxValue);
+			totalPeeps = totalPeeps + dataTable.getColumn(column+column2-1)[i]*1;
+		};
+		for (var i = 1; i < 10; i++) {
+			targetValues[i] = map(dataTable.getColumn(column+column2-1)[i], 0, maxValue, 0, maxLength);
+		};	
+	}
+	if (mouseX > buttonX+buttonSpacing*6-6 && mouseX < buttonX+buttonSpacing*6+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
+		startFrame = frameCount;
+		column = 37;
+		initValues = drawValues;
+		var maxValue = 0;
+		var rectLength = 0;
+		var totalPeeps = 0
+		for (var i = 1; i < 10; i++) {
+			maxValue = max(dataTable.getColumn(column+column2-1)[i], maxValue);
+			totalPeeps = totalPeeps + dataTable.getColumn(column+column2-1)[i]*1;
+		};
+		for (var i = 1; i < 10; i++) {
+			targetValues[i] = map(dataTable.getColumn(column+column2-1)[i], 0, maxValue, 0, maxLength);
+		};	
+	}
+	if (mouseX > buttonX+buttonSpacing*7-6 && mouseX < buttonX+buttonSpacing*7+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
+		startFrame = frameCount;
+		column = 43;
+		initValues = drawValues;
+		var maxValue = 0;
+		var rectLength = 0;
+		var totalPeeps = 0
+		for (var i = 1; i < 10; i++) {
+			maxValue = max(dataTable.getColumn(column+column2-1)[i], maxValue);
+			totalPeeps = totalPeeps + dataTable.getColumn(column+column2-1)[i]*1;
+		};
+		for (var i = 1; i < 10; i++) {
+			targetValues[i] = map(dataTable.getColumn(column+column2-1)[i], 0, maxValue, 0, maxLength);
+		};	
+	}
+	if (mouseX > buttonX-6 && mouseX < buttonX+6 && mouseY > buttonY+26 && mouseY < buttonY+36){
+		startFrame = frameCount;
+		column2 = 1;
+		initValues = drawValues;
+		var maxValue = 0;
+		var rectLength = 0;
+		var totalPeeps = 0
+		for (var i = 1; i < 10; i++) {
+			maxValue = max(dataTable.getColumn(column+column2-1)[i], maxValue);
+			totalPeeps = totalPeeps + dataTable.getColumn(column+column2-1)[i]*1;
+		};
+		for (var i = 1; i < 10; i++) {
+			targetValues[i] = map(dataTable.getColumn(column+column2-1)[i], 0, maxValue, 0, maxLength);
+		};
+	}
+	if (mouseX > buttonX+buttonSpacing-6 && mouseX < buttonX+buttonSpacing+6 && mouseY > buttonY+26 && mouseY < buttonY+36){
+		startFrame = frameCount;
+		column2 = 2;
+		initValues = drawValues;
+		var maxValue = 0;
+		var rectLength = 0;
+		var totalPeeps = 0
+		for (var i = 1; i < 10; i++) {
+			maxValue = max(dataTable.getColumn(column+column2-1)[i], maxValue);
+			totalPeeps = totalPeeps + dataTable.getColumn(column+column2-1)[i]*1;
+		};
+		for (var i = 1; i < 10; i++) {
+			targetValues[i] = map(dataTable.getColumn(column+column2-1)[i], 0, maxValue, 0, maxLength);
+		};
+	}
+	if (mouseX > buttonX+buttonSpacing*2-6 && mouseX < buttonX+buttonSpacing*2+6 && mouseY > buttonY+26 && mouseY < buttonY+36){
+		startFrame = frameCount;
+		column2 = 3;
+		initValues = drawValues;
+		var maxValue = 0;
+		var rectLength = 0;
+		var totalPeeps = 0
+		for (var i = 1; i < 10; i++) {
+			maxValue = max(dataTable.getColumn(column+column2-1)[i], maxValue);
+			totalPeeps = totalPeeps + dataTable.getColumn(column+column2-1)[i]*1;
+		};
+		for (var i = 1; i < 10; i++) {
+			targetValues[i] = map(dataTable.getColumn(column+column2-1)[i], 0, maxValue, 0, maxLength);
+		};
+	}
+	if (mouseX > buttonX+buttonSpacing*3-6 && mouseX < buttonX+buttonSpacing*3+6 && mouseY > buttonY+26 && mouseY < buttonY+36){
+		startFrame = frameCount;
+		column2 = 4;
+		initValues = drawValues;
+		var maxValue = 0;
+		var rectLength = 0;
+		var totalPeeps = 0
+		for (var i = 1; i < 10; i++) {
+			maxValue = max(dataTable.getColumn(column+column2-1)[i], maxValue);
+			totalPeeps = totalPeeps + dataTable.getColumn(column+column2-1)[i]*1;
+		};
+		for (var i = 1; i < 10; i++) {
+			targetValues[i] = map(dataTable.getColumn(column+column2-1)[i], 0, maxValue, 0, maxLength);
+		};
+	}
+	if (mouseX > buttonX+buttonSpacing*4-6 && mouseX < buttonX+buttonSpacing*4+6 && mouseY > buttonY+26 && mouseY < buttonY+36){
+		startFrame = frameCount;
+		column2 = 5;
+		initValues = drawValues;
+		var maxValue = 0;
+		var rectLength = 0;
+		var totalPeeps = 0
+		for (var i = 1; i < 10; i++) {
+			maxValue = max(dataTable.getColumn(column+column2-1)[i], maxValue);
+			totalPeeps = totalPeeps + dataTable.getColumn(column+column2-1)[i]*1;
+		};
+		for (var i = 1; i < 10; i++) {
+			targetValues[i] = map(dataTable.getColumn(column+column2-1)[i], 0, maxValue, 0, maxLength);
+		};
+	}
+	if (mouseX > buttonX+buttonSpacing*5-6 && mouseX < buttonX+buttonSpacing*5+6 && mouseY > buttonY+26 && mouseY < buttonY+36){
+		startFrame = frameCount;
+		column2 = 6;
+		initValues = drawValues;
+		var maxValue = 0;
+		var rectLength = 0;
+		var totalPeeps = 0
+		for (var i = 1; i < 10; i++) {
+			maxValue = max(dataTable.getColumn(column+column2-1)[i], maxValue);
+			totalPeeps = totalPeeps + dataTable.getColumn(column+column2-1)[i]*1;
+		};
+		for (var i = 1; i < 10; i++) {
+			targetValues[i] = map(dataTable.getColumn(column+column2-1)[i], 0, maxValue, 0, maxLength);
+		};
+	}
+}
+
+</script>
