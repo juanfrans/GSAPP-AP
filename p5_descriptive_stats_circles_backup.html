@@ -249,14 +249,13 @@ function updateValues(){
 	}
 }
 
-function mousePressed(){
-	if (mouseX > buttonX-6 && mouseX < buttonX+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
-		startFrame = frameCount;
-		valueGSAPPA = valueGSAPPC;
-		data = 0;
-		var cirlceArea = 0;
-		var maxGraduates = 0;
-		var totalGraduates = 0;
+function recalculateValues(){
+	valueGSAPPA = valueGSAPPC;
+	valueSurveyA = valueSurveyC;
+	var cirlceArea = 0;
+	var maxGraduates = 0;
+	var totalGraduates = 0;
+	if(data < 2){
 		for (var i = 1; i < 8; i++) {
 			maxGraduates = max(maxGraduates, totalGraduatesTable.getColumn(column)[i]);
 			totalGraduates = totalGraduates + totalGraduatesTable.getColumn(column)[i]*1;
@@ -268,7 +267,6 @@ function mousePressed(){
 		circleArea = 0;
 		maxGraduates = 0;
 		totalGraduates = 0;
-		valueSurveyA = valueSurveyC;
 		for (var i = 1; i < 8; i++) {
 			maxGraduates = max(maxGraduates, totalGraduatesTable.getColumn(column)[i+8]);
 			totalGraduates = totalGraduates + totalGraduatesTable.getColumn(column)[i+8]*1;
@@ -277,322 +275,71 @@ function mousePressed(){
 			circleArea = map(totalGraduatesTable.getColumn(column)[i+8], 0, maxGraduates, 0, maxArea);
 			valueSurveyB[i-1] = sqrt(circleArea/PI)*2;
 		};
+	}
+	else{
+		for (var i = 1; i < 8; i++) {
+			maxGraduates = max(maxGraduates, totalGraduatesTable.getColumn(column)[i]);
+			totalGraduates = totalGraduates + totalGraduatesTable.getColumn(column)[i]*1;
+		};
+		for (var i = 1; i < 8; i++) {
+			circleArea = map(totalGraduatesTable.getColumn(column)[i], 0, maxGraduates, 0, maxArea);
+			valueGSAPPB[i-1] = sqrt(circleArea/PI)*2;
+		};
+		for (var i = 1; i < 8; i++) {
+			circleArea = map(totalGraduatesTable.getColumn(column)[i+8], 0, maxGraduates, 0, maxArea);
+			valueSurveyB[i-1] = sqrt(circleArea/PI)*2;
+		};
+	}
+}
+
+function mousePressed(){
+	if (mouseX > buttonX-6 && mouseX < buttonX+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
+		data = 0;
+		recalculateValues();
+		startFrame = frameCount;
 	}
 
 	if (mouseX > buttonX+buttonSpacing-6 && mouseX < buttonX+buttonSpacing+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
-		startFrame = frameCount;
-		valueGSAPPA = valueGSAPPC;
 		data = 1;
-		var cirlceArea = 0;
-		var maxGraduates = 0;
-		var totalGraduates = 0;
-		for (var i = 1; i < 8; i++) {
-			maxGraduates = max(maxGraduates, totalGraduatesTable.getColumn(column)[i]);
-			totalGraduates = totalGraduates + totalGraduatesTable.getColumn(column)[i]*1;
-		};
-		for (var i = 1; i < 8; i++) {
-			circleArea = map(totalGraduatesTable.getColumn(column)[i], 0, maxGraduates, 0, maxArea);
-			valueGSAPPB[i-1] = sqrt(circleArea/PI)*2;
-		};
-		valueSurveyA = valueSurveyC;
-		circleArea = 0;
-		maxGraduates = 0;
-		totalGraduates = 0;
-		for (var i = 1; i < 8; i++) {
-			maxGraduates = max(maxGraduates, totalGraduatesTable.getColumn(column)[i+8]);
-			totalGraduates = totalGraduates + totalGraduatesTable.getColumn(column)[i+8]*1;
-		};
-		for (var i = 1; i < 8; i++) {
-			circleArea = map(totalGraduatesTable.getColumn(column)[i+8], 0, maxGraduates, 0, maxArea);
-			valueSurveyB[i-1] = sqrt(circleArea/PI)*2;
-		};
+		recalculateValues();
+		startFrame = frameCount;
 	}
 
 	if (mouseX > buttonX+buttonSpacing*2-6 && mouseX < buttonX+buttonSpacing*2+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
-		startFrame = frameCount;
-		valueGSAPPA = valueGSAPPC;
-		valueSurveyA = valueSurveyC;
 		data = 2;
-		var cirlceArea = 0;
-		var maxGraduates = 0;
-		var totalGraduates = 0;
-		for (var i = 1; i < 8; i++) {
-			maxGraduates = max(maxGraduates, totalGraduatesTable.getColumn(column)[i]);
-			totalGraduates = totalGraduates + totalGraduatesTable.getColumn(column)[i]*1;
-		};
-		for (var i = 1; i < 8; i++) {
-			circleArea = map(totalGraduatesTable.getColumn(column)[i], 0, maxGraduates, 0, maxArea);
-			valueGSAPPB[i-1] = sqrt(circleArea/PI)*2;
-		};
-		for (var i = 1; i < 8; i++) {
-			circleArea = map(totalGraduatesTable.getColumn(column)[i+8], 0, maxGraduates, 0, maxArea);
-			valueSurveyB[i-1] = sqrt(circleArea/PI)*2;
-		};
+		recalculateValues();
+		startFrame = frameCount;
 	}
 
 	if (mouseX > buttonX-6 && mouseX < buttonX+6 && mouseY > buttonY+30-6 && mouseY < buttonY+30+6){
-		startFrame = frameCount;
-		valueGSAPPA = valueGSAPPC;
-		valueSurveyA = valueSurveyC;
 		column = 1;
-		var cirlceArea = 0;
-		var maxGraduates = 0;
-		var totalGraduates = 0;
-		if(data < 2){
-			for (var i = 1; i < 8; i++) {
-				maxGraduates = max(maxGraduates, totalGraduatesTable.getColumn(column)[i]);
-				totalGraduates = totalGraduates + totalGraduatesTable.getColumn(column)[i]*1;
-			};
-			for (var i = 1; i < 8; i++) {
-				circleArea = map(totalGraduatesTable.getColumn(column)[i], 0, maxGraduates, 0, maxArea);
-				valueGSAPPB[i-1] = sqrt(circleArea/PI)*2;
-			};
-			circleArea = 0;
-			maxGraduates = 0;
-			totalGraduates = 0;
-			for (var i = 1; i < 8; i++) {
-				maxGraduates = max(maxGraduates, totalGraduatesTable.getColumn(column)[i+8]);
-				totalGraduates = totalGraduates + totalGraduatesTable.getColumn(column)[i+8]*1;
-			};
-			for (var i = 1; i < 8; i++) {
-				circleArea = map(totalGraduatesTable.getColumn(column)[i+8], 0, maxGraduates, 0, maxArea);
-				valueSurveyB[i-1] = sqrt(circleArea/PI)*2;
-			};
-		}
-		else{
-			for (var i = 1; i < 8; i++) {
-				maxGraduates = max(maxGraduates, totalGraduatesTable.getColumn(column)[i]);
-				totalGraduates = totalGraduates + totalGraduatesTable.getColumn(column)[i]*1;
-			};
-			for (var i = 1; i < 8; i++) {
-				circleArea = map(totalGraduatesTable.getColumn(column)[i], 0, maxGraduates, 0, maxArea);
-				valueGSAPPB[i-1] = sqrt(circleArea/PI)*2;
-			};
-			for (var i = 1; i < 8; i++) {
-				circleArea = map(totalGraduatesTable.getColumn(column)[i+8], 0, maxGraduates, 0, maxArea);
-				valueSurveyB[i-1] = sqrt(circleArea/PI)*2;
-			};
-		}
+		recalculateValues();
+		startFrame = frameCount;
 	}
 	if (mouseX > buttonX+buttonSpacing-6 && mouseX < buttonX+buttonSpacing+6 && mouseY > buttonY+30-6 && mouseY < buttonY+30+6){
-		startFrame = frameCount;
-		valueGSAPPA = valueGSAPPC;
-		valueSurveyA = valueSurveyC;
 		column = 2;
-		var cirlceArea = 0;
-		var maxGraduates = 0;
-		var totalGraduates = 0;
-		if(data < 2){
-			for (var i = 1; i < 8; i++) {
-				maxGraduates = max(maxGraduates, totalGraduatesTable.getColumn(column)[i]);
-				totalGraduates = totalGraduates + totalGraduatesTable.getColumn(column)[i]*1;
-			};
-			for (var i = 1; i < 8; i++) {
-				circleArea = map(totalGraduatesTable.getColumn(column)[i], 0, maxGraduates, 0, maxArea);
-				valueGSAPPB[i-1] = sqrt(circleArea/PI)*2;
-			};
-			circleArea = 0;
-			maxGraduates = 0;
-			totalGraduates = 0;
-			for (var i = 1; i < 8; i++) {
-				maxGraduates = max(maxGraduates, totalGraduatesTable.getColumn(column)[i+8]);
-				totalGraduates = totalGraduates + totalGraduatesTable.getColumn(column)[i+8]*1;
-			};
-			for (var i = 1; i < 8; i++) {
-				circleArea = map(totalGraduatesTable.getColumn(column)[i+8], 0, maxGraduates, 0, maxArea);
-				valueSurveyB[i-1] = sqrt(circleArea/PI)*2;
-			};
-		}
-		else{
-			for (var i = 1; i < 8; i++) {
-				maxGraduates = max(maxGraduates, totalGraduatesTable.getColumn(column)[i]);
-				totalGraduates = totalGraduates + totalGraduatesTable.getColumn(column)[i]*1;
-			};
-			for (var i = 1; i < 8; i++) {
-				circleArea = map(totalGraduatesTable.getColumn(column)[i], 0, maxGraduates, 0, maxArea);
-				valueGSAPPB[i-1] = sqrt(circleArea/PI)*2;
-			};
-			for (var i = 1; i < 8; i++) {
-				circleArea = map(totalGraduatesTable.getColumn(column)[i+8], 0, maxGraduates, 0, maxArea);
-				valueSurveyB[i-1] = sqrt(circleArea/PI)*2;
-			};
-		}
+		recalculateValues();
+		startFrame = frameCount;
 	}
 	if (mouseX > buttonX+buttonSpacing*2-6 && mouseX < buttonX+buttonSpacing*2+6 && mouseY > buttonY+30-6 && mouseY < buttonY+30+6){
-		startFrame = frameCount;
-		valueGSAPPA = valueGSAPPC;
-		valueSurveyA = valueSurveyC;
 		column = 3;
-		var cirlceArea = 0;
-		var maxGraduates = 0;
-		var totalGraduates = 0;
-		if(data < 2){
-			for (var i = 1; i < 8; i++) {
-				maxGraduates = max(maxGraduates, totalGraduatesTable.getColumn(column)[i]);
-				totalGraduates = totalGraduates + totalGraduatesTable.getColumn(column)[i]*1;
-			};
-			for (var i = 1; i < 8; i++) {
-				circleArea = map(totalGraduatesTable.getColumn(column)[i], 0, maxGraduates, 0, maxArea);
-				valueGSAPPB[i-1] = sqrt(circleArea/PI)*2;
-			};
-			circleArea = 0;
-			maxGraduates = 0;
-			totalGraduates = 0;
-			for (var i = 1; i < 8; i++) {
-				maxGraduates = max(maxGraduates, totalGraduatesTable.getColumn(column)[i+8]);
-				totalGraduates = totalGraduates + totalGraduatesTable.getColumn(column)[i+8]*1;
-			};
-			for (var i = 1; i < 8; i++) {
-				circleArea = map(totalGraduatesTable.getColumn(column)[i+8], 0, maxGraduates, 0, maxArea);
-				valueSurveyB[i-1] = sqrt(circleArea/PI)*2;
-			};
-		}
-		else{
-			for (var i = 1; i < 8; i++) {
-				maxGraduates = max(maxGraduates, totalGraduatesTable.getColumn(column)[i]);
-				totalGraduates = totalGraduates + totalGraduatesTable.getColumn(column)[i]*1;
-			};
-			for (var i = 1; i < 8; i++) {
-				circleArea = map(totalGraduatesTable.getColumn(column)[i], 0, maxGraduates, 0, maxArea);
-				valueGSAPPB[i-1] = sqrt(circleArea/PI)*2;
-			};
-			for (var i = 1; i < 8; i++) {
-				circleArea = map(totalGraduatesTable.getColumn(column)[i+8], 0, maxGraduates, 0, maxArea);
-				valueSurveyB[i-1] = sqrt(circleArea/PI)*2;
-			};
-		}
+		recalculateValues();
+		startFrame = frameCount;
 	}
 	if (mouseX > buttonX+buttonSpacing*3-6 && mouseX < buttonX+buttonSpacing*3+6 && mouseY > buttonY+30-6 && mouseY < buttonY+30+6){
-		startFrame = frameCount;
-		valueGSAPPA = valueGSAPPC;
-		valueSurveyA = valueSurveyC;
 		column = 4;
-		var cirlceArea = 0;
-		var maxGraduates = 0;
-		var totalGraduates = 0;
-		if(data < 2){
-			for (var i = 1; i < 8; i++) {
-				maxGraduates = max(maxGraduates, totalGraduatesTable.getColumn(column)[i]);
-				totalGraduates = totalGraduates + totalGraduatesTable.getColumn(column)[i]*1;
-			};
-			for (var i = 1; i < 8; i++) {
-				circleArea = map(totalGraduatesTable.getColumn(column)[i], 0, maxGraduates, 0, maxArea);
-				valueGSAPPB[i-1] = sqrt(circleArea/PI)*2;
-			};
-			circleArea = 0;
-			maxGraduates = 0;
-			totalGraduates = 0;
-			for (var i = 1; i < 8; i++) {
-				maxGraduates = max(maxGraduates, totalGraduatesTable.getColumn(column)[i+8]);
-				totalGraduates = totalGraduates + totalGraduatesTable.getColumn(column)[i+8]*1;
-			};
-			for (var i = 1; i < 8; i++) {
-				circleArea = map(totalGraduatesTable.getColumn(column)[i+8], 0, maxGraduates, 0, maxArea);
-				valueSurveyB[i-1] = sqrt(circleArea/PI)*2;
-			};
-		}
-		else{
-			for (var i = 1; i < 8; i++) {
-				maxGraduates = max(maxGraduates, totalGraduatesTable.getColumn(column)[i]);
-				totalGraduates = totalGraduates + totalGraduatesTable.getColumn(column)[i]*1;
-			};
-			for (var i = 1; i < 8; i++) {
-				circleArea = map(totalGraduatesTable.getColumn(column)[i], 0, maxGraduates, 0, maxArea);
-				valueGSAPPB[i-1] = sqrt(circleArea/PI)*2;
-			};
-			for (var i = 1; i < 8; i++) {
-				circleArea = map(totalGraduatesTable.getColumn(column)[i+8], 0, maxGraduates, 0, maxArea);
-				valueSurveyB[i-1] = sqrt(circleArea/PI)*2;
-			};
-		}
+		recalculateValues();
+		startFrame = frameCount;
 	}
 	if (mouseX > buttonX+buttonSpacing*4-6 && mouseX < buttonX+buttonSpacing*4+6 && mouseY > buttonY+30-6 && mouseY < buttonY+30+6){
-		startFrame = frameCount;
-		valueGSAPPA = valueGSAPPC;
-		valueSurveyA = valueSurveyC;
 		column = 5;
-		var cirlceArea = 0;
-		var maxGraduates = 0;
-		var totalGraduates = 0;
-		if(data < 2){
-			for (var i = 1; i < 8; i++) {
-				maxGraduates = max(maxGraduates, totalGraduatesTable.getColumn(column)[i]);
-				totalGraduates = totalGraduates + totalGraduatesTable.getColumn(column)[i]*1;
-			};
-			for (var i = 1; i < 8; i++) {
-				circleArea = map(totalGraduatesTable.getColumn(column)[i], 0, maxGraduates, 0, maxArea);
-				valueGSAPPB[i-1] = sqrt(circleArea/PI)*2;
-			};
-			circleArea = 0;
-			maxGraduates = 0;
-			totalGraduates = 0;
-			for (var i = 1; i < 8; i++) {
-				maxGraduates = max(maxGraduates, totalGraduatesTable.getColumn(column)[i+8]);
-				totalGraduates = totalGraduates + totalGraduatesTable.getColumn(column)[i+8]*1;
-			};
-			for (var i = 1; i < 8; i++) {
-				circleArea = map(totalGraduatesTable.getColumn(column)[i+8], 0, maxGraduates, 0, maxArea);
-				valueSurveyB[i-1] = sqrt(circleArea/PI)*2;
-			};
-		}
-		else{
-			for (var i = 1; i < 8; i++) {
-				maxGraduates = max(maxGraduates, totalGraduatesTable.getColumn(column)[i]);
-				totalGraduates = totalGraduates + totalGraduatesTable.getColumn(column)[i]*1;
-			};
-			for (var i = 1; i < 8; i++) {
-				circleArea = map(totalGraduatesTable.getColumn(column)[i], 0, maxGraduates, 0, maxArea);
-				valueGSAPPB[i-1] = sqrt(circleArea/PI)*2;
-			};
-			for (var i = 1; i < 8; i++) {
-				circleArea = map(totalGraduatesTable.getColumn(column)[i+8], 0, maxGraduates, 0, maxArea);
-				valueSurveyB[i-1] = sqrt(circleArea/PI)*2;
-			};
-		}
+		recalculateValues();
+		startFrame = frameCount;
 	}
 	if (mouseX > buttonX+buttonSpacing*5-6 && mouseX < buttonX+buttonSpacing*5+6 && mouseY > buttonY+30-6 && mouseY < buttonY+30+6){
-		startFrame = frameCount;
-		valueGSAPPA = valueGSAPPC;
-		valueSurveyA = valueSurveyC;
 		column = 6;
-		var cirlceArea = 0;
-		var maxGraduates = 0;
-		var totalGraduates = 0;
-		if(data < 2){
-			for (var i = 1; i < 8; i++) {
-				maxGraduates = max(maxGraduates, totalGraduatesTable.getColumn(column)[i]);
-				totalGraduates = totalGraduates + totalGraduatesTable.getColumn(column)[i]*1;
-			};
-			for (var i = 1; i < 8; i++) {
-				circleArea = map(totalGraduatesTable.getColumn(column)[i], 0, maxGraduates, 0, maxArea);
-				valueGSAPPB[i-1] = sqrt(circleArea/PI)*2;
-			};
-			circleArea = 0;
-			maxGraduates = 0;
-			totalGraduates = 0;
-			for (var i = 1; i < 8; i++) {
-				maxGraduates = max(maxGraduates, totalGraduatesTable.getColumn(column)[i+8]);
-				totalGraduates = totalGraduates + totalGraduatesTable.getColumn(column)[i+8]*1;
-			};
-			for (var i = 1; i < 8; i++) {
-				circleArea = map(totalGraduatesTable.getColumn(column)[i+8], 0, maxGraduates, 0, maxArea);
-				valueSurveyB[i-1] = sqrt(circleArea/PI)*2;
-			};
-		}
-		else{
-			for (var i = 1; i < 8; i++) {
-				maxGraduates = max(maxGraduates, totalGraduatesTable.getColumn(column)[i]);
-				totalGraduates = totalGraduates + totalGraduatesTable.getColumn(column)[i]*1;
-			};
-			for (var i = 1; i < 8; i++) {
-				circleArea = map(totalGraduatesTable.getColumn(column)[i], 0, maxGraduates, 0, maxArea);
-				valueGSAPPB[i-1] = sqrt(circleArea/PI)*2;
-			};
-			for (var i = 1; i < 8; i++) {
-				circleArea = map(totalGraduatesTable.getColumn(column)[i+8], 0, maxGraduates, 0, maxArea);
-				valueSurveyB[i-1] = sqrt(circleArea/PI)*2;
-			};
-		}
+		recalculateValues();
+		startFrame = frameCount;
 	}
 }
 
