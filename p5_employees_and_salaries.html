@@ -20,26 +20,29 @@ var WIDTH = 1000;
 var HEIGHT = 500;
 var leftMargin = 0;
 var column = 1;
-var buttonX = 26;
+var buttonX = 10;
 var buttonY = 80;
 var buttonSpacing = 80;
 var fillGSAPP;
 var fillAP;
 var spacing = 25;
 var barHeight = 15;
+var midPoint = 315;
+var midSpace = 25;
+var endY = 215;
 var initValues = [];
 var targetValues = [];
 var drawValues = [];
 var startFrame, endFrame;
 var transitionFrames = 100;
 var framesRemaining = 0;
-var maxLength = 450;
 var startX;
-var startY = 115;
-var column2 = 1;
+var colorValues = [[]];
+var centerX = 300;
+var centerY = 200;
 
 function preload(){
-	dataTable = loadTable('data/Salary_Major_Year.csv');
+	dataTable = loadTable('data/Number_of_employees_salary.csv');
 	console.log('done loading data');
 }
 
@@ -49,18 +52,17 @@ function setup(){
 	fillGSAPP = color(180, 64, 76);
 	fillAP = color(8, 48, 94);
 	textFont("effra");
-	startX = leftMargin + 100;
+	startX = leftMargin + 130;
+	colorValues = [color(180, 64, 76), color(182, 29, 85), color(8, 48, 94), color(3, 78, 95)];
 
 	// Setup initial values
-	var maxValue = 0;
 	var rectLength = 0;
 	var totalPeeps = 0
-	for (var i = 1; i < 10; i++) {
-		maxValue = max(dataTable.getColumn(column)[i], maxValue);
+	for (var i = 1; i < 5; i++) {
 		totalPeeps = totalPeeps + dataTable.getColumn(column)[i]*1;
 	};
-	for (var i = 1; i < 10; i++) {
-		drawValues[i] = map(dataTable.getColumn(column)[i], 0, maxValue, 0, maxLength);
+	for (var i = 0; i < 4; i++) {
+		drawValues[i] = map(dataTable.getColumn(column)[i+1], 0, totalPeeps, 0, 360);
 	};
 }
 
@@ -78,7 +80,7 @@ function draw(){
 	text("ALUMNI PROJECT", leftMargin, 50);
 	textSize(18);
 	textLeading(20);
-	text("ANNUAL SALARY BY YEAR OF GRADUATION AND MAJOR", 190, 3, 250, 100);
+	text("NUMBER OF EMPLOYEES AND SALARIES", 190, 3, 225, 100);
 	stroke(0);
 	strokeWeight(1);
 	line(178, 3, 178, 50);
@@ -88,26 +90,19 @@ function draw(){
 	noFill();
 	stroke(0);
 	strokeWeight(1.5);
-	for (var i = 0; i < 8; i++) {
+	for (var i = 0; i < 10; i++) {
 		ellipse(buttonX+buttonSpacing*i, buttonY, 12, 12);
-	};
-	for (var i = 0; i < 6; i++) {
-		ellipse(buttonX+buttonSpacing*i, buttonY+30, 12, 12);
 	};
 	fill(0);
 	noStroke();
-	ellipse(buttonX+buttonSpacing*((column-1)/6), buttonY, 7, 7);
-	ellipse(buttonX+buttonSpacing*(column2-1), buttonY+30, 7, 7);
+	ellipse(buttonX+buttonSpacing*(column-1), buttonY, 7, 7);
 	textStyle(NORMAL);
-	for (var i = 0; i < 9; i++) {
-		text(dataTable.getColumn(i*6+1)[0], buttonX+10+buttonSpacing*(i), buttonY+3);
+	for (var i = 1; i < 11; i++) {
+		text(dataTable.getColumn(i)[0], buttonX+10+buttonSpacing*(i-1), buttonY+3);
 	};
-	for (var i = 2; i < 7; i++) {
-		text(dataTable.getColumn(i)[0], buttonX+10+buttonSpacing*(i-1), buttonY+33);
-	};
-	text("All Years", buttonX+10, buttonY+33);
+
 	if(frameCount > 0){
-		drawGraph();
+		undergradMajorGraph();
 	}
 
 	framesRemaining = frameCount - startFrame;
@@ -116,24 +111,42 @@ function draw(){
 	}
 }
 
-function drawGraph(){
-	var totalPeeps = 0
-	for (var i = 1; i < 10; i++) {
-		totalPeeps = totalPeeps + dataTable.getColumn(column+column2-1)[i]*1;
+function undergradMajorGraph(){
+	var totalPeeps = 0;
+	var labelXbuffer = 10;
+	var labelYbuffer = 10;
+	for (var i = 0; i < 4; i++) {
+		totalPeeps = totalPeeps + dataTable.getColumn(column)[i+1]*1;
 	};
 	noStroke();
 	textSize(12);
-	for (var i = 1; i < 10; i++) {
-		fill(fillGSAPP);
-		rect(startX, startY+i*spacing, drawValues[i], barHeight);
-		textAlign(LEFT);
+	var lastAngle = radians(-90);
+	for (var i = 0; i < drawValues.length; i++) {
+		fill(colorValues[i]);
+		arc(centerX, centerY, 150, 150, lastAngle, lastAngle+radians(drawValues[i]));
 		fill(0);
-		if(dataTable.getColumn(column+column2-1)[i]>0){
-			text(nfc((dataTable.getColumn(column+column2-1)[i]/totalPeeps*100),1)+"%", leftMargin + startX + drawValues[i] + 5, startY+i*spacing+11);
+		if (centerX + 75 * cos(lastAngle + radians(drawValues[i])/2) < centerX){
+			textAlign(RIGHT);
+			labelXbuffer = -10;
 		}
-		textAlign(RIGHT);
-		text(dataTable.getColumn(0)[i], startX - 5, startY+i*spacing+11);
+		else {
+			textAlign(LEFT);
+			labelXbuffer = 10;
+		}
+		if (centerY + 75 * sin(lastAngle + radians(drawValues[i])/2) < centerY){
+			labelYbuffer = -10;
+		}
+		else {
+			labelYbuffer = 10;
+		}
+		if(dataTable.getColumn(column)[i+1]>0){
+			text(nfc((dataTable.getColumn(column)[i+1]/totalPeeps*100),1)+"%", centerX + 75 * cos(lastAngle + radians(drawValues[i])/2) + labelXbuffer, centerY + 75 * sin(lastAngle + radians(drawValues[i])/2) + labelYbuffer + 12);
+			text(dataTable.getColumn(0)[i+1], centerX + 75 * cos(lastAngle + radians(drawValues[i])/2) + labelXbuffer, centerY + 75 * sin(lastAngle + radians(drawValues[i])/2) + labelYbuffer);
+		}
+		lastAngle += radians(drawValues[i]);
 	};
+	fill(100);
+	ellipse(centerX, centerY, 75, 75);
 }
 
 function updateValues(){
@@ -144,15 +157,13 @@ function updateValues(){
 
 function recalculateValues(){
 	initValues = drawValues;
-	var maxValue = 0;
 	var rectLength = 0;
 	var totalPeeps = 0
-	for (var i = 1; i < 10; i++) {
-		maxValue = max(dataTable.getColumn(column+column2-1)[i], maxValue);
-		totalPeeps = totalPeeps + dataTable.getColumn(column+column2-1)[i]*1;
+	for (var i = 1; i < 5; i++) {
+		totalPeeps = totalPeeps + dataTable.getColumn(column)[i]*1;
 	};
-	for (var i = 1; i < 10; i++) {
-		targetValues[i] = map(dataTable.getColumn(column+column2-1)[i], 0, maxValue, 0, maxLength);
+	for (var i = 0; i < 4; i++) {
+		targetValues[i] = map(dataTable.getColumn(column)[i+1], 0, totalPeeps, 0, 360);
 	};
 }
 
@@ -163,69 +174,49 @@ function mousePressed(){
 		startFrame = frameCount;
 	}
 	if (mouseX > buttonX+buttonSpacing-6 && mouseX < buttonX+buttonSpacing+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
-		column = 7;
+		column = 2;
 		recalculateValues();
 		startFrame = frameCount;
 	}
 	if (mouseX > buttonX+buttonSpacing*2-6 && mouseX < buttonX+buttonSpacing*2+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
-		column = 13;
+		column = 3;
 		recalculateValues();
-		startFrame = frameCount;
+		startFrame = frameCount;	
 	}
 	if (mouseX > buttonX+buttonSpacing*3-6 && mouseX < buttonX+buttonSpacing*3+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
-		column = 19;
+		column = 4;
 		recalculateValues();
-		startFrame = frameCount;
+		startFrame = frameCount;	
 	}
 	if (mouseX > buttonX+buttonSpacing*4-6 && mouseX < buttonX+buttonSpacing*4+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
-		column = 25;
+		column = 5;
 		recalculateValues();
 		startFrame = frameCount;	
 	}
 	if (mouseX > buttonX+buttonSpacing*5-6 && mouseX < buttonX+buttonSpacing*5+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
-		column = 31;
+		column = 6;
 		recalculateValues();
 		startFrame = frameCount;	
 	}
 	if (mouseX > buttonX+buttonSpacing*6-6 && mouseX < buttonX+buttonSpacing*6+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
-		column = 37;
+		column = 7;
 		recalculateValues();
 		startFrame = frameCount;	
 	}
 	if (mouseX > buttonX+buttonSpacing*7-6 && mouseX < buttonX+buttonSpacing*7+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
-		column = 43;
+		column = 8;
 		recalculateValues();
-		startFrame = frameCount;
+		startFrame = frameCount;		
 	}
-	if (mouseX > buttonX-6 && mouseX < buttonX+6 && mouseY > buttonY+26 && mouseY < buttonY+36){
-		column2 = 1;
+	if (mouseX > buttonX+buttonSpacing*8-6 && mouseX < buttonX+buttonSpacing*8+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
+		column = 9;
 		recalculateValues();
-		startFrame = frameCount;
+		startFrame = frameCount;		
 	}
-	if (mouseX > buttonX+buttonSpacing-6 && mouseX < buttonX+buttonSpacing+6 && mouseY > buttonY+26 && mouseY < buttonY+36){
-		column2 = 2;
+	if (mouseX > buttonX+buttonSpacing*9-6 && mouseX < buttonX+buttonSpacing*9+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
+		column = 10;
 		recalculateValues();
-		startFrame = frameCount;
-	}
-	if (mouseX > buttonX+buttonSpacing*2-6 && mouseX < buttonX+buttonSpacing*2+6 && mouseY > buttonY+26 && mouseY < buttonY+36){
-		column2 = 3;
-		recalculateValues();
-		startFrame = frameCount;
-	}
-	if (mouseX > buttonX+buttonSpacing*3-6 && mouseX < buttonX+buttonSpacing*3+6 && mouseY > buttonY+26 && mouseY < buttonY+36){
-		column2 = 4;
-		recalculateValues();
-		startFrame = frameCount;
-	}
-	if (mouseX > buttonX+buttonSpacing*4-6 && mouseX < buttonX+buttonSpacing*4+6 && mouseY > buttonY+26 && mouseY < buttonY+36){
-		column2 = 5;
-		recalculateValues();
-		startFrame = frameCount;
-	}
-	if (mouseX > buttonX+buttonSpacing*5-6 && mouseX < buttonX+buttonSpacing*5+6 && mouseY > buttonY+26 && mouseY < buttonY+36){
-		column2 = 6;
-		recalculateValues();
-		startFrame = frameCount;
+		startFrame = frameCount;		
 	}
 }
 
