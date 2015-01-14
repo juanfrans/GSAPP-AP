@@ -7,88 +7,160 @@
 		<script src="//use.typekit.net/hgl4qxi.js"></script>
 		<script>try{Typekit.load();}catch(e){}</script>
 		<script>
-		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-		ga('create', 'UA-27897156-2', 'auto');
-		ga('send', 'pageview');
-
-		</script>
-		<link rel="stylesheet" type="text/css" href="style.css">
+			})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+			ga('create', 'UA-27897156-2', 'auto');
+			ga('send', 'pageview');
+			</script>
 		<script type="text/javascript" src="p5/p5.js"></script>
-	</head>
+		<link rel="stylesheet" type="text/css" href="style.css">
 
+	</head>
 	<body>
-		<div class="top-note">
-			<p>This is the project page for the GSAPP Alumni Project, a work in progress by Juan Francisco Saldarriaga and Steven Sanchez. This is the test using p5 (Processing). All rights reserved.</p>
+		<!--facebookjs-->
+		<div id="fb-root"></div>
+			<script>(function(d, s, id) {
+				  var js, fjs = d.getElementsByTagName(s)[0];
+				  if (d.getElementById(id)) return;
+				  js = d.createElement(s); js.id = id;
+				  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
+				  fjs.parentNode.insertBefore(js, fjs);
+				  }(document, 'script', 'facebook-jssdk'));</script>
+		<div class="header">
+			<div class="icon"><a href ="http://localhost:8000/GSAPP-AP/">
+				<img src="img/Header.png" width="175" height="35px"></a></div>
+			<div class="nav">
+				<div><a href="#1_intro">INTRO</a></div>
+				<div><a href="#2_stat">STATS</a></div>
+				<div><a href="#3_where">WHERE</a></div>
+				<div><a href="#4_who">WHO</a></div>
+				<div><a href="#5_post">POST</a></div>
+				<div><a href="#6_work">WORK</a></div>
+				<div><a href="#7_company">COMPANY</a></div>
+				<div><a href="#8_stability">STABILITY</a></div>
+				<div><a href="#9_future">FUTURE</a></div>
+			</div> 
+			<div class="social">
+			<div class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="icon"></div>
+			<a href="https://twitter.com/share" target="_blank"><img src="img/twitter.png"></a></div>
 		</div>
-		<div class="title">
-			<h1>
-				GSAPP-ALUMNI PROJECT
-			</h1>
-			<h2>
-				A DATA VISUALIZATION AND ANALYSIS BASED ON 5 YEARS OF GSAPP GRADUATES
-			</h2>
-			<h3>
-				<p>A project by: <a href="http://juanfrans.com">Juan Francisco Saldarriaga</a> & <a href="http://www.steven-sanchez.com/">Steven Sanchez</a></p>
-			</h3>
-		</div>
-		<div class="intro-text">
-			<p class="description">Based on a previous <a href="http://dl.dropbox.com/u/7595728/GSAPP6mGrad.pdf">survey</a> of the 2012 Masters of Architecture class, the GSAPP - ALUMNI PROJECT attempts to capture the state and evolution of GSAPP Alumni five years out. By comparing and contrasting the different disciplines and classes, it provides insight into GSAPP classes and helps record the paths GSAPP graduates have taken.<br><br>The initial questionaire was sent out to more than 3,500 graduates, over the months of February and March 2014, and it included questions about their...<br><br>Overall data (descriptive stats of the survey): Here is where we say that GSAPP has this many peeps and that every program has these many peeps and that our survey had this percentage and that even though it seems small we can say that it is representative. Now, whe we look at specific programs in specific years, then we should tread carefully because the sample is too small, but the conclusions are still meaningful.</p>
-		</div>
-		<div class="content">
-			<p>
-				<iframe scrolling="no" src="p5_descriptive_stats_circles_backup.html" class="p5_chart" width="650" height="300" frameborder="0">
-				</iframe>
+		<div><p class="intro">A DATA VISUALIZATION AND ANALYSIS BASED ON 5 YEARS OF GSAPP GRADUATES A PROJECT BY: JUAN FRANCISCO SALDARRIAGA & STEVEN SANCHEZ</p></div>
+		<div id="1_intro" class="content">
+			<h1>HELLO...WHY GSAPP?</h1>
+			<h2>Who We Are, Where We Came From, & Where We’re Going</h2>
+			<p class="description">
+				Based on a previous <a href="http://dl.dropbox.com/u/7595728/GSAPP6mGrad.pdf">survey</a> of the 2012 Masters of Architecture class, the GSAPP - ALUMNI PROJECT attempts to capture the state and evolution of GSAPP Alumni five years out. By comparing and contrasting the different disciplines and classes, it provides insight into GSAPP classes and helps record the paths GSAPP graduates have taken.<br><br>The initial questionaire was sent out to more than 3,500 graduates, over the months of February and March 2014, and it included questions about their...<br><br>Overall data (descriptive stats of the survey): Here is where we say that GSAPP has this many peeps and that every program has these many peeps and that our survey had this percentage and that even though it seems small we can say that it is representative. Now, whe we look at specific programs in specific years, then we should tread carefully because the sample is too small, but the conclusions are still meaningful.
+			</p></div>
+		<a name="2_stat"></a>
+		<div id="2_stat" class="content_grey">
+			<hr size="4" width="40" color="#000000" noshade>
+			<h1 class="catagory">STATS</h1>
+			<p class="description">
+				Next is the nationality of the peeps, or the place where they lived before comming to GSAPP. This one is a little tricky because of the size of the regions. Asia might be the largest geographic region but it's not necessarily the one where the most people come from, that would be the Northeast region. Also, the US was split into regions, otherwise it would overwhel the whole map and we also think it's more useful to show it like that...
 			</p>
-			<p class="description">One of the first things we can talk about is the gender of the people who responded. Do they correspond to the gender split in GSAPP??? That's a good question... Two interesting things, though: One, the gender split varies a lot. M.Archs and AADs are pretty balanced, but majors like HP and MS.RED have a big imbalance. The other thing is the age. The AADs seem like they are younger, which contradicts a little bit what one would think, because it's supposed to be a "post-professional" degree. Anyways, stuff like that...</p>
+			<h2 class="chart_name">Number of Survey Participants</h2>
+			<hr size="1" width="350" color="#000000" noshade>
 			<p>
-				<iframe scrolling="no" src="p5_gender_age.html" class="p5_chart" width="650" height="300" frameborder="0">
-				</iframe>
+				<iframe scrolling="no" src="p5_descriptive_stats_circles_backup.html" class="p5_chart" width="650" height="300" frameborder="0"></iframe>
 			</p>
+			<p class="description">
+				One of the first things we can talk about is the gender of the people who responded. Do they correspond to the gender split in GSAPP??? That's a good question... Two interesting things, though: One, the gender split varies a lot. M.Archs and AADs are pretty balanced, but majors like HP and MS.RED have a big imbalance. The other thing is the age. The AADs seem like they are younger, which contradicts a little bit what one would think, because it's supposed to be a "post-professional" degree. Anyways, stuff like that...
+			</p>	</div>
+		<a name="3_where"></a>
+		<div id="3_where" class="content">
+			<hr size="4" width="30" color="#000000" noshade>
+			<h1 class="catagory">WHERE</h1>
+
 			<p class="description">Next is the nationality of the peeps, or the place where they lived before comming to GSAPP. This one is a little tricky because of the size of the regions. Asia might be the largest geographic region but it's not necessarily the one where the most people come from, that would be the Northeast region. Also, the US was split into regions, otherwise it would overwhel the whole map and we also think it's more useful to show it like that...</p>
+
+			<h2 class="chart_name">Place of Living Pre & post GSAPP</h2>
+			<hr size="1" width="350" color="#000000" noshade>
+				<p><iframe scrolling="no" src="p5_world_map.html" class="p5_chart" width="780" height="475" frameborder="0"></iframe></p>
+
+			<h2 class="chart_name">Undergrad Education</h2>
+			<hr size="1" width="350" color="#000000" noshade>
+				<p><iframe scrolling="no" src="p5_undergrad.html" class="p5_chart" width="650" height="225" frameborder="0"></iframe></p>
+			</div>
+		<a name="4_who"></a>
+		<div id="4_who" class="content_grey">
+			<hr size="4" width="50" color="#000000" noshade>
+			<h1 class="catagory">WHO</h1>
+
 			<p class="description">This one is quite interesting... it shows how diverse is each major in terms of the academic background of the peeps coming in. The M.Archs are a little diverse, but the AADs and the AUDs are not at all, 100% of them coming from backgrounds similar to what they are studying at GSAPP. HP is a little diverse, but the most diverse one is UP, with more than 40% of the students coming from outside the GSAPP fields. In general though, GSAPP is pretty much dominated by peeps that come from similar fields of study, with less than 20% of students having a background in something other than GSAPP areas of study.</p>
-			<p>
-				<iframe scrolling="no" src="p5_undergrad.html" class="p5_chart" width="650" height="225" frameborder="0">
-				</iframe>
-			</p>
+
+			<p> <iframe scrolling="no" src="p5_gender_age.html" class="p5_chart" width="650" height="300" frameborder="0"></iframe></p>
+
+			<p class="description">This one is quite interesting... it shows how diverse is each major in terms of the academic background of the peeps coming in. The M.Archs are a little diverse, but the AADs and the AUDs are not at all, 100% of them coming from backgrounds similar to what they are studying at GSAPP. HP is a little diverse, but the most diverse one is UP, with more than 40% of the students coming from outside the GSAPP fields. In general though, GSAPP is pretty much dominated by peeps that come from similar fields of study, with less than 20% of students having a background in something other than GSAPP areas of study.</p>
+
+			
+			<p><iframe scrolling="no" src="p5_search_experience_internships.html" class="p5_chart" width="780" height="400" frameborder="0"></iframe></p>
+
+			<p class="description">This one is very interesting, and the interactivity works pretty well. However, there isn't enough data for certain majors on certain graduation years, so it all becomes very general and not detailed enough; it all becomes pretty similar. It's hard to figure out what to do with it... Also, if we are going to keep it like this, the Y axis labels need to change dynamically too. Which, should be ok to do but it will take some time...</p></div>
+		<a name="5_post"></a>
+		<div id="5_post" class="content">
+			<hr size="4" width="50" color="#000000" noshade>
+			<h1 class="catagory">POST</h1>
 			<p class="description">Overall most of the students that come into GSAPP have some previous professional experience in their field of choice. However, there are some interesting things. For example, even though the AADs are on average younger than the M.Archs they seem to come with more professional experience than them. In addition, the bit outliers are the MS.RED students, which in general come into their program with much more professional experience than the students for the rest of the school. The opposite would be the HP students, most of which have less than 1 year of professional experience.</p>
 			<p>
 				<iframe scrolling="no" src="p5_prior_experience.html" class="p5_chart" width="650" height="300" frameborder="0">
 				</iframe>
 			</p>
 			<p class="description">Salaries... some majors (certain years) are difficult to judge because there aren't that many people. However, for others, and the overall trends, this graphic is pretty telling. For example, the RED students have a much much higher percentage of people in the top bracket. The HP students would be the opposite. Also, we see a penalty on the AADs and AUD students. Supposing most of them are foreigners and don't have the connections that the M.Arch have, their salaries are lower. Also, although it is difficult to judge 2009, you can say that one surprising thing is that the class of 2012 is doing marginally better than the class of 2010, even though they have one year less of eperience.</p>
-			<p>
-				<iframe scrolling="no" src="p5_salary_year_major.html" class="p5_chart" width="650" height="400" frameborder="0">
-				</iframe>
-			</p>
-			<p class="description">Now, are the salaries related to the type of software the alumni are using? One would expect that to be the case. Specially for the people using very "advanced" software (ie. Grasshopper, 3dsMax, or the scripting languages). However, looking at the data this intuition doesn't prove true. On the contrary, the more you climb in the salaries ladder, the more common the software. People that are making more than $80,000 tend to use mostly Microsoft Office (specially Excel and Word). On the other extreme are the people making less than $30,000, using mostly Photoshop. Overall, however, the prevalance of Office is astonishing. One would think that after going to gradschool at GSAPP, with all it's technological sophistication, more people would be using cutting edge software. But on the contrary, the software picture seems almost banal.</p>
-			<p>
-				<iframe scrolling="no" src="p5_software_salary_major.html" class="p5_chart" width="780" height="800" frameborder="0">
-				</iframe>
-			</p>
+			<p></div>
+		<a name="6_work"></a>
+		<div id="6_work" class="content_grey">
+			<hr size="4" width="50" color="#000000" noshade>
+			<h1 class="catagory">WORK</h1>
+
+			<p class="description">This one is quite interesting... it shows how diverse is each major in terms of the academic background of the peeps coming in. The M.Archs are a little diverse, but the AADs and the AUDs are not at all, 100% of them coming from backgrounds similar to what they are studying at GSAPP. HP is a little diverse, but the most diverse one is UP, with more than 40% of the students coming from outside the GSAPP fields. In general though, GSAPP is pretty much dominated by peeps that come from similar fields of study, with less than 20% of students having a background in something other than GSAPP areas of study.</p>
+
+			<h2 class="chart_name">Salary By Year / Major</h2>
+			<hr size="1" width="350" color="#000000" noshade>
+
+			<p><iframe scrolling="no" src="p5_salary_year_major.html" class="p5_chart" width="650" height="400" frameborder="0"></iframe></p>
+
+			<p class="description">Now, are the salaries related to the type of software the alumni are using? One would expect that to be the case. Specially for the people using very "advanced" software (ie. Grasshopper, 3dsMax, or the scripting languages). However, looking at the data this intuition doesn't prove true. On the contrary, the more you climb in the salaries ladder, the more common the software. People that are making more than $80,000 tend to use mostly Microsoft Office (specially Excel and Word). On the other extreme are the people making less than $30,000, using mostly Photoshop. Overall, however, the prevalance of Office is astonishing. One would think that after going to gradschool at GSAPP, with all it's technological sophistication, more people would be using cutting edge software. But on the contrary, the software picture seems almost banal.</p></div>
+		<a name="7_company"></a>
+		<div id="7_company" class="content">
+			<hr size="4" width="40" color="#000000" noshade>
+			<h1 class="catagory">COMPANY</h1>
+
+			<p class="description">This one is quite interesting... it shows how diverse is each major in terms of the academic background of the peeps coming in. The M.Archs are a little diverse, but the AADs and the AUDs are not at all, 100% of them coming from backgrounds similar to what they are studying at GSAPP. HP is a little diverse, but the most diverse one is UP, with more than 40% of the students coming from outside the GSAPP fields. In general though, GSAPP is pretty much dominated by peeps that come from similar fields of study, with less than 20% of students having a background in something other than GSAPP areas of study.</p>
+
+			<h2 class="chart_name">Salary Used By Salary</h2>
+			<hr size="1" width="350" color="#000000" noshade>
+
+			<p><iframe scrolling="no" src="p5_software_salary_major.html" class="p5_chart" width="780" height="800" frameborder="0"></iframe></p>
+
+			<p class="description">This one is very interesting, and the interactivity works pretty well. However, there isn't enough data for certain majors on certain graduation years, so it all becomes very general and not detailed enough; it all becomes pretty similar. It's hard to figure out what to do with it... Also, if we are going to keep it like this, the Y axis labels need to change dynamically too. Which, should be ok to do but it will take some time...</p></div>
+		<a name="8_stability"></a>
+		<div id="8_stability" class="content_grey">
+			<hr size="4" width="40" color="#000000" noshade>
+			<h1 class="catagory">STABILITY</h1>
+
 			<p class="description">This one is very interesting, and the interactivity works pretty well. However, there isn't enough data for certain majors on certain graduation years, so it all becomes very general and not detailed enough; it all becomes pretty similar. It's hard to figure out what to do with it... Also, if we are going to keep it like this, the Y axis labels need to change dynamically too. Which, should be ok to do but it will take some time...</p>
-			<p>
-				<iframe scrolling="no" src="p5_search_experience_internships.html" class="p5_chart" width="780" height="400" frameborder="0">
-				</iframe>
-			</p>
+			
+			<h2 class="chart_name">Undergrad Education</h2>
+			<hr size="1" width="350" color="#000000" noshade>
+			<p><iframe scrolling="no" src="p5_hours_work.html" class="p5_chart" width="780" height="525" frameborder="0"></iframe></p>
+
+			<p class="description">This one is very interesting, and the interactivity works pretty well. However, there isn't enough data for certain majors on certain graduation years, so it all becomes very general and not detailed enough; it all becomes pretty similar. It's hard to figure out what to do with it... Also, if we are going to keep it like this, the Y axis labels need to change dynamically too. Which, should be ok to do but it will take some time...</p></div>
+		<a name="9_future"></a>
+		<div id="9_future" class="content">
+			<hr size="4" width="40" color="#000000" noshade>
+			<h1 class="catagory">FUTURE</h1>
+
 			<p class="description">This one is very interesting, and the interactivity works pretty well. However, there isn't enough data for certain majors on certain graduation years, so it all becomes very general and not detailed enough; it all becomes pretty similar. It's hard to figure out what to do with it... Also, if we are going to keep it like this, the Y axis labels need to change dynamically too. Which, should be ok to do but it will take some time...</p>
-			<p>
-				<iframe scrolling="no" src="p5_hours_work.html" class="p5_chart" width="780" height="525" frameborder="0">
-				</iframe>
-			</p>
-			<p class="description">This one is very interesting, and the interactivity works pretty well. However, there isn't enough data for certain majors on certain graduation years, so it all becomes very general and not detailed enough; it all becomes pretty similar. It's hard to figure out what to do with it... Also, if we are going to keep it like this, the Y axis labels need to change dynamically too. Which, should be ok to do but it will take some time...</p>
-			<p>
-				<iframe scrolling="no" src="p5_world_map.html" class="p5_chart" width="780" height="475" frameborder="0">
-				</iframe>
-			</p>
-			<p class="description">This one is very interesting, and the interactivity works pretty well. However, there isn't enough data for certain majors on certain graduation years, so it all becomes very general and not detailed enough; it all becomes pretty similar. It's hard to figure out what to do with it... Also, if we are going to keep it like this, the Y axis labels need to change dynamically too. Which, should be ok to do but it will take some time...</p>
-			<p>
-				<iframe scrolling="no" src="p5_employees_and_salaries.html" class="p5_chart" width="780" height="475" frameborder="0">
-				</iframe>
-			</p>
-		</div>
+			
+			<h2 class="chart_name">Undergrad Education</h2>
+			<hr size="1" width="350" color="#000000" noshade>
+			<p><iframe scrolling="no" src="p5_employees_and_salaries.html" class="p5_chart" width="780" height="475" frameborder="0"></iframe></p></div>
+
+			<p class="description">This one is very interesting, and the interactivity works pretty well. However, there isn't enough data for certain majors on certain graduation years, so it all becomes very general and not detailed enough; it all becomes pretty similar. It's hard to figure out what to do with it... Also, if we are going to keep it like this, the Y axis labels need to change dynamically too. Which, should be ok to do but it will take some time...</p></div>
+		<div class="note">
+			<hr size="1" width="auto" color="#000000" noshade>
+			<p>This is the project page for the GSAPP Alumni Project, a work in progress by Juan Francisco Saldarriaga and Steven Sanchez. This is the test using p5 (Processing). All rights reserved.</p></div>
 	</body>
 </htlm>
