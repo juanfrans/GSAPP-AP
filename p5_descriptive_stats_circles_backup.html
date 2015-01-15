@@ -22,7 +22,7 @@ var leftMargin = 0;
 var column = 1;
 var data = 0;
 var buttonX = 26;
-var buttonY = 80;
+var buttonY = 25;
 var buttonSpacing = 110;
 var fillGSAPP;
 var fillAP;
@@ -79,24 +79,24 @@ function setup(){
 }
 
 function draw(){
-	background(100);
+	background(208,0,90);
 
 	//Text
-	fill(0);
-	noStroke();
-	textStyle(BOLD);
-	textSize(36);
-	text("GSAPP", leftMargin, 30);
-	textStyle(NORMAL);
-	textSize(18);
-	text("ALUMNI PROJECT", leftMargin, 50);
-	textSize(18);
-	textLeading(20);
-	text("NUMBER OF PARTICIPANTS", 190, 3, 150, 100);
-	stroke(0);
-	strokeWeight(1);
-	line(178, 3, 178, 50);
-	textSize(20);
+	//fill(0);
+	//noStroke();
+	//textStyle(BOLD);
+	//textSize(36);
+	//text("GSAPP", leftMargin, 30);
+	//textStyle(NORMAL);
+	//textSize(18);
+	//text("ALUMNI PROJECT", leftMargin, 50);
+	//textSize(18);
+	//textLeading(20);
+	//text("NUMBER OF PARTICIPANTS", 190, 3, 150, 100);
+	//stroke(0);
+	//strokeWeight(1);
+	//line(178, 3, 178, 50);
+	//textSize(20);
 
 	//Buttons
 	textSize(12);
@@ -107,7 +107,7 @@ function draw(){
 		ellipse(buttonX+buttonSpacing*i, buttonY, 12, 12);
 	};
 	for (var i = 0; i < 6; i++) {
-		ellipse(buttonX+buttonSpacing*i, buttonY+30, 12, 12);
+		ellipse(buttonX+buttonSpacing*i, buttonY+20, 12, 12);
 	};
 
 	fill(0);
@@ -116,11 +116,11 @@ function draw(){
 	text("GSAPP", buttonX+10, buttonY+3);
 	text("OUR SURVEY", buttonX+buttonSpacing+10, buttonY+3);
 	text("COMPARISON", buttonX+buttonSpacing*2+10, buttonY+3);
-	ellipse(buttonX+buttonSpacing*(column-1), buttonY+30, 7, 7);
+	ellipse(buttonX+buttonSpacing*(column-1), buttonY+20, 7, 7);
 	ellipse(buttonX+buttonSpacing*(data), buttonY, 7, 7);
 	textStyle(NORMAL);
 	for (var i = 1; i < 7; i++) {
-		text(totalGraduatesTable.getColumn(i)[0], buttonX+10+buttonSpacing*(i-1), buttonY+33);
+		text(totalGraduatesTable.getColumn(i)[0], buttonX+10+buttonSpacing*(i-1), buttonY+23);
 	};
 
 	if(frameCount > 0){
@@ -308,32 +308,32 @@ function mousePressed(){
 		startFrame = frameCount;
 	}
 
-	if (mouseX > buttonX-6 && mouseX < buttonX+6 && mouseY > buttonY+30-6 && mouseY < buttonY+30+6){
+	if (mouseX > buttonX-6 && mouseX < buttonX+6 && mouseY > buttonY+20-6 && mouseY < buttonY+20+6){
 		column = 1;
 		recalculateValues();
 		startFrame = frameCount;
 	}
-	if (mouseX > buttonX+buttonSpacing-6 && mouseX < buttonX+buttonSpacing+6 && mouseY > buttonY+30-6 && mouseY < buttonY+30+6){
+	if (mouseX > buttonX+buttonSpacing-6 && mouseX < buttonX+buttonSpacing+6 && mouseY > buttonY+20-6 && mouseY < buttonY+20+6){
 		column = 2;
 		recalculateValues();
 		startFrame = frameCount;
 	}
-	if (mouseX > buttonX+buttonSpacing*2-6 && mouseX < buttonX+buttonSpacing*2+6 && mouseY > buttonY+30-6 && mouseY < buttonY+30+6){
+	if (mouseX > buttonX+buttonSpacing*2-6 && mouseX < buttonX+buttonSpacing*2+6 && mouseY > buttonY+20-6 && mouseY < buttonY+20+6){
 		column = 3;
 		recalculateValues();
 		startFrame = frameCount;
 	}
-	if (mouseX > buttonX+buttonSpacing*3-6 && mouseX < buttonX+buttonSpacing*3+6 && mouseY > buttonY+30-6 && mouseY < buttonY+30+6){
+	if (mouseX > buttonX+buttonSpacing*3-6 && mouseX < buttonX+buttonSpacing*3+6 && mouseY > buttonY+20-6 && mouseY < buttonY+20+6){
 		column = 4;
 		recalculateValues();
 		startFrame = frameCount;
 	}
-	if (mouseX > buttonX+buttonSpacing*4-6 && mouseX < buttonX+buttonSpacing*4+6 && mouseY > buttonY+30-6 && mouseY < buttonY+30+6){
+	if (mouseX > buttonX+buttonSpacing*4-6 && mouseX < buttonX+buttonSpacing*4+6 && mouseY > buttonY+20-6 && mouseY < buttonY+20+6){
 		column = 5;
 		recalculateValues();
 		startFrame = frameCount;
 	}
-	if (mouseX > buttonX+buttonSpacing*5-6 && mouseX < buttonX+buttonSpacing*5+6 && mouseY > buttonY+30-6 && mouseY < buttonY+30+6){
+	if (mouseX > buttonX+buttonSpacing*5-6 && mouseX < buttonX+buttonSpacing*5+6 && mouseY > buttonY+20-6 && mouseY < buttonY+20+6){
 		column = 6;
 		recalculateValues();
 		startFrame = frameCount;
