@@ -171,7 +171,7 @@ iframe.p5_chart{
 }
 
 h1{
-	font-family:  helvetica, sans-serif;
+	font-family: "din-condensed-web", helvetica, sans-serif;
 	font-size: 40px;
 	color: #000000;
 	font-weight: 700;
@@ -184,7 +184,7 @@ h1{
 	padding-bottom: 0px;
 }
 
-/*"din-condensed-web",*/
+/**/
 
 h2{
 	font-family: helvetica, sans-serif;
@@ -221,7 +221,7 @@ a:link {
     text-decoration: none;
 }
 
-/*a:hover{
+a:hover{
 	opacity: .5;
 	text-decoration: none;
 }
