@@ -3,7 +3,7 @@
 body {
 	background-color: rgb(255);
 	color: #000000;
-	font-family: "DIN Condensed Web", helvetica, sans-serif;
+	font-family:  helvetica, sans-serif;
 	font-size: 16px;
 	font-weight: 100;
 	text-align: left;
@@ -111,7 +111,7 @@ div.content_grey{
 p.description_intro {
 	width: 350px;
 	text-align: justify;
-	font-family: "Futura PT Condensed", helvetica, sans-serif;
+	font-family:  helvetica, sans-serif;
 	color: #000000;
 	font-size: 13px;
 	font-weight: 100;
@@ -125,7 +125,7 @@ p.description_intro {
 p.description {
 	width: 350px;
 	text-align: justify;
-	font-family: "Futura PT Condensed", helvetica, sans-serif;
+	font-family:  helvetica, sans-serif;
 	color: #000000;
 	font-size: 13px;
 	font-weight: 100;
@@ -165,13 +165,13 @@ iframe.p5_chart{
 
 .top-note{
 	color: #000000;
-	font-family: "Futura PT Condensed", helvetica, sans-serif;
+	font-family:  helvetica, sans-serif;
 	font-size: 10px;
 	font-weight: 200;
 }
 
 h1{
-	font-family: "din-condensed-web", helvetica, sans-serif;
+	font-family:  helvetica, sans-serif;
 	font-size: 40px;
 	color: #000000;
 	font-weight: 700;
@@ -184,8 +184,10 @@ h1{
 	padding-bottom: 0px;
 }
 
+/*"din-condensed-web",*/
+
 h2{
-	font-family: "DIN Condensed Web", helvetica, sans-serif;
+	font-family: helvetica, sans-serif;
 	font-size: 18px;
 	color: #E6E7E8;
 	font-weight: 100;
@@ -200,7 +202,7 @@ h2{
 
 h3{
 	height:14px;
-	font-family: "DIN Condensed Web", helvetica, sans-serif;
+	font-family: helvetica, sans-serif;
 	font-size: 16px;
 	color: #000000;
 	font-weight: 100;
@@ -212,35 +214,6 @@ h3{
 	padding-top: 0px;
 	padding-bottom: 2px;
 }
-.title a:link{
-	text-decoration: none;
-}
-
-.title a:hover{
-	text-decoration: none;
-}
-
-.title h2 {
-	color: #000000;
-	font-weight: 400;
-	font-family: "Futura PT Condensed", helvetica, sans-serif;
-	font-size: 12px;
-	text-align: center;
-	padding-top: 0px;
-	margin-bottom: 0px;
-	line-height: 100%;
-}
-
-.title h3 {
-	color: #000000;
-	font-weight: 400;
-	font-family: "Futura PT Condensed", helvetica, sans-serif;
-	font-size: 12px;
-	text-align: center;
-	padding-top: 0px;
-	margin-bottom: 0px;
-	line-height: 50%;
-}
 
 /* unvisited link */
 a:link {
@@ -248,7 +221,7 @@ a:link {
     text-decoration: none;
 }
 
-a:hover{
+/*a:hover{
 	opacity: .5;
 	text-decoration: none;
 }
