@@ -16,12 +16,12 @@
 </head>
 <script type="text/javascript">
 
-var WIDTH = 1000;
+var WIDTH = 650;
 var HEIGHT = 500;
 var leftMargin = 0;
 var column = 1;
 var buttonX = 26;
-var buttonY = 80;
+var buttonY = 25;
 var buttonSpacing = 80;
 var fillGSAPP;
 var fillAP;
@@ -30,14 +30,17 @@ var initValues = [];
 var targetValues = [];
 var drawValues = [];
 var startFrame, endFrame;
-var transitionFrames = 100;
+var transitionFrames = 60;
 var framesRemaining = 0;
 var maxArea;
 var maxCircleRadius = 50;
 var startX;
 var worldMap;
-var mapProportion = 1.75;
+var mapProportion = 1.95;
+var fctCrds = 0.9;
 var coordenates = [[]];
+var mapX = 0;
+var mapY = 75;
 
 function preload(){
 	dataTable = loadTable('data/Living_before_GSAPP.csv');
@@ -47,14 +50,14 @@ function preload(){
 
 function setup(){
 	createCanvas(WIDTH, HEIGHT);
-	colorMode(HSB, 360, 100, 100, 100);
-	fillGSAPP = color(180, 64, 76);
-	fillAP = color(8, 48, 94);
-	textFont("effra");
+	colorMode(RGB, 255, 255, 255, 100);
+	fillGSAPP = color(80, 194, 193);
+	fillAP = color(240, 139, 124);
+	textFont("proxima nova");
 	startX = leftMargin + 130;
 
 	// Setup initial values
-	coordenates = [[400, 350], [550, 250], [110, 200], [350, 225], [200, 325], [430, 260], [155, 230], [200, 240], [625, 385], [175, 265], [140, 260], [100, 250]];
+	coordenates = [[mapX+400*fctCrds, mapY+250*fctCrds], [mapX+550*fctCrds, mapY+150*fctCrds], [mapX+110*fctCrds, mapY+100*fctCrds], [mapX+350*fctCrds, mapY+125*fctCrds], [mapX+200*fctCrds, mapY+225*fctCrds], [mapX+430*fctCrds, mapY+160*fctCrds], [mapX+155*fctCrds, mapY+130*fctCrds], [mapX+200*fctCrds, mapY+140*fctCrds], [mapX+625*fctCrds, mapY+285*fctCrds], [mapX+175*fctCrds, mapY+165*fctCrds], [mapX+140*fctCrds, mapY+160*fctCrds*fctCrds], [mapX+100*fctCrds, mapY+160*fctCrds]];
 	maxArea = PI*pow((maxCircleRadius/2),2);
 	var maxValue = 0;
 	var totalPeeps = 0
@@ -70,39 +73,29 @@ function setup(){
 }
 
 function draw(){
-	background(100);
-	image(worldMap, 0, 100, 1280/mapProportion, 628/mapProportion);
+	background(255);
+	image(worldMap, mapX, mapY, 1280/mapProportion, 628/mapProportion);
 
-	//Text
-	fill(0);
-	noStroke();
-	textStyle(BOLD);
-	textSize(36);
-	text("GSAPP", leftMargin, 30);
-	textStyle(NORMAL);
-	textSize(18);
-	text("ALUMNI PROJECT", leftMargin, 50);
-	textSize(18);
-	textLeading(20);
-	text("PLACE OF LIVING BEFORE COMING TO GSAPP", 190, 3, 250, 100);
-	stroke(0);
-	strokeWeight(1);
-	line(178, 3, 178, 50);
-	textSize(12);
-	noStroke();
+	//Buttons
 	textSize(12);
 	noFill();
 	stroke(0);
 	strokeWeight(1.5);
-	for (var i = 0; i < 8; i++) {
+	for (var i = 0; i < 2; i++) {
 		ellipse(buttonX+buttonSpacing*i, buttonY, 12, 12);
+	};
+	for (var i = 0; i < 8; i++) {
+		ellipse(buttonX+buttonSpacing*i, buttonY+20, 12, 12);
 	};
 	fill(0);
 	noStroke();
+	textStyle(NORMAL);
+	text("PRE", buttonX+10, buttonY+3);
+	text("POST", buttonX+buttonSpacing+10, buttonY+3);
 	ellipse(buttonX+buttonSpacing*(column-1), buttonY, 7, 7);
 	textStyle(NORMAL);
 	for (var i = 1; i < 9; i++) {
-		text(dataTable.getColumn(i)[0], buttonX+10+buttonSpacing*(i-1), buttonY+3);
+		text(dataTable.getColumn(i)[0], buttonX+10+buttonSpacing*(i-1), buttonY+23);
 	};
 
 	if(frameCount > 0){
@@ -121,7 +114,7 @@ function drawGraph(){
 		totalPeeps = totalPeeps + dataTable.getColumn(column)[i+1]*1;
 	};
 	noStroke();
-	textSize(12);
+	textSize(10);
 	for (var i = 0; i < drawValues.length; i++) {
 		fill(fillGSAPP);
 		ellipse(coordenates[i][0], coordenates[i][1], drawValues[i], drawValues[i]);
@@ -130,9 +123,9 @@ function drawGraph(){
 		textAlign(LEFT);
 		fill(0);
 		if(dataTable.getColumn(column)[i+1]>0){
-			text(nfc((dataTable.getColumn(column)[i+1]/totalPeeps*100),1)+'%', coordenates[i][0]+6, coordenates[i][1]+18);
+			text(dataTable.getColumn(0)[i+1]+' '+nfc((dataTable.getColumn(column)[i+1]/totalPeeps*100),1)+'%', coordenates[i][0]+6, coordenates[i][1]+6);
 		}
-		text(dataTable.getColumn(0)[i+1], coordenates[i][0]+6, coordenates[i][1]+6);
+		//text(dataTable.getColumn(0)[i+1], coordenates[i][0]+6, coordenates[i][1]+6);
 	};
 }
 
