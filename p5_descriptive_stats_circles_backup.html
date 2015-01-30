@@ -17,7 +17,7 @@
 <script type="text/javascript">
 
 var WIDTH = 650;
-var HEIGHT = 275;
+var HEIGHT = 250;
 var leftMargin = 0;
 var column = 1;
 var data = 0;
@@ -32,11 +32,19 @@ var valueGSAPPC = [];
 var valueSurveyA = [];
 var valueSurveyB = [];
 var valueSurveyC = [];
+var numberValueGSAPPA = [];
+var numberValueGSAPPB = [];
+var numberValueGSAPPC = [];
+var numberValueSurveyA = [];
+var numberValueSurveyB = [];
+var numberValueSurveyC = [];
 var startFrame, endFrame;
 var transitionFrames = 100;
 var maxCircleRadius, maxArea;
 var framesRemaining = 0;
-
+var circleStartY = 150;
+var circleStartX = 50;
+var maxCircleRadius = 75;
 
 function preload(){
 	totalGraduatesTable = loadTable('data/Total_Graduates.csv');
@@ -46,13 +54,12 @@ function preload(){
 
 function setup(){
 	createCanvas(WIDTH, HEIGHT);
-	colorMode(HSB, 360, 100, 100, 100);
-	fillGSAPP = color(180, 64, 76);
-	fillAP = color(8, 48, 94);
-	textFont("effra");
+	colorMode(RGB, 255, 255, 255, 100);
+	fillGSAPP = color(80, 194, 193);
+	fillAP = color(240, 139, 124);
+	textFont("proxima nova");
 
 	// Setup starting values
-	maxCircleRadius = 75;
 	maxArea = PI*pow((maxCircleRadius/2),2);
 	var cirlceArea = 0;
 	var maxGraduates = 0;
@@ -64,6 +71,7 @@ function setup(){
 	for (var i = 1; i < 8; i++) {
 		circleArea = map(totalGraduatesTable.getColumn(column)[i], 0, maxGraduates, 0, maxArea);
 		valueGSAPPC[i-1] = sqrt(circleArea/PI)*2;
+		numberValueGSAPPC[i-1] = parseInt(totalGraduatesTable.getColumn(column)[i]);
 	};
 	cirlceArea = 0;
 	maxGraduates = 0;
@@ -75,28 +83,12 @@ function setup(){
 	for (var i = 1; i < 8; i++) {
 		circleArea = map(totalGraduatesTable.getColumn(column)[i+8], 0, maxGraduates, 0, maxArea);
 		valueSurveyC[i-1] = sqrt(circleArea/PI)*2;
+		numberValueSurveyC[i-1] = parseInt(totalGraduatesTable.getColumn(column)[i+8]);
 	};
 }
 
 function draw(){
-	background(208,0,90);
-
-	//Text
-	//fill(0);
-	//noStroke();
-	//textStyle(BOLD);
-	//textSize(36);
-	//text("GSAPP", leftMargin, 30);
-	//textStyle(NORMAL);
-	//textSize(18);
-	//text("ALUMNI PROJECT", leftMargin, 50);
-	//textSize(18);
-	//textLeading(20);
-	//text("NUMBER OF PARTICIPANTS", 190, 3, 150, 100);
-	//stroke(0);
-	//strokeWeight(1);
-	//line(178, 3, 178, 50);
-	//textSize(20);
+	background(239, 239, 239);
 
 	//Buttons
 	textSize(12);
@@ -139,8 +131,6 @@ function draw(){
 }
 
 function circleChart2(){
-	var circleStartY = 200;
-	var circleStartX = 50;
 	var maxCircleRadius = 75;
 	var maxArea = PI*pow((maxCircleRadius/2),2);
 	var cirlceArea = 0;
@@ -164,8 +154,8 @@ function circleChart2(){
 	for (var i = 1; i < 8; i++) {
 		major = totalGraduatesTable.getColumn(0)[i];
 		text(major.toUpperCase(), circleStartX+90*(i-1), circleStartY-50);
-		text(totalGraduatesTable.getColumn(column)[i+8]+"/"+totalGraduatesTable.getColumn(column)[i], circleStartX+90*(i-1), circleStartY+55);
-		text("("+round(totalGraduatesTable.getColumn(column)[i+8]/totalGraduatesTable.getColumn(column)[i]*100)+"%)", circleStartX+90*(i-1), circleStartY+70);
+		text(numberValueSurveyC[i-1]+"/"+numberValueGSAPPC[i-1], circleStartX+90*(i-1), circleStartY+55);
+		text("("+round(numberValueSurveyC[i-1]/numberValueGSAPPC[i-1]*100)+"%)", circleStartX+90*(i-1), circleStartY+70);
 	};
 
 	noFill();
@@ -186,34 +176,38 @@ function circleChart2(){
 }
 
 function circleChart(){
-	var circleStartY = 200;
-	var circleStartX = 50;
-	var maxCircleRadius = 75;
 	var maxArea = PI*pow((maxCircleRadius/2),2);
 	var cirlceArea = 0;
 	var maxGraduates = 0;
 	var major;
 	var totalGraduates = 0;
-	var GSAPP = 8*data;
 
 	for (var i = 1; i < 8; i++) {
-		maxGraduates = max(maxGraduates, totalGraduatesTable.getColumn(column)[i+GSAPP]);
+		maxGraduates = max(maxGraduates, totalGraduatesTable.getColumn(column)[i+8*data]);
 	};
 	for (var i = 1; i < 8; i++) {
-		totalGraduates = totalGraduates + totalGraduatesTable.getColumn(column)[i+GSAPP]*1;
+		totalGraduates = totalGraduates + totalGraduatesTable.getColumn(column)[i+8*data]*1;
 	};
-
 	fill(0);
 	noStroke();
 	textSize(12);
 	textAlign(CENTER);
-	for (var i = 1; i < 8; i++) {
-		major = totalGraduatesTable.getColumn(0)[i];
-		text(major.toUpperCase(), circleStartX+90*(i-1), circleStartY-50);
-		text(totalGraduatesTable.getColumn(column)[i+GSAPP], circleStartX+90*(i-1), circleStartY+55);
-		text("("+round(totalGraduatesTable.getColumn(column)[i+GSAPP]/totalGraduates*100)+"%)", circleStartX+90*(i-1), circleStartY+70);
-	};
-
+	if (data == 0){
+		for (var i = 1; i < 8; i++) {
+			major = totalGraduatesTable.getColumn(0)[i];
+			text(major.toUpperCase(), circleStartX+90*(i-1), circleStartY-50);
+			text(numberValueGSAPPC[i-1], circleStartX+90*(i-1), circleStartY+55);
+			text("("+round(numberValueGSAPPC[i-1]/totalGraduates*100)+"%)", circleStartX+90*(i-1), circleStartY+70);
+		};
+	}
+	if (data == 1){
+		for (var i = 1; i < 8; i++) {
+			major = totalGraduatesTable.getColumn(0)[i];
+			text(major.toUpperCase(), circleStartX+90*(i-1), circleStartY-50);
+			text(numberValueSurveyC[i-1], circleStartX+90*(i-1), circleStartY+55);
+			text("("+round(numberValueSurveyC[i-1]/totalGraduates*100)+"%)", circleStartX+90*(i-1), circleStartY+70);
+		};
+	}
 	noFill();
 	stroke(0);
 	strokeWeight(0.5);
@@ -243,12 +237,16 @@ function updateValues(){
 	for (var i=0; i<valueGSAPPA.length; i++){
 		valueGSAPPC[i] = lerp(valueGSAPPA[i], valueGSAPPB[i], (framesRemaining/transitionFrames));
 		valueSurveyC[i] = lerp(valueSurveyA[i], valueSurveyB[i], (framesRemaining/transitionFrames));
+		numberValueGSAPPC[i] = round(lerp(numberValueGSAPPA[i], numberValueGSAPPB[i], (framesRemaining/transitionFrames)));
+		numberValueSurveyC[i] = round(lerp(numberValueSurveyA[i], numberValueSurveyB[i], (framesRemaining/transitionFrames)));
 	}
 }
 
 function recalculateValues(){
 	valueGSAPPA = valueGSAPPC;
 	valueSurveyA = valueSurveyC;
+	numberValueGSAPPA = numberValueGSAPPC;
+	numberValueSurveyA = numberValueSurveyC;
 	var cirlceArea = 0;
 	var maxGraduates = 0;
 	var totalGraduates = 0;
@@ -260,6 +258,7 @@ function recalculateValues(){
 		for (var i = 1; i < 8; i++) {
 			circleArea = map(totalGraduatesTable.getColumn(column)[i], 0, maxGraduates, 0, maxArea);
 			valueGSAPPB[i-1] = sqrt(circleArea/PI)*2;
+			numberValueGSAPPB[i-1] = totalGraduatesTable.getColumn(column)[i];
 		};
 		circleArea = 0;
 		maxGraduates = 0;
@@ -271,6 +270,7 @@ function recalculateValues(){
 		for (var i = 1; i < 8; i++) {
 			circleArea = map(totalGraduatesTable.getColumn(column)[i+8], 0, maxGraduates, 0, maxArea);
 			valueSurveyB[i-1] = sqrt(circleArea/PI)*2;
+			numberValueSurveyB[i-1] = totalGraduatesTable.getColumn(column)[i+8];
 		};
 	}
 	else{
@@ -281,10 +281,12 @@ function recalculateValues(){
 		for (var i = 1; i < 8; i++) {
 			circleArea = map(totalGraduatesTable.getColumn(column)[i], 0, maxGraduates, 0, maxArea);
 			valueGSAPPB[i-1] = sqrt(circleArea/PI)*2;
+			numberValueGSAPPB[i-1] = totalGraduatesTable.getColumn(column)[i];
 		};
 		for (var i = 1; i < 8; i++) {
 			circleArea = map(totalGraduatesTable.getColumn(column)[i+8], 0, maxGraduates, 0, maxArea);
 			valueSurveyB[i-1] = sqrt(circleArea/PI)*2;
+			numberValueSurveyB[i-1] = totalGraduatesTable.getColumn(column)[i+8];
 		};
 	}
 }
