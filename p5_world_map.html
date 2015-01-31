@@ -20,6 +20,7 @@ var WIDTH = 650;
 var HEIGHT = 500;
 var leftMargin = 0;
 var column = 1;
+var postGSAPP = 0;
 var buttonX = 26;
 var buttonY = 25;
 var buttonSpacing = 80;
@@ -29,6 +30,9 @@ var spacing = 25;
 var initValues = [];
 var targetValues = [];
 var drawValues = [];
+var numberInitValues = [];
+var numberTargetValues = [];
+var numberDrawValues = [];
 var startFrame, endFrame;
 var transitionFrames = 60;
 var framesRemaining = 0;
@@ -41,6 +45,11 @@ var fctCrds = 0.9;
 var coordenates = [[]];
 var mapX = 0;
 var mapY = 75;
+var preOutsideDraw = 0;
+var preOutsideInit = 0;
+var preOutsideTarget = 0;
+var postOutside = 0;
+var outside = [1, 2, 3, 4, 5, 6, 9]
 
 function preload(){
 	dataTable = loadTable('data/Living_before_GSAPP.csv');
@@ -69,7 +78,11 @@ function setup(){
 	for (var i = 0; i < 12; i++) {
 		circleArea = map(dataTable.getColumn(column)[i+1], 0, maxValue, 0, maxArea);
 		drawValues[i] = sqrt(circleArea/PI)*2;
+		numberDrawValues[i] = parseInt(dataTable.getColumn(column)[i+1]);
 	};
+	for (var i = 0; i < outside.length; i++) {
+	 	preOutsideDraw = preOutsideDraw + parseInt(dataTable.getColumn(column)[outside[i]])/totalPeeps;
+	 };
 }
 
 function draw(){
@@ -92,16 +105,20 @@ function draw(){
 	textStyle(NORMAL);
 	text("PRE", buttonX+10, buttonY+3);
 	text("POST", buttonX+buttonSpacing+10, buttonY+3);
-	ellipse(buttonX+buttonSpacing*(column-1), buttonY, 7, 7);
+	ellipse(buttonX+buttonSpacing*(column-1), buttonY+20, 7, 7);
+	ellipse(buttonX+buttonSpacing*(postGSAPP), buttonY, 7, 7);
 	textStyle(NORMAL);
 	for (var i = 1; i < 9; i++) {
 		text(dataTable.getColumn(i)[0], buttonX+10+buttonSpacing*(i-1), buttonY+23);
 	};
-
+	text('CAME FROM ABROAD', 25, mapY+415);
+	textStyle(BOLD);
+	textSize(48);
+	text(nfc(preOutsideDraw*100,1)+'%', 25, mapY+400);
+	textStyle(NORMAL);
 	if(frameCount > 0){
 		drawGraph();
 	}
-
 	framesRemaining = frameCount - startFrame;
 	if (framesRemaining < transitionFrames){
 		updateValues();
@@ -122,8 +139,8 @@ function drawGraph(){
 	for (var i = 0; i < drawValues.length; i++) {
 		textAlign(LEFT);
 		fill(0);
-		if(dataTable.getColumn(column)[i+1]>0){
-			text(dataTable.getColumn(0)[i+1]+' '+nfc((dataTable.getColumn(column)[i+1]/totalPeeps*100),1)+'%', coordenates[i][0]+6, coordenates[i][1]+6);
+		if(numberDrawValues[i]>0.25){
+			text(dataTable.getColumn(0)[i+1]+' '+nfc((numberDrawValues[i]/totalPeeps*100),1)+'%', coordenates[i][0]+6, coordenates[i][1]+6);
 		}
 		//text(dataTable.getColumn(0)[i+1], coordenates[i][0]+6, coordenates[i][1]+6);
 	};
@@ -132,11 +149,15 @@ function drawGraph(){
 function updateValues(){
 	for (var i=0; i<drawValues.length; i++){
 		drawValues[i] = lerp(initValues[i], targetValues[i], (framesRemaining/transitionFrames));
+		numberDrawValues[i] = lerp(numberInitValues[i], numberTargetValues[i], (framesRemaining/transitionFrames));
 	}
+	preOutsideDraw = lerp(preOutsideInit, preOutsideTarget, (framesRemaining/transitionFrames));
 }
 
 function recalculateValues(){
 	initValues = drawValues;
+	numberInitValues = numberDrawValues;
+	preOutsideInit = preOutsideDraw;
 	var maxValue = 0;
 	var circleArea = 0;
 	var totalPeeps = 0
@@ -144,49 +165,72 @@ function recalculateValues(){
 		maxValue = max(dataTable.getColumn(column)[i+1], maxValue);
 		totalPeeps = totalPeeps + dataTable.getColumn(column)[i]*1;
 	};
-	for (var i = 0; i < drawValues.length; i++) {
-		circleArea = map(dataTable.getColumn(column)[i+1], 0, maxValue, 0, maxArea);
-		targetValues[i] = sqrt(circleArea/PI)*2;
-	};
+	if (postGSAPP == 0){
+		for (var i = 0; i < drawValues.length; i++) {
+			circleArea = map(dataTable.getColumn(column)[i+1], 0, maxValue, 0, maxArea);
+			targetValues[i] = sqrt(circleArea/PI)*2;
+			numberTargetValues[i] = dataTable.getColumn(column)[i+1];
+		};
+		for (var i = 0; i < outside.length; i++) {
+			preOutsideTarget = preOutsideTarget + dataTable.getColumn(column)[outside[i]]/totalPeeps;
+		};
+	}
+	else{
+		for (var i = 0; i < drawValues.length; i++) {
+			circleArea = map(dataTable.getColumn(column)[i+14], 0, maxValue, 0, maxArea);
+			targetValues[i] = sqrt(circleArea/PI)*2;
+			numberTargetValues[i] = dataTable.getColumn(column)[i+14];
+		};
+	}
 }
 
 function mousePressed(){
 	if (mouseX > buttonX-6 && mouseX < buttonX+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
-		column = 1;
+		postGSAPP = 0;
 		recalculateValues();
 		startFrame = frameCount;
 	}
 	if (mouseX > buttonX+buttonSpacing-6 && mouseX < buttonX+buttonSpacing+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
+		postGSAPP = 1;
+		recalculateValues();
+		startFrame = frameCount;
+	}
+	if (mouseX > buttonX-6 && mouseX < buttonX+6 && mouseY > buttonY+14 && mouseY < buttonY+26){
+		column = 1;
+		recalculateValues();
+		startFrame = frameCount;
+	}
+	if (mouseX > buttonX+buttonSpacing-6 && mouseX < buttonX+buttonSpacing+6 && mouseY > buttonY+14 && mouseY < buttonY+26){
 		column = 2;
 		recalculateValues();
 		startFrame = frameCount;
 	}
-	if (mouseX > buttonX+buttonSpacing*2-6 && mouseX < buttonX+buttonSpacing*2+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
+	if (mouseX > buttonX+buttonSpacing*2-6 && mouseX < buttonX+buttonSpacing*2+6 && mouseY > buttonY+14 && mouseY < buttonY+26){
 		column = 3;
 		recalculateValues();
 		startFrame = frameCount;	
 	}
-	if (mouseX > buttonX+buttonSpacing*3-6 && mouseX < buttonX+buttonSpacing*3+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
+	if (mouseX > buttonX+buttonSpacing*3-6 && mouseX < buttonX+buttonSpacing*3+6 && mouseY > buttonY+14 && mouseY < buttonY+26){
 		column = 4;
 		recalculateValues();
 		startFrame = frameCount;	
 	}
-	if (mouseX > buttonX+buttonSpacing*4-6 && mouseX < buttonX+buttonSpacing*4+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
+	if (mouseX > buttonX+buttonSpacing*4-6 && mouseX < buttonX+buttonSpacing*4+6 && mouseY > buttonY+14 && mouseY < buttonY+26){
 		column = 5;
 		recalculateValues();
 		startFrame = frameCount;	
 	}
-	if (mouseX > buttonX+buttonSpacing*5-6 && mouseX < buttonX+buttonSpacing*5+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
+	if (mouseX > buttonX+buttonSpacing*5-6 && mouseX < buttonX+buttonSpacing*5+6 && mouseY > buttonY+14 && mouseY < buttonY+26){
 		column = 6;
 		recalculateValues();
 		startFrame = frameCount;	
 	}
-	if (mouseX > buttonX+buttonSpacing*6-6 && mouseX < buttonX+buttonSpacing*6+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
+	if (mouseX > buttonX+buttonSpacing*6-6 && mouseX < buttonX+buttonSpacing*6+6 && mouseY > buttonY+14 && mouseY < buttonY+26){
 		column = 7;
 		recalculateValues();
 		startFrame = frameCount;	
 	}
-	if (mouseX > buttonX+buttonSpacing*7-6 && mouseX < buttonX+buttonSpacing*7+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
+	if (mouseX > buttonX+buttonSpacing*7-6 && mouseX < buttonX+buttonSpacing*7+6 && mouseY > buttonY+14 && mouseY < buttonY+26){
 		column = 8;
 		recalculateValues();
 		startFrame = frameCount;		
