@@ -10,7 +10,6 @@ body {
 	margin: 0px;
 	padding: 0px;
 }
-
 @media screen and (max-width: 1175px){
 	div.nav_link{
 		display:none;
@@ -40,7 +39,6 @@ div.nav_icon{
 	float: left;
 	top: 3px;
 }
-
 div.social_link{
 	position: relative;
 	width: auto;
@@ -48,20 +46,17 @@ div.social_link{
 	margin-right: 20%;
 	bottom: 3px;
 	opacity: .75;
-
 }
 li.social_link{
 	float: right;
 	display: inline-block;
 	padding-left: 10px;
 }
-
 div.nav_link{
 	width: auto;
 	float: left;
 	left: 0;
 	padding-left: 5px;
-
 }
 li.nav_link{
 	display: inline-block;
@@ -81,21 +76,18 @@ div.content_intro{
 	margin: 0;
 	top: 0;
 }
-
 div.content{
 	width: 100%;
 	height: 100%;
 	margin: 0;
 	background-color: #ffffff;
 }
-
 div.content_grey{
 	width: 100%;
 	height: 100%;
 	margin:0;
 	background-color: #EFEFEF;
 }
-
 h1{
 	font-family: "din-condensed-web", helvetica, sans-serif;
 	font-size: 40px;
@@ -109,7 +101,6 @@ h1{
 	padding-top: 0px;
 	padding-bottom: 0px;
 }
-
 h2{
 	font-family: "Proxima-Nova",helvetica, sans-serif;
 	font-size: 19px;
@@ -124,7 +115,6 @@ h2{
 	padding-top: 0px;
 	padding-bottom: 0px;
 }
-
 h3{
 	font-family: "Proxima-Nova",helvetica, sans-serif;
 	font-size: 16px;
@@ -138,7 +128,6 @@ h3{
 	padding: 0;
 	text-transform: uppercase;
 }
-
 p.description {
 	width: 350px;
 	text-align: justify;
@@ -153,15 +142,12 @@ p.description {
 	margin-top: 25px;
 	line-height: 125%;
 }
-
 #title1{
 	padding-top: 100px;
 }
-
 #intro1{
 	padding-bottom: 35px;
 }
-
 hr{
 	padding: 0px;	
 	margin-bottom: 0px;
