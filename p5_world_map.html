@@ -34,7 +34,7 @@ var numberInitValues = [];
 var numberTargetValues = [];
 var numberDrawValues = [];
 var startFrame, endFrame;
-var transitionFrames = 60;
+var transitionFrames = 60.0;
 var framesRemaining = 0;
 var maxArea;
 var maxCircleRadius = 50;
@@ -48,7 +48,9 @@ var mapY = 75;
 var preOutsideDraw = 0;
 var preOutsideInit = 0;
 var preOutsideTarget = 0;
-var postOutside = 0;
+var postOutsideDraw = 0;
+var postOutsideInit = 0;
+var postOutsideTarget = 0;
 var outside = [1, 2, 3, 4, 5, 6, 9]
 
 function preload(){
@@ -83,6 +85,9 @@ function setup(){
 	for (var i = 0; i < outside.length; i++) {
 	 	preOutsideDraw = preOutsideDraw + parseInt(dataTable.getColumn(column)[outside[i]])/totalPeeps;
 	 };
+	for (var i = 0; i < outside.length; i++) {
+	 	postOutsideDraw = postOutsideDraw + parseInt(dataTable.getColumn(column)[outside[i]+14])/(preOutsideDraw*totalPeeps);
+	 };
 }
 
 function draw(){
@@ -111,10 +116,12 @@ function draw(){
 	for (var i = 1; i < 9; i++) {
 		text(dataTable.getColumn(i)[0], buttonX+10+buttonSpacing*(i-1), buttonY+23);
 	};
-	text('CAME FROM ABROAD', 25, mapY+415);
+	text('CAME FROM ABROAD', 25, mapY+405);
+	text('OF THOSE STAYED', 300, mapY+405);
 	textStyle(BOLD);
 	textSize(48);
-	text(nfc(preOutsideDraw*100,1)+'%', 25, mapY+400);
+	text(floor(preOutsideDraw*100)+'%', 25, mapY+390);
+	text(floor(postOutsideDraw*100)+'%', 300, mapY+390);
 	textStyle(NORMAL);
 	if(frameCount > 0){
 		drawGraph();
@@ -152,27 +159,28 @@ function updateValues(){
 		numberDrawValues[i] = lerp(numberInitValues[i], numberTargetValues[i], (framesRemaining/transitionFrames));
 	}
 	preOutsideDraw = lerp(preOutsideInit, preOutsideTarget, (framesRemaining/transitionFrames));
+	postOutsideDraw = lerp(postOutsideInit, postOutsideTarget, (framesRemaining/transitionFrames));
 }
 
 function recalculateValues(){
 	initValues = drawValues;
 	numberInitValues = numberDrawValues;
 	preOutsideInit = preOutsideDraw;
+	postOutsideInit = postOutsideDraw;
+	preOutsideTarget = 0;
+	postOutsideTarget = 0;
 	var maxValue = 0;
 	var circleArea = 0;
 	var totalPeeps = 0
 	for (var i = 0; i < drawValues.length; i++) {
 		maxValue = max(dataTable.getColumn(column)[i+1], maxValue);
-		totalPeeps = totalPeeps + dataTable.getColumn(column)[i]*1;
+		totalPeeps = totalPeeps + dataTable.getColumn(column)[i+1]*1;
 	};
 	if (postGSAPP == 0){
 		for (var i = 0; i < drawValues.length; i++) {
 			circleArea = map(dataTable.getColumn(column)[i+1], 0, maxValue, 0, maxArea);
 			targetValues[i] = sqrt(circleArea/PI)*2;
 			numberTargetValues[i] = dataTable.getColumn(column)[i+1];
-		};
-		for (var i = 0; i < outside.length; i++) {
-			preOutsideTarget = preOutsideTarget + dataTable.getColumn(column)[outside[i]]/totalPeeps;
 		};
 	}
 	else{
@@ -182,6 +190,12 @@ function recalculateValues(){
 			numberTargetValues[i] = dataTable.getColumn(column)[i+14];
 		};
 	}
+	for (var i = 0; i < outside.length; i++) {
+		preOutsideTarget = preOutsideTarget + (dataTable.getColumn(column)[outside[i]]*1)/totalPeeps;
+	};
+	for (var i = 0; i < outside.length; i++) {
+		postOutsideTarget = postOutsideTarget + (dataTable.getColumn(column)[outside[i]+14]*1)/(preOutsideDraw*totalPeeps);
+	};
 }
 
 function mousePressed(){
