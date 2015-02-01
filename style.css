@@ -10,7 +10,7 @@ body {
 	margin: 0px;
 	padding: 0px;
 }
-@media screen and (max-width: 1175px){
+@media screen and (max-width: 1250px){
 	div.nav_link{
 		display:none;
 	}
@@ -61,7 +61,7 @@ div.nav_link{
 li.nav_link{
 	display: inline-block;
 	padding-top: 3px;
-	padding-right: 1px;
+	padding-right: 3px;
 	color: #FFFFFF;
 	font-size: 13px;
 	font-weight: 300;
