@@ -57,7 +57,7 @@ function setup(){
 	colorMode(RGB, 255, 255, 255, 100);
 	fillGSAPP = color(80, 194, 193);
 	fillAP = color(240, 139, 124);
-	textFont("proxima nova");
+	textFont("proxima-nova");
 
 	// Setup initial values
 	var maxValue = 0;
@@ -105,6 +105,7 @@ function draw(){
 	if (framesRemaining < transitionFrames){
 		updateValues();
 	}
+	checkButtonHover();
 }
 
 function agePyramid(){
@@ -213,6 +214,15 @@ function mousePressed(){
 		column = 8;
 		recalculateValues();
 		startFrame = frameCount;
+	}
+}
+
+function checkButtonHover(){
+	if ((mouseX > buttonX-6 && mouseX < buttonX+6 && mouseY > buttonY-6 && mouseY < buttonY+6) || (mouseX > buttonX+buttonSpacing-6 && mouseX < buttonX+buttonSpacing+6 && mouseY > buttonY-6 && mouseY < buttonY+6) || (mouseX > buttonX+buttonSpacing*2-6 && mouseX < buttonX+buttonSpacing*2+6 && mouseY > buttonY-6 && mouseY < buttonY+6) || (mouseX > buttonX+buttonSpacing*3-6 && mouseX < buttonX+buttonSpacing*3+6 && mouseY > buttonY-6 && mouseY < buttonY+6) || (mouseX > buttonX+buttonSpacing*4-6 && mouseX < buttonX+buttonSpacing*4+6 && mouseY > buttonY-6 && mouseY < buttonY+6) || (mouseX > buttonX+buttonSpacing*5-6 && mouseX < buttonX+buttonSpacing*5+6 && mouseY > buttonY-6 && mouseY < buttonY+6) || (mouseX > buttonX+buttonSpacing*6-6 && mouseX < buttonX+buttonSpacing*6+6 && mouseY > buttonY-6 && mouseY < buttonY+6) || (mouseX > buttonX+buttonSpacing*7-6 && mouseX < buttonX+buttonSpacing*7+6 && mouseY > buttonY-6 && mouseY < buttonY+6)){
+		cursor(HAND);
+	}
+	else{
+		cursor(ARROW);
 	}
 }
 

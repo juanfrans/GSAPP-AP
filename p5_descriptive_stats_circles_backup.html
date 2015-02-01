@@ -128,6 +128,7 @@ function draw(){
 	if (framesRemaining < transitionFrames){
 		updateValues();
 	}
+	checkButtonHover();
 }
 
 function circleChart2(){
@@ -339,6 +340,15 @@ function mousePressed(){
 		column = 6;
 		recalculateValues();
 		startFrame = frameCount;
+	}
+}
+
+function checkButtonHover(){
+	if ((mouseX > buttonX-6 && mouseX < buttonX+6 && mouseY > buttonY-6 && mouseY < buttonY+6) || (mouseX > buttonX+buttonSpacing-6 && mouseX < buttonX+buttonSpacing+6 && mouseY > buttonY-6 && mouseY < buttonY+6) || (mouseX > buttonX+buttonSpacing*2-6 && mouseX < buttonX+buttonSpacing*2+6 && mouseY > buttonY-6 && mouseY < buttonY+6) || (mouseX > buttonX-6 && mouseX < buttonX+6 && mouseY > buttonY+14 && mouseY < buttonY+26) || (mouseX > buttonX+buttonSpacing-6 && mouseX < buttonX+buttonSpacing+6 && mouseY > buttonY+14 && mouseY < buttonY+26) || (mouseX > buttonX+buttonSpacing*2-6 && mouseX < buttonX+buttonSpacing*2+6 && mouseY > buttonY+14 && mouseY < buttonY+26) || (mouseX > buttonX+buttonSpacing*3-6 && mouseX < buttonX+buttonSpacing*3+6 && mouseY > buttonY+14 && mouseY < buttonY+26) || (mouseX > buttonX+buttonSpacing*4-6 && mouseX < buttonX+buttonSpacing*4+6 && mouseY > buttonY+14 && mouseY < buttonY+26) || (mouseX > buttonX+buttonSpacing*5-6 && mouseX < buttonX+buttonSpacing*5+6 && mouseY > buttonY+14 && mouseY < buttonY+26)){
+		cursor(HAND);
+	}
+	else{
+		cursor(ARROW);
 	}
 }
 

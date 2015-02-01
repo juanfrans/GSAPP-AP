@@ -64,7 +64,6 @@ function setup(){
 	colorMode(RGB, 255, 255, 255, 100);
 	fillGSAPP = color(80, 194, 193);
 	fillAP = color(240, 139, 124);
-	//text.style("font-family", "Proxima-Nova");
 	textFont("proxima-nova");
 	startX = leftMargin + 130;
 
@@ -87,7 +86,7 @@ function setup(){
 	 	preOutsideDraw = preOutsideDraw + parseInt(dataTable.getColumn(column)[outside[i]])/totalPeeps;
 	 };
 	for (var i = 0; i < outside.length; i++) {
-	 	postOutsideDraw = postOutsideDraw + parseInt(dataTable.getColumn(column)[outside[i]+14])/(preOutsideDraw*totalPeeps);
+	 	postOutsideDraw = postOutsideDraw + parseInt(dataTable.getColumn(column)[outside[i]+14])/totalPeeps;
 	 };
 }
 
@@ -118,7 +117,7 @@ function draw(){
 		text(dataTable.getColumn(i)[0], buttonX+10+buttonSpacing*(i-1), buttonY+23);
 	};
 	text('CAME FROM ABROAD', 25, mapY+405);
-	text('OF THOSE STAYED', 300, mapY+405);
+	text('LEFT AFTER GRADSCHOOL', 300, mapY+405);
 	textStyle(BOLD);
 	textSize(48);
 	text(floor(preOutsideDraw*100)+'%', 25, mapY+390);
@@ -131,6 +130,7 @@ function draw(){
 	if (framesRemaining < transitionFrames){
 		updateValues();
 	}
+	checkButtonHover();
 }
 
 function drawGraph(){
@@ -161,6 +161,10 @@ function updateValues(){
 	}
 	preOutsideDraw = lerp(preOutsideInit, preOutsideTarget, (framesRemaining/transitionFrames));
 	postOutsideDraw = lerp(postOutsideInit, postOutsideTarget, (framesRemaining/transitionFrames));
+	if (framesRemaining/transitionFrames > 0.96){
+		preOutsideDraw = preOutsideTarget;
+		postOutsideDraw = postOutsideTarget;
+	}
 }
 
 function recalculateValues(){
@@ -195,60 +199,74 @@ function recalculateValues(){
 		preOutsideTarget = preOutsideTarget + (dataTable.getColumn(column)[outside[i]]*1)/totalPeeps;
 	};
 	for (var i = 0; i < outside.length; i++) {
-		postOutsideTarget = postOutsideTarget + (dataTable.getColumn(column)[outside[i]+14]*1)/(preOutsideDraw*totalPeeps);
+		if(preOutsideTarget == 0){
+			postOutsideTarget = 0;
+		}
+		else{
+			postOutsideTarget = postOutsideTarget + (dataTable.getColumn(column)[outside[i]+14]*1)/totalPeeps;
+		}
 	};
 }
 
 function mousePressed(){
 	if (mouseX > buttonX-6 && mouseX < buttonX+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
 		postGSAPP = 0;
-		recalculateValues();
 		startFrame = frameCount;
+		recalculateValues();
 	}
 	if (mouseX > buttonX+buttonSpacing-6 && mouseX < buttonX+buttonSpacing+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
 		postGSAPP = 1;
-		recalculateValues();
 		startFrame = frameCount;
+		recalculateValues();
 	}
 	if (mouseX > buttonX-6 && mouseX < buttonX+6 && mouseY > buttonY+14 && mouseY < buttonY+26){
 		column = 1;
-		recalculateValues();
 		startFrame = frameCount;
+		recalculateValues();
 	}
 	if (mouseX > buttonX+buttonSpacing-6 && mouseX < buttonX+buttonSpacing+6 && mouseY > buttonY+14 && mouseY < buttonY+26){
 		column = 2;
-		recalculateValues();
 		startFrame = frameCount;
+		recalculateValues();
 	}
 	if (mouseX > buttonX+buttonSpacing*2-6 && mouseX < buttonX+buttonSpacing*2+6 && mouseY > buttonY+14 && mouseY < buttonY+26){
 		column = 3;
+		startFrame = frameCount;
 		recalculateValues();
-		startFrame = frameCount;	
 	}
 	if (mouseX > buttonX+buttonSpacing*3-6 && mouseX < buttonX+buttonSpacing*3+6 && mouseY > buttonY+14 && mouseY < buttonY+26){
 		column = 4;
+		startFrame = frameCount;
 		recalculateValues();
-		startFrame = frameCount;	
 	}
 	if (mouseX > buttonX+buttonSpacing*4-6 && mouseX < buttonX+buttonSpacing*4+6 && mouseY > buttonY+14 && mouseY < buttonY+26){
 		column = 5;
+		startFrame = frameCount;
 		recalculateValues();
-		startFrame = frameCount;	
 	}
 	if (mouseX > buttonX+buttonSpacing*5-6 && mouseX < buttonX+buttonSpacing*5+6 && mouseY > buttonY+14 && mouseY < buttonY+26){
 		column = 6;
+		startFrame = frameCount;
 		recalculateValues();
-		startFrame = frameCount;	
 	}
 	if (mouseX > buttonX+buttonSpacing*6-6 && mouseX < buttonX+buttonSpacing*6+6 && mouseY > buttonY+14 && mouseY < buttonY+26){
 		column = 7;
+		startFrame = frameCount;
 		recalculateValues();
-		startFrame = frameCount;	
 	}
 	if (mouseX > buttonX+buttonSpacing*7-6 && mouseX < buttonX+buttonSpacing*7+6 && mouseY > buttonY+14 && mouseY < buttonY+26){
 		column = 8;
+		startFrame = frameCount;
 		recalculateValues();
-		startFrame = frameCount;		
+	}
+}
+
+function checkButtonHover(){
+	if ((mouseX > buttonX-6 && mouseX < buttonX+6 && mouseY > buttonY-6 && mouseY < buttonY+6) || (mouseX > buttonX+buttonSpacing-6 && mouseX < buttonX+buttonSpacing+6 && mouseY > buttonY-6 && mouseY < buttonY+6) || (mouseX > buttonX-6 && mouseX < buttonX+6 && mouseY > buttonY+14 && mouseY < buttonY+26) || (mouseX > buttonX+buttonSpacing-6 && mouseX < buttonX+buttonSpacing+6 && mouseY > buttonY+14 && mouseY < buttonY+26) || (mouseX > buttonX+buttonSpacing*2-6 && mouseX < buttonX+buttonSpacing*2+6 && mouseY > buttonY+14 && mouseY < buttonY+26) || (mouseX > buttonX+buttonSpacing*3-6 && mouseX < buttonX+buttonSpacing*3+6 && mouseY > buttonY+14 && mouseY < buttonY+26) || (mouseX > buttonX+buttonSpacing*4-6 && mouseX < buttonX+buttonSpacing*4+6 && mouseY > buttonY+14 && mouseY < buttonY+26) || (mouseX > buttonX+buttonSpacing*5-6 && mouseX < buttonX+buttonSpacing*5+6 && mouseY > buttonY+14 && mouseY < buttonY+26) || (mouseX > buttonX+buttonSpacing*6-6 && mouseX < buttonX+buttonSpacing*6+6 && mouseY > buttonY+14 && mouseY < buttonY+26) || (mouseX > buttonX+buttonSpacing*7-6 && mouseX < buttonX+buttonSpacing*7+6 && mouseY > buttonY+14 && mouseY < buttonY+26)){
+		cursor(HAND);
+	}
+	else{
+		cursor(ARROW);
 	}
 }
 
