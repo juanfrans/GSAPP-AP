@@ -36,8 +36,12 @@ var drawValues = [];
 var initValues2 = [];
 var targetValues2 = [];
 var drawValues2 = [];
+var initValues3 = 0;
+var targetValues3 = 0;
+var drawValues3 = 0;
 var startFrame, endFrame;
 var transitionFrames = 60;
+var transitionFrames2 = 20;
 var framesRemaining = 0;
 var startX;
 var colorValues = [[]];
@@ -46,8 +50,9 @@ var centerY = 160;
 var bufferX = 150;
 
 function preload(){
-	dataTable = loadTable('data/Interviews.csv');
-	dataTable2 = loadTable('data/Job_Applications.csv');
+	dataTable2 = loadTable('data/Time_Till_Work.csv');
+	dataTable = loadTable('data/Visa_Requirement.csv');
+	dataTable3 = loadTable('data/Visa_Payment.csv');
 	console.log('done loading data');
 }
 
@@ -66,16 +71,21 @@ function setup(){
 	var rectLength = 0;
 	var totalPeeps = 0;
 	var totalPeeps2 = 0;
-	for (var i = 1; i < 8; i++) {
+	var totalPeeps3 = 0;
+	for (var i = 1; i < 3; i++) {
 		totalPeeps = totalPeeps + dataTable.getColumn(column)[i]*1;
 	};
-	for (var i = 0; i < 7; i++) {
-		drawValues[i] = map(dataTable.getColumn(column)[i+1], 0, totalPeeps, 0, 360);
+	for (var i = 0; i < 2; i++) {
+		drawValues[i] = map(dataTable.getColumn(column)[i+1], 0, totalPeeps, 0, 100);
 	};
-		for (var i = 1; i < 5; i++) {
+	for (var i = 1; i < 3; i++) {
+		totalPeeps3 = totalPeeps3 + dataTable3.getColumn(column)[i]*1;
+	};
+	drawValues3 = map(dataTable3.getColumn(column)[1], 0, totalPeeps3, 0, 100);
+		for (var i = 1; i < 6; i++) {
 		totalPeeps2 = totalPeeps2 + dataTable2.getColumn(column)[i]*1;
 	};
-	for (var i = 0; i < 4; i++) {
+	for (var i = 0; i < 5; i++) {
 		drawValues2[i] = map(dataTable2.getColumn(column)[i+1], 0, totalPeeps2, 0, 360);
 	};
 }
@@ -111,52 +121,36 @@ function draw(){
 	fill(0);
 	noStroke();
 	textAlign(CENTER);
-	text('APPLICATIONS SENT', WIDTH/2-bufferX, 285);
-	text('INTERVIEWS', WIDTH/2+bufferX, 285);
+	text('TIME UNTIL FINDING A JOB', WIDTH/2-bufferX, 285);
 }
 
 function undergradMajorGraph(){
 	var totalPeeps = 0;
 	var totalPeeps2 = 0;
+	var totalPeeps3 = 0;
 	var labelXbuffer = 10;
 	var labelYbuffer = 10;
-	for (var i = 0; i < 7; i++) {
+	for (var i = 0; i < 2; i++) {
 		totalPeeps = totalPeeps + dataTable.getColumn(column)[i+1]*1;
+	};
+	for (var i = 0; i < 1; i++) {
+		totalPeeps3 = totalPeeps3 + dataTable3.getColumn(column)[i+1]*1;
 	};
 	for (var i = 0; i < 4; i++) {
 		totalPeeps2 = totalPeeps2 + dataTable2.getColumn(column)[i+1]*1;
 	};
 	noStroke();
+	textSize(48);
+	textStyle(BOLD);
+	text(round(drawValues[1])+'%', WIDTH/2+10, 125);
+	text(round(drawValues3)+'%', WIDTH/2+10, 225);
+	textStyle(NORMAL);
 	textSize(12);
+	text('OF THE VISAS WERE NOT PAID FOR BY THE COMPANIES', WIDTH/2+10, 240);
+	text('REQUIRED A VISA TO WORK IN THE US', WIDTH/2+10, 140);
+	textSize(12);
+	textStyle(NORMAL);
 	var lastAngle = radians(-90);
-	for (var i = 0; i < drawValues.length; i++) {
-		fill(colorValues[i]);
-		arc(centerX, centerY, 150, 150, lastAngle, lastAngle+radians(drawValues[i]));
-		fill(0);
-		if (centerX + 75 * cos(lastAngle + radians(drawValues[i])/2) < centerX){
-			textAlign(RIGHT);
-			labelXbuffer = -10;
-		}
-		else {
-			textAlign(LEFT);
-			labelXbuffer = 10;
-		}
-		if (centerY + 75 * sin(lastAngle + radians(drawValues[i])/2) < centerY){
-			labelYbuffer = -10;
-		}
-		else {
-			labelYbuffer = 10;
-		}
-		if(dataTable.getColumn(column)[i+1]>0){
-			text(nfc((dataTable.getColumn(column)[i+1]/totalPeeps*100),0)+"%", centerX + 75 * cos(lastAngle + radians(drawValues[i])/2) + labelXbuffer, centerY + 75 * sin(lastAngle + radians(drawValues[i])/2) + labelYbuffer + 12);
-			text(dataTable.getColumn(0)[i+1], centerX + 75 * cos(lastAngle + radians(drawValues[i])/2) + labelXbuffer, centerY + 75 * sin(lastAngle + radians(drawValues[i])/2) + labelYbuffer);
-		}
-		lastAngle += radians(drawValues[i]);
-	};
-	fill(239, 239, 239);
-	ellipse(centerX, centerY, 75, 75);
-
-	lastAngle = radians(-90);
 	for (var i = 0; i < drawValues2.length; i++) {
 		fill(colorValues[i]);
 		arc(centerX2, centerY, 150, 150, lastAngle, lastAngle+radians(drawValues2[i]));
@@ -175,8 +169,14 @@ function undergradMajorGraph(){
 		else {
 			labelYbuffer = 10;
 		}
+		if (centerY + 75 * sin(lastAngle + radians(drawValues2[i])/2) < centerY && centerX2 + 75 * cos(lastAngle + radians(drawValues2[i])/2) < centerX2 && centerX2 + 75 * cos(lastAngle + radians(drawValues2[i])/2) > centerX2 - 15){
+			textAlign(LEFT);
+			labelYbuffer = - 20;
+		}
+		else{
+		}
 		if(dataTable2.getColumn(column)[i+1]>0){
-			text(nfc((dataTable2.getColumn(column)[i+1]/totalPeeps2*100),0)+"%", centerX2 + 75 * cos(lastAngle + radians(drawValues2[i])/2) + labelXbuffer, centerY + 75 * sin(lastAngle + radians(drawValues2[i])/2) + labelYbuffer + 12);
+			text(round(dataTable2.getColumn(column)[i+1]/totalPeeps2*100)+"%", centerX2 + 75 * cos(lastAngle + radians(drawValues2[i])/2) + labelXbuffer, centerY + 75 * sin(lastAngle + radians(drawValues2[i])/2) + labelYbuffer + 12);
 			text(dataTable2.getColumn(0)[i+1], centerX2 + 75 * cos(lastAngle + radians(drawValues2[i])/2) + labelXbuffer, centerY + 75 * sin(lastAngle + radians(drawValues2[i])/2) + labelYbuffer);
 		}
 		lastAngle += radians(drawValues2[i]);
@@ -192,24 +192,39 @@ function updateValues(){
 	for (var i=0; i<drawValues2.length; i++){
 		drawValues2[i] = lerp(initValues2[i], targetValues2[i], (framesRemaining/transitionFrames));
 	}
+	drawValues3 = lerp(initValues3, targetValues3, (framesRemaining/transitionFrames2));
+	if (framesRemaining/transitionFrames2 > 0.96){
+		drawValues3 = targetValues3;
+	}
 }
 
 function recalculateValues(){
 	initValues = drawValues;
 	initValues2 = drawValues2;
+	initValues3 = drawValues3;
 	var rectLength = 0;
 	var totalPeeps = 0;
 	var totalPeeps2 = 0;
-	for (var i = 1; i < 8; i++) {
+	var totalPeeps3 = 0;
+	for (var i = 1; i < 3; i++) {
 		totalPeeps = totalPeeps + dataTable.getColumn(column)[i]*1;
 	};
-	for (var i = 0; i < 7; i++) {
-		targetValues[i] = map(dataTable.getColumn(column)[i+1], 0, totalPeeps, 0, 360);
+	for (var i = 1; i < 3; i++) {
+		totalPeeps3 = totalPeeps3 + dataTable3.getColumn(column)[i]*1;
 	};
-	for (var i = 1; i < 5; i++) {
+	if (totalPeeps3 == 0){
+		targetValues3 = 0;
+	}
+	else{
+		targetValues3 = map(dataTable3.getColumn(column)[1], 0, totalPeeps3, 0, 100);
+	}
+	for (var i = 0; i < 2; i++) {
+		targetValues[i] = map(dataTable.getColumn(column)[i+1], 0, totalPeeps, 0, 100);
+	};
+	for (var i = 1; i < 6; i++) {
 		totalPeeps2 = totalPeeps2 + dataTable2.getColumn(column)[i]*1;
 	};
-	for (var i = 0; i < 4; i++) {
+	for (var i = 0; i < 5; i++) {
 		targetValues2[i] = map(dataTable2.getColumn(column)[i+1], 0, totalPeeps2, 0, 360);
 	};
 }
