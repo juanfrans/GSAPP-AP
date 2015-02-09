@@ -16,34 +16,33 @@
 </head>
 <script type="text/javascript">
 
-var WIDTH = 650;
-var HEIGHT = 250;
-var leftMargin = 0;
-var column = 1;
-var buttonX = 26;
-var buttonY = 25;
-var buttonSpacing = 80;
-var fillGSAPP;
+var WIDTH = 650;   
+var HEIGHT = 275;	
+var leftMargin = 0;	
+var column = 1; 	
+var buttonX = 26;	
+var buttonY = 25;	
+var buttonSpacing = 80;	
+var fillGSAPP;	
 var fillAP;
-var spacing = 25;
-var barHeight = 15;
-var midPoint = 315;
-var midSpace = 25;
-var endY = 160;
-var initValues = [];
-var targetValues = [];
-var drawValues = [];
-var numberInitValues = [];
+var spacing = 25;	
+var barHeight = 15;	
+var midSpace = 25;	
+var initValues = [];	
+var targetValues = [];	
+var drawValues = [];	
+var numberInitValues = [];	
 var numberTargetValues = [];
 var numberDrawValues = [];
-var startFrame, endFrame;
+var startFrame, endFrame; 
 var transitionFrames = 60;
 var framesRemaining = 0;
-var maxLength = 450;
-var startX;
+var maxLength = 450;	
+var startX;				
+var startY = 40;		
 
 function preload(){
-	undergradMajorTable = loadTable('data/Job_Who.csv');
+	undergradMajorTable = loadTable('data/Job_Who.csv'); //function preload
 	console.log('done loading data');
 }
 
@@ -59,13 +58,13 @@ function setup(){
 	var maxValue = 0;
 	var rectLength = 0;
 	var totalPeeps = 0
-	for (var i = 1; i < 5; i++) {
+	for (var i = 1; i < 9; i++) {
 		maxValue = max(undergradMajorTable.getColumn(column)[i], maxValue);
-		totalPeeps = totalPeeps + undergradMajorTable.getColumn(column)[i]*1;
+		totalPeeps = totalPeeps + undergradMajorTable.getColumn(column)[i]*1; // gets total amount of people
 	};
-	for (var i = 1; i < 5; i++) {
+	for (var i = 1; i < 9; i++) {
 		drawValues[i] = map(undergradMajorTable.getColumn(column)[i], 0, maxValue, 0, maxLength);
-		numberDrawValues[i] = parseInt(undergradMajorTable.getColumn(column)[i]);
+		numberDrawValues[i] = parseInt(undergradMajorTable.getColumn(column)[i]); // re-caulcaites each column to the set 
 	};
 }
 
@@ -79,7 +78,7 @@ function draw(){
 	noFill();
 	stroke(0);
 	strokeWeight(1.5);
-	for (var i = 0; i < 8; i++) {
+	for (var i = 0; i < 9; i++) {
 		ellipse(buttonX+buttonSpacing*i, buttonY, 12, 12);
 	};
 	fill(0);
@@ -92,53 +91,54 @@ function draw(){
 
 	if(frameCount > 0){
 		undergradMajorGraph();
-	}
+	} 
 
 	framesRemaining = frameCount - startFrame;
 	if (framesRemaining < transitionFrames){
-		updateValues();
+		updateValues(); 
 	}
 	checkButtonHover();
 }
 
 function undergradMajorGraph(){
 	var totalPeeps = 0
-	for (var i = 1; i < 5; i++) {
+	for (var i = 1; i < 9; i++) {
 		totalPeeps = totalPeeps + undergradMajorTable.getColumn(column)[i]*1;
 	};
 	noStroke();
 	textSize(12);
-	for (var i = 1; i < 5; i++) {
+	for (var i = 1; i < 9; i++) {
 		fill(fillGSAPP);
-		rect(startX, endY-i*spacing, drawValues[i], barHeight);
+		rect(startX, startY+i*spacing, drawValues[i], barHeight);
 		textAlign(LEFT);
 		fill(0);
 		if(undergradMajorTable.getColumn(column)[i]>0){
-			text(nfc((numberDrawValues[i]/totalPeeps*100),1)+"%", leftMargin + startX + drawValues[i] + 5, endY-i*spacing+11);
+			text(nfc((numberDrawValues[i]/totalPeeps*100),1)+"%", leftMargin + startX + drawValues[i] + 5, startY+i*spacing+11); //nfc, one after decimal 
 		}
 		textAlign(RIGHT);
-		text(undergradMajorTable.getColumn(0)[i], startX - 5, endY-i*spacing+11);
+		text(undergradMajorTable.getColumn(0)[i], startX - 5, startY+i*spacing+11); //plot catogries 
 	};
 }
+
 
 function updateValues(){
 	for (var i=0; i<drawValues.length; i++){
 		drawValues[i] = lerp(initValues[i], targetValues[i], (framesRemaining/transitionFrames));
-		numberDrawValues[i] = lerp(numberInitValues[i], numberTargetValues[i], (framesRemaining/transitionFrames));
+		numberDrawValues[i] = lerp(numberInitValues[i], numberTargetValues[i], (framesRemaining/transitionFrames)); //lerp find perceantage value 
 	}
 }
-
+// where the bar wants to go 
 function recalculateValues(){
-	initValues = drawValues;
-	numberInitValues = numberDrawValues;
-	var maxValue = 0;
+	initValues = drawValues; //recaluted start point 
+	numberInitValues = numberDrawValues; //recalutlate start point
+	var maxValue = 0;	
 	var rectLength = 0;
 	var totalPeeps = 0
-	for (var i = 1; i < 5; i++) {
+	for (var i = 1; i < 9; i++) {
 		maxValue = max(undergradMajorTable.getColumn(column)[i], maxValue);
 		totalPeeps = totalPeeps + undergradMajorTable.getColumn(column)[i]*1;
 	};
-	for (var i = 1; i < 5; i++) {
+	for (var i = 1; i < 9; i++) {
 		targetValues[i] = map(undergradMajorTable.getColumn(column)[i], 0, maxValue, 0, maxLength);
 		numberTargetValues[i] = undergradMajorTable.getColumn(column)[i];
 	};
