@@ -33,9 +33,6 @@ var endY = 215;
 var initValues = [];
 var targetValues = [];
 var drawValues = [];
-var initValues2 = [];
-var targetValues2 = [];
-var drawValues2 = [];
 var startFrame, endFrame;
 var transitionFrames = 60;
 var framesRemaining = 0;
@@ -216,7 +213,7 @@ function mousePressed(){
 	}
 }
 
-function touchIsDown(){
+function touchStarted(){
 	if (touchX > buttonX-6 && touchX < buttonX+6 && touchY > buttonY-6 && touchY < buttonY+6){
 		column = 1;
 		recalculateValues();
