@@ -17,7 +17,7 @@
 <script type="text/javascript">
 
 var WIDTH = 650;   
-var HEIGHT = 275;	
+var HEIGHT = 600;	
 var leftMargin = 0;	
 var column = 1; 	
 var buttonX = 26;	
@@ -58,11 +58,11 @@ function setup(){
 	var maxValue = 0;
 	var rectLength = 0;
 	var totalPeeps = 0
-	for (var i = 1; i < 9; i++) {
+	for (var i = 1; i < 19; i++) {
 		maxValue = max(undergradMajorTable.getColumn(column)[i], maxValue);
 		totalPeeps = totalPeeps + undergradMajorTable.getColumn(column)[i]*1; // gets total amount of people
 	};
-	for (var i = 1; i < 9; i++) {
+	for (var i = 1; i < 19; i++) {
 		drawValues[i] = map(undergradMajorTable.getColumn(column)[i], 0, maxValue, 0, maxLength);
 		numberDrawValues[i] = parseInt(undergradMajorTable.getColumn(column)[i]); // re-caulcaites each column to the set 
 	};
@@ -78,14 +78,14 @@ function draw(){
 	noFill();
 	stroke(0);
 	strokeWeight(1.5);
-	for (var i = 0; i < 9; i++) {
+	for (var i = 0; i < 19; i++) {
 		ellipse(buttonX+buttonSpacing*i, buttonY, 12, 12);
 	};
 	fill(0);
 	noStroke();
 	ellipse(buttonX+buttonSpacing*(column-1), buttonY, 7, 7);
 	textStyle(NORMAL);
-	for (var i = 1; i < 9; i++) {
+	for (var i = 1; i < 19; i++) {
 		text(undergradMajorTable.getColumn(i)[0], buttonX+10+buttonSpacing*(i-1), buttonY+3);
 	};
 
@@ -102,12 +102,12 @@ function draw(){
 
 function undergradMajorGraph(){
 	var totalPeeps = 0
-	for (var i = 1; i < 9; i++) {
+	for (var i = 1; i < 19; i++) {
 		totalPeeps = totalPeeps + undergradMajorTable.getColumn(column)[i]*1;
 	};
 	noStroke();
 	textSize(12);
-	for (var i = 1; i < 9; i++) {
+	for (var i = 1; i < 19; i++) {
 		fill(fillGSAPP);
 		rect(startX, startY+i*spacing, drawValues[i], barHeight);
 		textAlign(LEFT);
@@ -134,11 +134,11 @@ function recalculateValues(){
 	var maxValue = 0;	
 	var rectLength = 0;
 	var totalPeeps = 0
-	for (var i = 1; i < 9; i++) {
+	for (var i = 1; i < 19; i++) {
 		maxValue = max(undergradMajorTable.getColumn(column)[i], maxValue);
 		totalPeeps = totalPeeps + undergradMajorTable.getColumn(column)[i]*1;
 	};
-	for (var i = 1; i < 9; i++) {
+	for (var i = 1; i < 19; i++) {
 		targetValues[i] = map(undergradMajorTable.getColumn(column)[i], 0, maxValue, 0, maxLength);
 		numberTargetValues[i] = undergradMajorTable.getColumn(column)[i];
 	};
