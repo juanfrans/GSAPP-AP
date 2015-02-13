@@ -46,8 +46,8 @@ var centerY = 160;
 var bufferX = 150;
 
 function preload(){
-	dataTable2 = loadTable('data/Time_Till_Work.csv');
-	dataTable = loadTable('data/Visa_Requirement.csv');
+	dataTable2 = loadTable('data/Status_Job.csv');
+	dataTable = loadTable('data/Number_Jobs.csv');
 	console.log('done loading data');
 }
 
@@ -73,16 +73,16 @@ function setup(){
 	for (var i = 0; i < 2; i++) {
 		drawValues[i] = map(dataTable.getColumn(column)[i+1], 0, totalPeeps, 0, 360);
 	};
-		for (var i = 1; i < 6; i++) {
+		for (var i = 1; i < 4; i++) {
 		totalPeeps2 = totalPeeps2 + dataTable2.getColumn(column)[i]*1;
 	};
-	for (var i = 0; i < 5; i++) {
+	for (var i = 0; i < 3; i++) {
 		drawValues2[i] = map(dataTable2.getColumn(column)[i+1], 0, totalPeeps2, 0, 360);
 	};
 }
 
 function draw(){
-	background(255);
+	background(239, 239, 239);
 
 	//Buttons
 	textSize(12);
@@ -124,7 +124,7 @@ function undergradMajorGraph(){
 	for (var i = 0; i < 2; i++) {
 		totalPeeps = totalPeeps + dataTable.getColumn(column)[i+1]*1;
 	};
-	for (var i = 0; i < 5; i++) {
+	for (var i = 0; i < 3; i++) {
 		totalPeeps2 = totalPeeps2 + dataTable2.getColumn(column)[i+1]*1;
 	};
 	noStroke();
@@ -156,7 +156,6 @@ function undergradMajorGraph(){
 	};
 	fill(239, 239, 239);
 	ellipse(centerX, centerY, 75, 75);
-
 	lastAngle = radians(-90);
 	for (var i = 0; i < drawValues2.length; i++) {
 		fill(colorValues[i]);
@@ -183,7 +182,7 @@ function undergradMajorGraph(){
 		else{
 		}
 		if(dataTable2.getColumn(column)[i+1]>0){
-			text(round(dataTable2.getColumn(column)[i+1]/totalPeeps2*100)+"%", centerX2 + 75 * cos(lastAngle + radians(drawValues2[i])/2) + labelXbuffer, centerY + 75 * sin(lastAngle + radians(drawValues2[i])/2) + labelYbuffer + 12);
+			text(nfc((dataTable2.getColumn(column)[i+1]/totalPeeps2*100),1)+"%", centerX2 + 75 * cos(lastAngle + radians(drawValues2[i])/2) + labelXbuffer, centerY + 75 * sin(lastAngle + radians(drawValues2[i])/2) + labelYbuffer + 12);
 			text(dataTable2.getColumn(0)[i+1], centerX2 + 75 * cos(lastAngle + radians(drawValues2[i])/2) + labelXbuffer, centerY + 75 * sin(lastAngle + radians(drawValues2[i])/2) + labelYbuffer);
 		}
 		lastAngle += radians(drawValues2[i]);

@@ -1,4 +1,4 @@
-/*! p5.js v0.3.16 January 08, 2015 */
+/*! p5.js v0.4.0 February 01, 2015 */
 (function (root, factory) {
   if (typeof define === 'function' && define.amd)
     define('p5', [], function () { return (root.returnExportsGlobal = factory());});
@@ -99,7 +99,11 @@ amdclean['constants'] = function (require) {
 amdclean['core'] = function (require, shim, constants) {
   'use strict';
   var constants = constants;
-  var p5 = function (sketch, node) {
+  var p5 = function (sketch, node, sync) {
+    if (arguments.length === 2 && typeof node === 'boolean') {
+      sync = node;
+      node = undefined;
+    }
     this._setupDone = false;
     this._pixelDensity = window.devicePixelRatio || 1;
     this._startTime = new Date().getTime();
@@ -196,11 +200,9 @@ amdclean['core'] = function (require, shim, constants) {
       this._loadingScreen.parentNode.removeChild(this._loadingScreen);
     }.bind(this);
     this._draw = function () {
-      var userSetup = this.setup || window.setup;
       var now = new Date().getTime();
       this._frameRate = 1000 / (now - this._lastFrameTime);
       this._lastFrameTime = now;
-      var userDraw = this.draw || window.draw;
       if (this._loop) {
         if (this._drawInterval) {
           clearInterval(this._drawInterval);
@@ -209,20 +211,7 @@ amdclean['core'] = function (require, shim, constants) {
           window.requestDraw(this._draw.bind(this));
         }.bind(this), 1000 / this._targetFrameRate);
       }
-      if (typeof userDraw === 'function') {
-        this.push();
-        if (typeof userSetup === 'undefined') {
-          this.scale(this._pixelDensity, this._pixelDensity);
-        }
-        this._registeredMethods.pre.forEach(function (f) {
-          f.call(this);
-        });
-        userDraw();
-        this._registeredMethods.post.forEach(function (f) {
-          f.call(this);
-        });
-        this.pop();
-      }
+      this.redraw();
       this._updatePMouseCoords();
       this._updatePTouchCoords();
     }.bind(this);
@@ -325,10 +314,14 @@ amdclean['core'] = function (require, shim, constants) {
     window.addEventListener('blur', function () {
       self._setProperty('focused', false);
     });
-    if (document.readyState === 'complete') {
+    if (sync) {
       this._start();
     } else {
-      window.addEventListener('load', this._start.bind(this), false);
+      if (document.readyState === 'complete') {
+        this._start();
+      } else {
+        window.addEventListener('load', this._start.bind(this), false);
+      }
     }
   };
   p5.prototype._preloadMethods = [
@@ -1172,7 +1165,7 @@ amdclean['p5Vector'] = function (require, core, polargeometry, constants) {
     this.z = z || 0;
     return this;
   };
-  p5.Vector.prototype.get = function () {
+  p5.Vector.prototype.copy = function () {
     if (this.p5) {
       return new p5.Vector(this.p5, [
         this.x,
@@ -1366,17 +1359,41 @@ amdclean['p5Vector'] = function (require, core, polargeometry, constants) {
       return new p5.Vector(vx, vy, vz);
     }
   };
-  p5.Vector.add = function (v1, v2) {
-    return v1.get().add(v2);
+  p5.Vector.add = function (v1, v2, target) {
+    if (!target) {
+      target = v1.get();
+    } else {
+      target.set(v1);
+    }
+    target.add(v2);
+    return target;
   };
-  p5.Vector.sub = function (v1, v2) {
-    return v1.get().sub(v2);
+  p5.Vector.sub = function (v1, v2, target) {
+    if (!target) {
+      target = v1.get();
+    } else {
+      target.set(v1);
+    }
+    target.sub(v2);
+    return target;
   };
-  p5.Vector.mult = function (v, n) {
-    return v.get().mult(n);
+  p5.Vector.mult = function (v, n, target) {
+    if (!target) {
+      target = v.get();
+    } else {
+      target.set(v);
+    }
+    target.mult(n);
+    return target;
   };
-  p5.Vector.div = function (v, n) {
-    return v.get().div(n);
+  p5.Vector.div = function (v, n, target) {
+    if (!target) {
+      target = v.get();
+    } else {
+      target.set(v);
+    }
+    target.div(n);
+    return target;
   };
   p5.Vector.dot = function (v1, v2) {
     return v1.dot(v2);
@@ -1387,8 +1404,14 @@ amdclean['p5Vector'] = function (require, core, polargeometry, constants) {
   p5.Vector.dist = function (v1, v2) {
     return v1.dist(v2);
   };
-  p5.Vector.lerp = function (v1, v2, amt) {
-    return v1.get().lerp(v2, amt);
+  p5.Vector.lerp = function (v1, v2, amt, target) {
+    if (!target) {
+      target = v1.get();
+    } else {
+      target.set(v1);
+    }
+    target.lerp(v2, amt);
+    return target;
   };
   p5.Vector.angleBetween = function (v1, v2) {
     var angle = Math.acos(v1.dot(v2) / (v1.mag() * v2.mag()));
@@ -1797,15 +1820,19 @@ amdclean['colorsetting'] = function (require, core, constants, p5Color) {
     255
   ];
   p5.prototype.background = function () {
+    this.drawingContext.save();
+    this.drawingContext.setTransform(1, 0, 0, 1, 0, 0);
+    this.drawingContext.scale(this._pixelDensity, this._pixelDensity);
     if (arguments[0] instanceof p5.Image) {
       this.image(arguments[0], 0, 0, this.width, this.height);
     } else {
       var curFill = this.drawingContext.fillStyle;
-      var ctx = this.drawingContext;
-      ctx.fillStyle = p5.Color._getCanvasColor.apply(this, arguments);
-      ctx.fillRect(0, 0, this.width, this.height);
-      ctx.fillStyle = curFill;
+      var newFill = p5.Color._getCanvasColor.apply(this, arguments);
+      this.drawingContext.fillStyle = newFill;
+      this.drawingContext.fillRect(0, 0, this.width, this.height);
+      this.drawingContext.fillStyle = curFill;
     }
+    this.drawingContext.restore();
   };
   p5.prototype.clear = function () {
     this.drawingContext.clearRect(0, 0, this.width, this.height);
@@ -2277,15 +2304,20 @@ amdclean['imageloading_displaying'] = function (require, core, filters, canvas, 
   var Filters = filters;
   var canvas = canvas;
   var constants = constants;
-  p5.prototype.loadImage = function (path, callback) {
+  p5.prototype.loadImage = function (path, successCallback, failureCallback) {
     var img = new Image();
     var pImg = new p5.Image(1, 1, this);
     img.onload = function () {
       pImg.width = pImg.canvas.width = img.width;
       pImg.height = pImg.canvas.height = img.height;
       pImg.canvas.getContext('2d').drawImage(img, 0, 0);
-      if (typeof callback !== 'undefined') {
-        callback(pImg);
+      if (typeof successCallback === 'function') {
+        successCallback(pImg);
+      }
+    };
+    img.onerror = function (e) {
+      if (typeof failureCallback === 'function') {
+        failureCallback(e);
       }
     };
     if (path.indexOf('data:image/') !== 0) {
@@ -2433,8 +2465,12 @@ amdclean['imagepixels'] = function (require, core, filters, p5Color) {
   };
   p5.prototype.set = function (x, y, imgOrCol) {
     if (imgOrCol instanceof p5.Image) {
+      this.drawingContext.save();
+      this.drawingContext.setTransform(1, 0, 0, 1, 0, 0);
+      this.drawingContext.scale(this._pixelDensity, this._pixelDensity);
       this.drawingContext.drawImage(imgOrCol.canvas, x, y);
       this.loadPixels.call(this);
+      this.drawingContext.restore();
     } else {
       var idx = 4 * (y * this.width + x);
       if (!this.imageData) {
@@ -3354,6 +3390,7 @@ amdclean['inputtouch'] = function (require, core) {
   p5.prototype.ptouchX = 0;
   p5.prototype.ptouchY = 0;
   p5.prototype.touches = [];
+  p5.prototype.touchIsDown = false;
   p5.prototype._updateTouchCoords = function (e) {
     if (e.type === 'mousedown' || e.type === 'mousemove' || e.type === 'mouseup') {
       this._setProperty('touchX', this.mouseX);
@@ -3389,6 +3426,7 @@ amdclean['inputtouch'] = function (require, core) {
     var context = this._isGlobal ? window : this;
     var executeDefault;
     this._updateTouchCoords(e);
+    this._setProperty('touchIsDown', true);
     if (typeof context.touchStarted === 'function') {
       executeDefault = context.touchStarted(e);
       if (executeDefault === false) {
@@ -3420,6 +3458,9 @@ amdclean['inputtouch'] = function (require, core) {
   };
   p5.prototype.ontouchend = function (e) {
     this._updateTouchCoords(e);
+    if (this.touches.length === 0) {
+      this._setProperty('touchIsDown', false);
+    }
     var context = this._isGlobal ? window : this;
     var executeDefault;
     if (typeof context.touchEnded === 'function') {
@@ -3501,7 +3542,7 @@ amdclean['mathrandom'] = function (require, core) {
       var m = 4294967296, a = 1664525, c = 1013904223, seed, z;
       return {
         setSeed: function (val) {
-          z = seed = val || Math.round(Math.random() * m);
+          z = seed = (val == null ? Math.random() * m : val) >>> 0;
         },
         getSeed: function () {
           return seed;
@@ -3663,7 +3704,7 @@ amdclean['mathnoise'] = function (require, core) {
         var m = 4294967296, a = 1664525, c = 1013904223, seed, z;
         return {
           setSeed: function (val) {
-            z = seed = val || Math.round(Math.random() * m);
+            z = seed = (val == null ? Math.random() * m : val) >>> 0;
           },
           getSeed: function () {
             return seed;
@@ -4880,9 +4921,21 @@ amdclean['structure'] = function (require, core) {
     throw new Error('popStyle() not used, see pop()');
   };
   p5.prototype.redraw = function () {
-    var context = this._isGlobal ? window : this;
-    if (context.draw) {
-      context.draw();
+    var userSetup = this.setup || window.setup;
+    var userDraw = this.draw || window.draw;
+    if (typeof userDraw === 'function') {
+      this.push();
+      if (typeof userSetup === 'undefined') {
+        this.scale(this._pixelDensity, this._pixelDensity);
+      }
+      this._registeredMethods.pre.forEach(function (f) {
+        f.call(this);
+      });
+      userDraw();
+      this._registeredMethods.post.forEach(function (f) {
+        f.call(this);
+      });
+      this.pop();
     }
   };
   p5.prototype.size = function () {
@@ -4908,7 +4961,7 @@ amdclean['transform'] = function (require, core, constants, outputtext_area) {
     throw new Error('pushMatrix() not used, see push()');
   };
   p5.prototype.resetMatrix = function () {
-    this.drawingContext.setTransform();
+    this.drawingContext.setTransform(1, 0, 0, 1, 0, 0);
     return this;
   };
   p5.prototype.rotate = function (r) {
@@ -4978,6 +5031,7 @@ amdclean['typographyattributes'] = function (require, core, constants) {
   };
   p5.prototype.textSize = function (s) {
     this._setProperty('_textSize', s);
+    this._setProperty('_textLeading', s * 1.25);
     this._applyTextProperties();
   };
   p5.prototype.textStyle = function (s) {
