@@ -106,8 +106,8 @@ function draw(){
 	noStroke();
 	textStyle(NORMAL);
 	text("GSAPP", buttonX+10, buttonY+3);
-	text("OUR SURVEY", buttonX+buttonSpacing+10, buttonY+3);
-	text("COMPARISON", buttonX+buttonSpacing*2+10, buttonY+3);
+	text("Our Survey", buttonX+buttonSpacing+10, buttonY+3);
+	text("Comparison", buttonX+buttonSpacing*2+10, buttonY+3);
 	ellipse(buttonX+buttonSpacing*(column-1), buttonY+20, 7, 7);
 	ellipse(buttonX+buttonSpacing*(data), buttonY, 7, 7);
 	textStyle(NORMAL);
@@ -154,7 +154,7 @@ function circleChart2(){
 	textAlign(CENTER);
 	for (var i = 1; i < 8; i++) {
 		major = totalGraduatesTable.getColumn(0)[i];
-		text(major.toUpperCase(), circleStartX+90*(i-1), circleStartY-50);
+		text(major, circleStartX+90*(i-1), circleStartY-50);
 		text(numberValueSurveyC[i-1]+"/"+numberValueGSAPPC[i-1], circleStartX+90*(i-1), circleStartY+55);
 		text("("+round(numberValueSurveyC[i-1]/numberValueGSAPPC[i-1]*100)+"%)", circleStartX+90*(i-1), circleStartY+70);
 	};
@@ -196,7 +196,7 @@ function circleChart(){
 	if (data == 0){
 		for (var i = 1; i < 8; i++) {
 			major = totalGraduatesTable.getColumn(0)[i];
-			text(major.toUpperCase(), circleStartX+90*(i-1), circleStartY-50);
+			text(major, circleStartX+90*(i-1), circleStartY-50);
 			text(numberValueGSAPPC[i-1], circleStartX+90*(i-1), circleStartY+55);
 			text("("+round(numberValueGSAPPC[i-1]/totalGraduates*100)+"%)", circleStartX+90*(i-1), circleStartY+70);
 		};
@@ -204,7 +204,7 @@ function circleChart(){
 	if (data == 1){
 		for (var i = 1; i < 8; i++) {
 			major = totalGraduatesTable.getColumn(0)[i];
-			text(major.toUpperCase(), circleStartX+90*(i-1), circleStartY-50);
+			text(major, circleStartX+90*(i-1), circleStartY-50);
 			text(numberValueSurveyC[i-1], circleStartX+90*(i-1), circleStartY+55);
 			text("("+round(numberValueSurveyC[i-1]/totalGraduates*100)+"%)", circleStartX+90*(i-1), circleStartY+70);
 		};

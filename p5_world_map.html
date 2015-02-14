@@ -86,7 +86,7 @@ function setup(){
 	 	preOutsideDraw = preOutsideDraw + parseInt(dataTable.getColumn(column)[outside[i]])/totalPeeps;
 	 };
 	for (var i = 0; i < outside.length; i++) {
-	 	postOutsideDraw = postOutsideDraw + parseInt(dataTable.getColumn(column)[outside[i]+14])/totalPeeps;
+	 	postOutsideDraw = postOutsideDraw + parseInt(dataTable.getColumn(column)[outside[i]+13])/totalPeeps;
 	 };
 }
 
@@ -199,13 +199,10 @@ function recalculateValues(){
 		preOutsideTarget = preOutsideTarget + (dataTable.getColumn(column)[outside[i]]*1)/totalPeeps;
 	};
 	for (var i = 0; i < outside.length; i++) {
-		if(preOutsideTarget == 0){
-			postOutsideTarget = 0;
-		}
-		else{
-			postOutsideTarget = postOutsideTarget + (dataTable.getColumn(column)[outside[i]+14]*1)/totalPeeps;
-		}
+		postOutsideTarget = postOutsideTarget + (dataTable.getColumn(column)[outside[i]+13]*1)/totalPeeps;
 	};
+	console.log(totalPeeps);
+	console.log(postOutsideTarget);
 }
 
 function mousePressed(){
