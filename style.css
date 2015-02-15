@@ -169,9 +169,12 @@ table{
 	margin-bottom: 25px;
 	text-align: center; 
 }
+td{
+	font-size: 12px;
+}
 td.number{
 	font-family: "din-condensed-web", helvetica, sans-serif;
-	font-size: 80px;
+	font-size: 50px;
 	padding-left: 15px;
 	padding-right: 15px;
 	padding-top: 2px;
