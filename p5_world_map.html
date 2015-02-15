@@ -16,12 +16,12 @@
 </head>
 <script type="text/javascript">
 
-var WIDTH = 650;
-var HEIGHT = 500;
+var WIDTH = 800;
+var HEIGHT = 600;
 var leftMargin = 0;
 var column = 1;
 var postGSAPP = 0;
-var buttonX = 26;
+var buttonX = 100;
 var buttonY = 25;
 var buttonSpacing = 80;
 var fillGSAPP;
@@ -40,8 +40,8 @@ var maxArea;
 var maxCircleRadius = 50;
 var startX;
 var worldMap;
-var mapProportion = 1.95;
-var fctCrds = 0.9;
+var mapProportion = 1.6;
+var fctCrds = 1.08;
 var coordenates = [[]];
 var mapX = 0;
 var mapY = 75;
@@ -116,12 +116,23 @@ function draw(){
 	for (var i = 1; i < 9; i++) {
 		text(dataTable.getColumn(i)[0], buttonX+10+buttonSpacing*(i-1), buttonY+23);
 	};
-	text('CAME FROM ABROAD', 25, mapY+405);
-	text('LEFT AFTER GRADSCHOOL', 300, mapY+405);
-	textStyle(BOLD);
-	textSize(48);
-	text(floor(preOutsideDraw*100)+'%', 25, mapY+390);
-	text(floor(postOutsideDraw*100)+'%', 300, mapY+390);
+	stroke(0);
+	strokeCap(SQUARE);
+	strokeWeight(2.5);
+	line(WIDTH/2, mapY+415, WIDTH/2, mapY+480);
+	noStroke();
+	textAlign(CENTER);
+	textSize(12);
+	text('Came from abroad', WIDTH/2 - 80, mapY+490);
+	text('Left after gradschool', WIDTH/2 + 80, mapY+490);
+	textFont("din-condensed-web");
+	textStyle(NORMAL);
+	textSize(50);
+	text(floor(preOutsideDraw*100)+'%', WIDTH/2 - 80, mapY+460);
+	text(floor(postOutsideDraw*100)+'%', WIDTH/2 + 80, mapY+460);
+	textSize(12);
+	textFont("proxima-nova");
+	textAlign(LEFT);
 	textStyle(NORMAL);
 	if(frameCount > 0){
 		drawGraph();
@@ -138,19 +149,26 @@ function drawGraph(){
 	for (var i = 0; i < drawValues.length; i++) {
 		totalPeeps = totalPeeps + dataTable.getColumn(column)[i+1]*1;
 	};
-	noStroke();
 	textSize(10);
-	for (var i = 0; i < drawValues.length; i++) {
+	stroke(239, 239, 239);
+	strokeWeight(0.75);
+	if (postGSAPP == 0){
 		fill(fillGSAPP);
-		ellipse(coordenates[i][0], coordenates[i][1], drawValues[i], drawValues[i]);
+	}
+	else{
+		fill(fillAP);
 	}
 	for (var i = 0; i < drawValues.length; i++) {
-		textAlign(LEFT);
-		fill(0);
+		ellipse(coordenates[i][0], coordenates[i][1], drawValues[i], drawValues[i]);
+	}
+	noStroke();
+	textAlign(LEFT);
+	fill(0);
+	for (var i = 0; i < drawValues.length; i++) {
+
 		if(numberDrawValues[i]>0.25){
 			text(dataTable.getColumn(0)[i+1]+' '+nfc((numberDrawValues[i]/totalPeeps*100),1)+'%', coordenates[i][0]+6, coordenates[i][1]+6);
 		}
-		//text(dataTable.getColumn(0)[i+1], coordenates[i][0]+6, coordenates[i][1]+6);
 	};
 }
 

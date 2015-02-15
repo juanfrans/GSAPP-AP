@@ -197,7 +197,7 @@ function circleChart(){
 		for (var i = 1; i < 8; i++) {
 			major = totalGraduatesTable.getColumn(0)[i];
 			text(major, circleStartX+90*(i-1), circleStartY-50);
-			text(numberValueGSAPPC[i-1], circleStartX+90*(i-1), circleStartY+55);
+			text(numberValueGSAPPC[i-1]+'', circleStartX+90*(i-1), circleStartY+55);
 			text("("+round(numberValueGSAPPC[i-1]/totalGraduates*100)+"%)", circleStartX+90*(i-1), circleStartY+70);
 		};
 	}
@@ -205,7 +205,7 @@ function circleChart(){
 		for (var i = 1; i < 8; i++) {
 			major = totalGraduatesTable.getColumn(0)[i];
 			text(major, circleStartX+90*(i-1), circleStartY-50);
-			text(numberValueSurveyC[i-1], circleStartX+90*(i-1), circleStartY+55);
+			text(numberValueSurveyC[i-1]+'', circleStartX+90*(i-1), circleStartY+55);
 			text("("+round(numberValueSurveyC[i-1]/totalGraduates*100)+"%)", circleStartX+90*(i-1), circleStartY+70);
 		};
 	}
