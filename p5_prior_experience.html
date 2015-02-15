@@ -77,16 +77,16 @@ function undergradMajorGraph(){
 		};
 		for (var j = 1; j < 5; j++) {
 			if (j == 1){
-				fill(fillGSAPP)
+				fill(fillGSAPP);
 			}
 			else if (j == 2){
-				fill(154, 216, 218);
+				fill(172, 221, 220);
 			}
 			else if (j == 3){
-				fill(fillAP);
+				fill(247, 193, 180);
 			}
 			else {
-				fill(241, 62, 54);
+				fill(fillAP);
 			}
 			rectLength = map(dataTable.getColumn(i)[j]*1, 0, totalPeeps, 0, maxLength);
 			rect(startX+rectStart, startY+i*spacing, rectLength, barHeight);
