@@ -106,7 +106,7 @@ h1{
 h2{
 	font-family: "proxima-nova",helvetica, sans-serif;
 	width: 650px;
-	font-size: 19px;
+	font-size: 15px;
 	font-style: normal;
 	color: #D1D1D1;
 	font-weight: 300;
@@ -118,6 +118,7 @@ h2{
 	margin-top: 3px;
 	padding-top: 0px;
 	padding-bottom: 0px;
+	text-transform: uppercase;
 }
 h3{
 	font-family: "proxima-nova",helvetica, sans-serif;
@@ -129,7 +130,7 @@ h3{
 	margin-left:auto;
 	margin-right:auto;
 	margin-bottom: 0px;
-	margin-top: 25px;
+	margin-top: 35px;
 	padding: 0;
 	text-transform: uppercase;
 }
@@ -158,6 +159,32 @@ hr{
 	padding: 0px;	
 	margin-bottom: 0px;
 	margin-top: 0px;
+}
+table{
+	width:auto;
+	height: auto;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 25px;
+	margin-bottom: 25px;
+	text-align: center; 
+}
+td{
+	font-size: 12px;
+}
+td.number{
+	font-family: "din-condensed-web", helvetica, sans-serif;
+	font-size: 50px;
+	padding-left: 15px;
+	padding-right: 15px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	margin: 0px; 
+}
+td.border{
+	width: 1px;
+	background: #000000;
+	padding: 0px
 }
 
 /******* Charts *******/
