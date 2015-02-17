@@ -133,6 +133,19 @@ h3{
 	margin-top: 40px;
 	padding: 0;
 }
+h4{
+	font-family: "proxima-nova",helvetica, sans-serif;
+	font-style: normal;
+	font-size: 11px;
+	font-weight: 100;
+	color: #000000;
+	text-align: center;
+	margin-left:auto;
+	margin-right:auto;
+	margin-bottom: 0px;
+	margin-top: 0px;
+	padding: 0;
+}
 p.description {
 	width: 350px;
 	text-align: justify;
@@ -160,7 +173,7 @@ hr{
 	margin-top: 0px;
 }
 table{
-	width:auto;
+	width:300px;
 	height: auto;
 	margin-left: auto;
 	margin-right: auto;
@@ -170,6 +183,8 @@ table{
 }
 td{
 	font-size: 12px;
+	white-space: pre-wrap;
+	vertical-align: top;
 }
 td.number{
 	font-family: "din-condensed-web", helvetica, sans-serif;
@@ -179,6 +194,19 @@ td.number{
 	padding-top: 2px;
 	padding-bottom: 2px;
 	margin: 0px; 
+	line-height: .9;
+	vertical-align: middle;
+}
+td.text{
+	font-family: "din-condensed-web", helvetica, sans-serif;
+	font-size: 35px;
+	padding-left: 15px;
+	padding-right: 15px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	margin: 0px; 
+	line-height: .9;
+	vertical-align: middle;
 }
 td.border{
 	width: 1px;
