@@ -41,6 +41,7 @@ var transitionFrames = 60;
 var framesRemaining = 0;
 var maxLength = 400;
 var startX;
+var totalPeeps = [449, 125, 96, 47, 25, 68, 59, 29]	
 
 function preload(){
 	dataTable = loadTable('data/Reasons_Change.csv');
@@ -58,10 +59,8 @@ function setup(){
 	// Setup initial values
 	var maxValue = 0;
 	var rectLength = 0;
-	var totalPeeps = 0
 	for (var i = 1; i < 11; i++) {
 		maxValue = max(dataTable.getColumn(column)[i], maxValue);
-		totalPeeps = totalPeeps + dataTable.getColumn(column)[i]*1;
 	};
 	for (var i = 1; i < 11; i++) {
 		drawValues[i] = map(dataTable.getColumn(column)[i], 0, maxValue, 0, maxLength);
@@ -102,10 +101,6 @@ function draw(){
 }
 
 function undergradMajorGraph(){
-	var totalPeeps = 0
-	for (var i = 1; i < 11; i++) {
-		totalPeeps = totalPeeps + dataTable.getColumn(column)[i]*1;
-	};
 	noStroke();
 	textSize(12);
 	for (var i = 1; i < 11; i++) {
@@ -114,7 +109,7 @@ function undergradMajorGraph(){
 		textAlign(LEFT);
 		fill(0);
 		if(dataTable.getColumn(column)[i]>0){
-			text(round(numberDrawValues[i]/totalPeeps*100)+"%", leftMargin + startX + drawValues[i] + 5, endY-i*spacing+11);
+			text(round(numberDrawValues[i]/totalPeeps[column-1]*100)+"%", leftMargin + startX + drawValues[i] + 5, endY-i*spacing+11);
 		}
 		textAlign(RIGHT);
 		text(dataTable.getColumn(0)[i], startX - 5, endY-i*spacing+11);
@@ -133,10 +128,8 @@ function recalculateValues(){
 	numberInitValues = numberDrawValues;
 	var maxValue = 0;
 	var rectLength = 0;
-	var totalPeeps = 0
 	for (var i = 1; i < 11; i++) {
 		maxValue = max(dataTable.getColumn(column)[i], maxValue);
-		totalPeeps = totalPeeps + dataTable.getColumn(column)[i]*1;
 	};
 	for (var i = 1; i < 11; i++) {
 		targetValues[i] = map(dataTable.getColumn(column)[i], 0, maxValue, 0, maxLength);

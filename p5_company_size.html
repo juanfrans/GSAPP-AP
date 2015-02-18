@@ -57,8 +57,8 @@ function setup(){
 	colorValues = [color(115, 162, 161), color(59, 143, 142), fillGSAPP, color(154, 216, 218), color(242, 204, 198), fillAP, color(241, 62, 54)];
 
 	// Setup initial values
-	centerX = WIDTH/2 + bufferX;
-	centerX2 = WIDTH/2 - bufferX;
+	centerX = WIDTH/2;
+	centerX2 = WIDTH/2;
 	var rectLength = 0;
 	var totalPeeps = 0;
 	var totalPeeps2 = 0;
@@ -98,10 +98,6 @@ function draw(){
 		updateValues();
 	}
 	checkButtonHover();
-	fill(0);
-	noStroke();
-	textAlign(CENTER);
-	text('COMPANY SIZE', WIDTH/2+bufferX, 285);
 }
 
 function undergradMajorGraph(){

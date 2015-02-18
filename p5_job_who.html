@@ -39,7 +39,8 @@ var transitionFrames = 60;
 var framesRemaining = 0;
 var maxLength = 450;	
 var startX;				
-var startY = 40;		
+var startY = 40;
+var totalPeeps = [449, 125, 96, 47, 25, 68, 59, 29]	
 
 function preload(){
 	undergradMajorTable = loadTable('data/Job_Who.csv'); //function preload
@@ -57,10 +58,8 @@ function setup(){
 	// Setup initial values
 	var maxValue = 0;
 	var rectLength = 0;
-	var totalPeeps = 0
 	for (var i = 1; i < 9; i++) {
 		maxValue = max(undergradMajorTable.getColumn(column)[i], maxValue);
-		totalPeeps = totalPeeps + undergradMajorTable.getColumn(column)[i]*1; // gets total amount of people
 	};
 	for (var i = 1; i < 9; i++) {
 		drawValues[i] = map(undergradMajorTable.getColumn(column)[i], 0, maxValue, 0, maxLength);
@@ -101,10 +100,6 @@ function draw(){
 }
 
 function undergradMajorGraph(){
-	var totalPeeps = 0
-	for (var i = 1; i < 9; i++) {
-		totalPeeps = totalPeeps + undergradMajorTable.getColumn(column)[i]*1;
-	};
 	noStroke();
 	textSize(12);
 	for (var i = 1; i < 9; i++) {
@@ -113,7 +108,7 @@ function undergradMajorGraph(){
 		textAlign(LEFT);
 		fill(0);
 		if(undergradMajorTable.getColumn(column)[i]>0){
-			text(nfc((numberDrawValues[i]/totalPeeps*100),1)+"%", leftMargin + startX + drawValues[i] + 5, startY+i*spacing+11); //nfc, one after decimal 
+			text(nfc((numberDrawValues[i]/totalPeeps[column-1]*100),1)+"%", leftMargin + startX + drawValues[i] + 5, startY+i*spacing+11); //nfc, one after decimal 
 		}
 		textAlign(RIGHT);
 		text(undergradMajorTable.getColumn(0)[i], startX - 5, startY+i*spacing+11); //plot catogries 
@@ -133,10 +128,8 @@ function recalculateValues(){
 	numberInitValues = numberDrawValues; //recalutlate start point
 	var maxValue = 0;	
 	var rectLength = 0;
-	var totalPeeps = 0
 	for (var i = 1; i < 9; i++) {
 		maxValue = max(undergradMajorTable.getColumn(column)[i], maxValue);
-		totalPeeps = totalPeeps + undergradMajorTable.getColumn(column)[i]*1;
 	};
 	for (var i = 1; i < 9; i++) {
 		targetValues[i] = map(undergradMajorTable.getColumn(column)[i], 0, maxValue, 0, maxLength);
