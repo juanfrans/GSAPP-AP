@@ -43,7 +43,7 @@ var centerY = 160;
 var bufferX = 150;
 
 function preload(){
-	dataTable = loadTable('data/Company_Size.csv');
+	dataTable = loadTable('data/GSAPP_Prepared.csv');
 	console.log('done loading data');
 }
 
@@ -62,10 +62,10 @@ function setup(){
 	var rectLength = 0;
 	var totalPeeps = 0;
 	var totalPeeps2 = 0;
-	for (var i = 1; i < 5; i++) {
+	for (var i = 1; i < 4; i++) {
 		totalPeeps = totalPeeps + dataTable.getColumn(column)[i]*1;
 	};
-	for (var i = 0; i < 4; i++) {
+	for (var i = 0; i < 3; i++) {
 		drawValues[i] = map(dataTable.getColumn(column)[i+1], 0, totalPeeps, 0, 360);
 	};
 }
@@ -104,7 +104,7 @@ function undergradMajorGraph(){
 	var totalPeeps = 0;
 	var labelXbuffer = 10;
 	var labelYbuffer = 10;
-	for (var i = 0; i < 4; i++) {
+	for (var i = 0; i < 3; i++) {
 		totalPeeps = totalPeeps + dataTable.getColumn(column)[i+1]*1;
 	};
 	noStroke();
@@ -148,10 +148,10 @@ function recalculateValues(){
 	initValues = drawValues;
 	var rectLength = 0;
 	var totalPeeps = 0;
-	for (var i = 1; i < 5; i++) {
+	for (var i = 1; i < 4; i++) {
 		totalPeeps = totalPeeps + dataTable.getColumn(column)[i]*1;
 	};
-	for (var i = 0; i < 4; i++) {
+	for (var i = 0; i < 3; i++) {
 		targetValues[i] = map(dataTable.getColumn(column)[i+1], 0, totalPeeps, 0, 360);
 	};
 }
