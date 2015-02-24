@@ -1,0 +1,4 @@
+AuthType Basic
+AuthName "restricted area"
+AuthUserFile /GSAPP-AP/.htpasswd
+require valid-user
