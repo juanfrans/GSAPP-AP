@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>GSAPP.AP - Alumni Survey - Columbia University GSAPP</title>
+	<meta name="description" content ="A data visualization and analysis based on 5 years of Coulmbia Univeristy GSAPP (Graduate School of Architecture, Planning, And Preservation) Graduates">
+	<script src="//use.typekit.net/hgl4qxi.js"></script>
+	<script>try{Typekit.load();}catch(e){}</script>
+	<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-27897156-2', 'auto');
+	ga('send', 'pageview');</script>
+	<script type="text/javascript" src="p5/p5.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<script type="text/javascript" src="scroll.js"></script>	
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+		<div class="nav_container">
+			<div class="nav_icon">
+				<a href ="http://gsapp-ap.com/">
+				<img class="title" src="img/Header3.png" height="35px"></a>
+			</div>
+			<div class="social_link">
+				<ul class="social_link">
+					<li class="social_link"><a href="mailto:?subject=GSAPP.ap&body=http://gsapp-ap.com/ - A Data Visualization And Analysis Based On 5 Years Of GSAPP Graduates - A Project By: Juan Francisco Saldarriaga and Steven Sanchez" target="_blank"><img src="img/social-emailthis-bw.png" height="20px"></a></li>
+					<li class="social_link"><a href="http://www.linkedin.com/shareArticle?mini=true&url=http://gsapp-ap.com/&title=GSAPP%20Alumni%20Project&summary=A%20Data%20Visualization%20And%20Analysis%20Based%20On%205%20Years%20Of%20GSAPP%20Graduates.%20A%20Project%20By%20Juan%20Francisco%20Saldarriaga%20And%20Steven%20Sanchez&source=Coulmbia%20University%20Graduate%20School%2Of%20Architecture%20Planning%20Preservation" target="_blank"><img src="img/social-linkedin-bw.png" height="20px"></a></li>
+					<li class="social_link"><a href="http://www.facebook.com/share.php?u=http://gsapp-ap.com/&title=GSAPP.ap" target="_blank"><img src="img/social-facebook-bw.png" height="20px"></a></li>
+					<li class="social_link"><a href="http://twitter.com/intent/tweet?status=GSAPP.ap+http://gsapp-ap.com/" target="_blank"><img src="img/social-twitter-bw.png" height="20px"></a></li>
+				</ul>
+			</div>
+			<div class="nav_link">
+				<ul class="nav_link">	
+					<li class="nav_link"><a href="#1_intro">INTRO |</a></li>
+					<li class="nav_link"><a href="#2_stat">STATS |</a></li>
+					<li class="nav_link"><a href="#3_who">WHO |</a></li>
+					<li class="nav_link"><a href="#4_where">WHERE |</a></li>
+					<li class="nav_link"><a href="#5_post">POST |</a></li>
+					<li class="nav_link"><a href="#6_work">WORK |</a></li>
+					<li class="nav_link"><a href="#7_company">COMPANY |</a></li>
+					<li class="nav_link"><a href="#8_stability">STABILITY |</a></li>
+					<li class="nav_link"><a href="#9_future">FUTURE</a></li>
+				</ul>
+			</div>
+		</div>
+		<div id="1_intro" class="content_intro">
+			<h1 id="title1">HELLO...WHY GSAPP?</h1>
+			<h2>Surveying 5 years of alumni from the Graduate School of Architecture, Planning and Preservation at Columbia University</h2>
+			<p class="description" id="intro1">
+				GSAPP.AP visualizes the responses of 5 years of GSAPP graduates in an attempt to capture and analyze the state and evolution of the school's alumni. Based on a previous <a class="contact" href="http://dl.dropbox.com/u/7595728/GSAPP6mGrad.pdf" target="_blank">survey</a> of the 2012 Masters of Architecture class, GSAPP.AP compares the different disciplines and graduating classes that make up the school, thus providing insights into the school's professions and helping record the different paths its graduates have taken.<br><br>The initial questionnaire was sent out to more than 1,900 graduates over the months of February and March 2014, and it included questions about their background, their job search, their current jobs and their views towards the future. Here we present their responses, hoping not only to provide valuable insight into the graduates themselves but also to study, analyze and question the professions they have chosen and the school as a center for education and professional development.<br><br>For reference, the acronyms used here signify the following: M.Arch - Masters in Architecture; MS.AAD - Masters of Science in Advanced Architectural Design; MS.AUD - Masters of Science in Advanced Urban Design; MS.HP - Masters of Science in Historic Preservation; MS.RED - Masters of Science in Real Estate Development; MS.UP - Masters of Science in Urban Planning; Other includes double majors as well as PhDs and students in the Masters in Critical Curatorial and Conceptual Practices.
+			</p>
+			<a name="2_stat"></a>
+			<div style="height: 40px; padding:0px; margin:0px;"></div>
+		</div>
+		<div id="2-stat" class="content_grey">
+			<hr size="5" width="35" color="#000000" noshade>
+			<h1 class="catagory">STATS</h1>
+			<p class="description">
+				Even though the survey was sent to all GSAPP alumni graduating between 2009 and 2013, only 23% of graduates responded. However, small as this may be, this constitutes a meaningful sample and provides valuable information.
+			</p>
+			<div>
+				<table>
+					<tr>
+						<td class="number">1938</td>
+						<td class="border"></td>
+						<td class="number">23%</td>
+					</tr>
+					<tr>
+						<td>Total GSAPP Graduates</td>
+						<td></td>
+						<td>% Replied to The Survey</td>
+					</tr>	
+				</table>
+			</div>
+			<p class="description">
+				Overall, the class that had the highest response rate was the M.Arch class from 2013, with over 50% of the graduates responding to the survey. One of the limitations of the survey was the lack of response rate in certain class years and majors. Below is the comparison between 5 years of GSAPP graduates as a whole, and those who responded to our survey.
+			</p>
+			<h3 class="chart_name">Survey Response Rate / GSAPP Graduates</h3>
+			<hr size="1" width="350" color="#000000" noshade>
+			<p>
+				<iframe scrolling="no" src="p5_descriptive_stats_circles_backup.html" class="p5_chart" width="650" height="230" frameborder="0"></iframe>
+			</p>
+			<a name="3_who"></a>
+			<div style="height: 40px; padding:0px; margin:0px;"></div>
+		</div>
+		<div id="3-who" class="content">
+			<hr size="5" width="35" color="#000000" noshade>
+			<h1 class="catagory">WHO</h1>
+			<p class="description">
+				Overall, the majority of students come to GSAPP with undergraduate degrees similar to their graduate field of study. For example, more than 80% of the M.Arch students have an undergraduate degree in design or architecture. As for the MS.AADs and MS.AUDs, as they are 'post-professional' degrees, 100% of the students have a background in a similar field. Urban planning is the one exception where more than 40% of students come from the humanities, sciences or social sciences.
+			</p>
+			<h3 class="chart_name">Undergraduate Education</h3>
+			<hr size="1" width="350" color="#000000" noshade>
+			<p>
+				<iframe scrolling="no" src="p5_undergrad.html" class="p5_chart" width="650" height="160" frameborder="0"></iframe>
+			</p>
+			<p class="description">
+				In terms of gender, the overall diversity of men and women is even, with slightly more women than men (50.5% vs 49.5%). However, in certain fields there is a gender discrepancy. For example, in Historic Preservation women constitute 84% of the graduated student population vs. 16% men, in Real Estate Development men constitute 71% of alumni vs.29% women, and in Urban Planning 66% of graduated alumni were women vs. 34% men. The M.Archs, MS.AADs and MS.AUDs have close to, if not equal diversity between men and women.
+			</p>
+			<div>
+				<table>
+					<tr>
+						<td class="number">84-16</td>
+						<td class="border"></td>
+						<td class="number">71-29</td>
+					</tr>
+					<tr>
+						<td>Female-Male Ratio in Historic Preservation</td>
+						<td></td>
+						<td>Male-Female Ratio in Real Estate Development</td>
+					</tr>	
+				</table>
+			</div>
+			<p class="description">
+				Most alumni are between the age of 25 and 35, with some minor exceptions. This is consistent between genders with only a small increase of students over the age of 35 found in male alumni. 
+			</p>
+			<h3 class="chart_name">Age and Gender</h3>
+			<hr size="1" width="350" color="#000000" noshade>
+			<p>
+				<iframe scrolling="no" src="p5_gender_age.html" class="p5_chart" width="650" height="235" frameborder="0"></iframe>
+			</p>
+			<p class="description">
+				Most students come into GSAPP with some professional experience in their chosen field of study. In most cases over 50% of the students have more than a year of experience with the exception of Historic Preservation where only around 40% enter GSAPP with more than a year of experience.<p>
+			<div>
+				<table>
+					<tr>
+						<td class="text">ADVANCED TRAINING</td>
+					</tr>
+					<tr>
+						<td>Most Common Reason For Attending GSAPP</td>
+					</tr>	
+				</table>
+			</div>
+			<p class="description">
+				The notable outlier is Real Estate Development, where more than 90% have more than a year of professional experience and more than 60% have more than 3 years. In all cases there was a percentage of students that enter GSAPP with no professional experience in their chosen field of study. For example Urban Planning and Historic Preservation have the highest rates with 29% and 28% of student having no professional experience.
+			</p>
+			<h3 class="chart_name">Prior Professional Experience In Years</h3>
+			<hr size="1" width="350" color="#000000" noshade>
+			<p>
+				<iframe scrolling="no" src="p5_prior_experience.html" class="p5_chart" width="650" height="240" frameborder="0"></iframe>
+			</p>
+			<a name="4_where"></a>
+			<div style="height: 40px; padding:0px; margin:0px;"></div>
+		</div>
+		<div id="4-where" class="content_grey">
+			<hr size="5" width="35" color="#000000" noshade>
+			<h1 class="catagory">WHERE</h1>
+			<p class="description">
+				Most GSAPP graduates come from the North Eastern region of the United States. However, this varies greatly when looking at the specific majors. For example, a great portion of MS.AADs come from Europe and Asia, as well as MS.AUDs. Urban Planning, Historic Preservation and Real Estate Development are almost entirely made up of students from the United States. Finally, out of all the continents, Africa is consistently the most underrepresented.<br><br>In terms of where people migrate to after graduating almost 85% of graduates stay in the U.S., again, almost exclusively in the North East. Out of all the majors, the MS.AUDs are the ones with the highest proportion of graduates leaving the U.S. (19%), whereas the M.Arch and Historic Preservation degrees keep more than 90% of their graduates in the U.S.
+			</p>
+			<h3 class="chart_name">Place of Residence Pre & Post GSAPP</h3>
+			<hr size="1" width="350" color="#000000" noshade>
+			<p>
+				<iframe scrolling="no" src="p5_world_map.html" class="p5_chart" width="800" height="575" frameborder="0"></iframe>
+			</p>
+			<a name="5_post"></a>
+			<div style="height: 40px; padding:0px; margin:0px;"></div>	
+		</div>
+		<div id="5-post" class="content">
+			<hr size="5" width="35" color="#000000" noshade>
+			<h1 class="catagory">POST</h1>
+			<p class="description">
+				Getting a job after graduate school is a daunting challenge and even though GSAPP enjoys a very strong reputation in the professional world many students struggle finding employment when they finish their degree. This is specially true for the last 5 years of GSAPP graduates, having had to live through one of the worst economic downturns in the history of the profession.
+			</p>
+			<div>
+				<table>
+					<tr>
+						<td class="number">18%</td>
+						<td class="border"></td>
+						<td class="number">17%</td>
+					</tr>
+					<tr>
+						<td>Of Students Sent More Than 50 Job Applications</td>
+						<td></td>
+						<td>Of Students Had More Than 5 Job Interviews</td>
+					</tr>	
+				</table>
+			</div>
+			<p class="description">
+				Nevertheless, there is still variation between the different majors in the school, and this can be seen both in the number of job applications sent and in the number of interviews the graduates went through before finding a job.<br><br>For instance, more than half of the M.Arch graduates sent less than 10 job applications and only 10% of them sent more than 50, while around 30% of the MS.AADs and MS.AUDs had to send more than 50 applications before getting a job. Similarly, almost 40% of the Real Estate Graduates went through more than 5 interviews before getting a job, while only 11% of the M.Archs had to do this.
+			</p>
+			<h3 class="chart_name">Job Applications and Interviews</h3>
+			<hr size="1" width="350" color="#000000" noshade>
+			<p>
+				<iframe scrolling="no" src="p5_interviews_applications.html" class="p5_chart" width="650" height="295" frameborder="0"></iframe>
+			</p>
+			<div>
+				<table>
+					<tr>
+						<td class="number">2.76</td>
+						<td class="border"></td>
+						<td class="number">4.06</td>
+					</tr>
+					<tr>
+						<td>Average Number of Interviews For Graduates</td>
+						<td></td>
+						<td>Average Number of Interviews For Graduates Who Submitted 50+ Applications</td>
+					</tr>	
+				</table>
+			</div>
+			<p class="description">
+				In addition to job applications and interviews, another interesting difference between the majors can be seen in who helped the graduates get a job. For example, in the case of the M.Archs, 36% of them got a job with help from a GSAPP professor, and 23% of them had help from a GSAPP friend. However, only around 12% of the MS.AADs or Urban Planners found a job thanks to a GSAPP professor.<br><br>Overall, though, the most common response to 'who helped you find a job' was 'nobody', with 40% of the cases. This speaks very highly of the graduates' resourcefulness but not so well of the networks they are able to build at the school.
+			</p>
+			<h3 class="chart_name">Who Helped You Find A Job</h3>
+			<hr size="1" width="350" color="#000000" noshade>
+			<p>
+				<iframe scrolling="no" src="p5_job_who.html" class="p5_chart" width="650" height="260" frameborder="0"></iframe>
+			</p>
+			<p class="description">
+				Even though recent graduates had to face very difficult economic conditions, most alumni found jobs within 3 months of graduating. Again, the M.Archs and the Real Estate graduates seem to struggled the least, with the great majority of graduates finding a job in less than 3 months. On the other hand, more than half of the MS.AUDs and Historic Preservation students found a job only after 3 months.<br><br>In addition, another big difference, which certainly plays a role in finding a job, are the foreign visa requirements for many of the graduates. Around half of the MS.AAD and MS.AUD require a visa to work in the U.S., while only around 10% of the Urban Planners or M.Archs require the same.</p>
+			<div>
+				<table>
+					<tr>
+						<td class="number">49%</td>
+						<td class="border"></td>
+						<td class="text">Medium Size Firm</td>
+					</tr>
+					<tr>
+						<td>% Of Visas Not Paid For By Employers</td>
+						<td></td>
+						<td>Type of Employer Most Likely Not to Pay for A Visa</td>
+					</tr>	
+				</table>
+			</div>
+			<p class="description">
+				It is important to note that 49% of the visas were not paid for by the employer but by the GSAPP graduate. U.S. immigration law states that visas should not be paid for by the employees.
+			</p>
+			<h3 class="chart_name">Length of Job Search and Visa Requirements</h3>
+			<hr size="1" width="350" color="#000000" noshade>
+			<p>
+				<iframe scrolling="no" src="p5_time_visa.html" class="p5_chart" width="650" height="300" frameborder="0"></iframe>
+			</p>
+			<a name="6_work"></a>
+			<div style="height: 40px; padding:0px; margin:0px;"></div>
+		</div>
+		<div id="6-work" class="content_grey">
+			<hr size="5" width="35" color="#000000" noshade>
+			<h1 class="catagory">WORK</h1>
+			<p class="description">
+				Even though talking about salaries can be difficult, we feel that having more information and transparency on this subject is always welcomed. Especially for young graduates, knowing what other people in similar positions make can be an invaluable tool when negotiating their first salary after of graduate school.
+			</p>
+			<div>
+				<table>
+					<tr>
+						<td class="number">71%</td>
+						<td class="border"></td>
+						<td class="number">1.5%</td>
+					</tr>
+					<tr>
+						<td>Real Estate Graduates Making More Than $100,000</td>
+						<td></td>
+						<td>Other Graduates Making More Than $100,000</td>
+					</tr>	
+				</table>
+			</div>
+			<p class="description">
+				Overall, our survey shows that most people make between $40,000 and $70,000 with a great portion concentrated between $50,000 and $60,000. However, this varies greatly both in terms of the specific majors and when looking at how much time has passed since graduating. For example, the majority of Real Estate Development graduates make more than $100,000 per year, while in the rest of the disciplines, less than 4% of graduates make more than $100,000 per year.
+			</p>
+			<h3 class="chart_name">Annual Salary</h3>
+			<hr size="1" width="350" color="#000000" noshade>
+			<h4>$ Amount in Thousands</h4>
+			<p>
+				<iframe scrolling="no" src="p5_salary_year_major.html" class="p5_chart" width="650" height="320" frameborder="0"></iframe>
+			</p>
+
+			<p class="description">
+				In addition to the differences in salaries between the different majors, our survey also shows a disparity between how much men and women make in each profession. Overall, we see 16% of men making more than $100,000 while only 5% of women make this much and only in Urban Planning is there a greater proportion of women than men in the top range of salaries. In all other disciplines, men make on average more than women.
+			</p>
+			<h3 class="chart_name">Salary By Gender</h3>
+			<hr size="1" width="350" color="#000000" noshade>
+			<h4>$ Amount in Thousands</h4>
+			<p>
+				<iframe scrolling="no" src="p5_gender_salary.html" class="p5_chart" width="650" height="300" frameborder="0"></iframe>
+			</p>
+			<p class="description">
+				It is surprising how few people use the advanced software programs learned during their time in grad-school. For example, less than 25% of GSAPP grads use 3DS Max, Grasshopper, Revit or ArcGIS at work, and less than 5% use Maya, Catia or Processing. By far the most widely used softwares are the Adobe Creative Suite (around 70% of graduates use it) and Microsoft Word and Excel (used by around 85%).<br><br>There are also differences between the types of software used by different majors and by the different salary ranges. Real Estate graduates, for example, use almost exclusively Word, Excel and PowerPoint, while M.Archs, MS.AADs and MS.AUDs use a combination of Adobe Creative Suite, with 2D and 3D modeling software (Rhino and AutoCAD) and Microsoft Office. Finally, theres seems to be no correlation between increased salary and the use of scripting or 3D modeling. In contrast, the use of Microsoft Office and the Adobe Creative Suite most commonly associates with higher paid alumni.
+			</p>
+			<h3 class="chart_name">Software Used By Salary and Major</h3>
+			<hr size="1" width="350" color="#000000" noshade>
+			<h4>$ Amount in Thousands</h4>
+			<p>
+				<iframe scrolling="no" src="p5_software_salary_major.html" class="p5_chart" width="650" height="710" frameborder="0"></iframe>
+			</p>
+			<p class="description">
+				As much as architects and people in related fields like to complain about the long working hours, the data collected in this software doesn't necessarily confirm those complaints. Overall, most people work between 40 and 60 hours a week, and this seems to be true for most GSAPP majors, with the exception of Real Estate, who report working longer hours, and Historic Preservation, who report working less hours.<br><br>In regards to salary, also, there doesn't seem to be a very strong correlation between working more hours and making more money.
+			</p>
+			<h3 class="chart_name">Average Hours Worked Per Week By Salary and Major</h3>
+			<hr size="1" width="350" color="#000000" noshade>
+			<h4>$ Amount in Thousands</h4>
+			<p>
+				<iframe scrolling="no" src="p5_hours_work.html" class="p5_chart" width="650" height="460" frameborder="0"></iframe>
+			</p>
+			<a name="7_company"></a>
+			<div style="height: 40px; padding:0px; margin:0px;"></div>
+		</div>
+		<div id="7-company" class="content">
+			<hr size="5" width="35" color="#000000" noshade>
+			<h1 class="catagory">COMPANY</h1>
+			<p class="description">
+				Since almost half of GSAPP graduates major in Architecture or Advanced Architectural Design, we could estimate that more than 50% of graduates practice in a architectural related field post graduation. However, there's also a large portion of graduates that work in interior design, something GSAPP students learn very little of, and there is also some graduates who work in graphic design (9.3%), engineering (10.9%) and data visualization (6.4%), all fields that are not specifically studied in school.
+			</p>
+			<h3 class="chart_name">Current Employers Type of Work</h3>
+			<hr size="1" width="350" color="#000000" noshade>
+			<p>
+				<iframe scrolling="no" src="p5_job_worktype.html" class="p5_chart" width="650" height="510" frameborder="0"></iframe>
+			</p>
+			<p class="description">
+				Company size varies by major, with most people working either for large firms with more than 100 employees (35%) or in small to medium firms with less than 50 employees. The M.Archs, MS.AADs and MS.AUDs all maintain these proportions, but the Real Estate and Urban Planning graduates tend to work overwhelmingly in companies that have more than 100 employees, while the Historic Preservation graduates tend to work more in small firms with less than 10 employees.
+			</p>
+			<h3 class="chart_name">Current Employers Company Size</h3>
+			<hr size="1" width="350" color="#000000" noshade>
+			<p>
+				<iframe scrolling="no" src="p5_company_size.html" class="p5_chart" width="650" height="250" frameborder="0"></iframe>
+			</p>
+			<p class="description">
+				Overtime payment seems to be another prominent issue with GSAPP graduates, with almost 50% of firms not compensating at all for extra time. In fact, only 15% of firms pay their employees overtime, and the rest compensate them with various perks, like an occasional office party, paying for dinner and cabs home, or giving extra vacation days. The most extreme case is Real Estate Development, where almost 60% of firms don't compensate at all, while in contrast in Urban Planning 31% of firms pay for extra time.
+			</p>
+			<h3 class="chart_name">Company Overtime Policy</h3>
+			<hr size="1" width="350" color="#000000" noshade>
+			<p>
+				<iframe scrolling="no" src="p5_overtime_payment.html" class="p5_chart" width="650" height="230" frameborder="0"></iframe>
+			</p>
+			<a name="8_stability"></a>
+			<div style="height: 40px; padding:0px; margin:0px;"></div>
+		</div>
+		<div id="8-stability" class="content_grey">
+			<hr size="5" width="35" color="#000000" noshade>
+			<h1 class="catagory">STABILITY</h1>
+			<p class="description">
+				Even though the past 5 years have been difficult for the professions taught at GSAPP, most graduates seem to have stable jobs with 82% reporting being employed full-time and only 3.5% either unemployed, interning, or employed part-time. However, it is interesting to see that overall 13.5% of graduates have a different work status: they are either working full-time while freelancing, just freelancing, or have become independent and own their own business. In this regard, the class of 2010 sticks out, with more than 20% of graduates describing themselves as freelancing or self-employed.<br><br>In terms of how many jobs graduates have had since graduating, it is typical for alumni to have only one or two, even for students who graduated in 2009.
+			</p>
+			<h3 class="chart_name">Current Employment Status</h3>
+			<hr size="1" width="350" color="#000000" noshade>
+			<p>
+				<iframe scrolling="no" src="p5_job_status.html" class="p5_chart" width="650" height="325" frameborder="0"></iframe>
+			</p>
+			<p class="description">
+				Amongst reasons for changing jobs, the answer that alumni mention the most is better pay, followed by work being more interesting, and better work environment. Few people mention having problems with co-workers or bosses as a leading cause for changing jobs.
+			</p>
+			<h3 class="chart_name">Reasons for Changing Jobs</h3>
+			<hr size="1" width="350" color="#000000" noshade>
+			<p>
+				<iframe scrolling="no" src="p5_reasons_change.html" class="p5_chart" width="650" height="300" frameborder="0"></iframe>
+			</p>
+			<a name="9_future"></a>
+			<div style="height: 40px; padding:0px; margin:0px;"></div>
+		</div>
+		<div id="9-future" class="content">
+			<hr size="5" width="35" color="#000000" noshade>
+			<h1 class="catagory">FUTURE</h1>
+			<p class="description">
+				In terms of licensing, there seems to be an overall desire for alumni to obtain a professional license with-in the next 3 years. However, there's also a great portion of graduates who either don't have concrete plans for licensure or are just not interested. Specifically, the MS.AUDs and the MS.AADs seem to be more indifferent towards the licensing process. One reason for this might be that a large number of alumni are already licensed in their country of origin or that some don't plan to stay permanently in the United States<br><br>In addition, there seems to be confusion in certain fields as to whether or not there is an official license. For example, 16% of Urban Planning graduates say that there's no official license while 28% of them say that they will get licensed in the next 3 years. 
+			</p>
+			<h3 class="chart_name">Plans For Proffesional Licensure</h3>
+			<hr size="1" width="350" color="#000000" noshade>
+			<p>
+				<iframe scrolling="no" src="p5_license.html" class="p5_chart" width="650" height="210" frameborder="0"></iframe>
+			</p>
+			<p class="description">
+				In a general comparison of degree satisfaction, Graduates from the university tend to have a favorable outlook on their education. 75% report a positive view on the workplace preparedness obtained at GSAPP. The largest block of GSAPP graduates stating they felt the University didn't prepare them for their careers is within the Urban Planning Department. 25% of Urban Planning graduates reported not feeling prepared by their education experience.
+			</p>
+			<div>
+				<table>
+					<tr>
+						<td class="text">25% OF URBAN PLANNING GRADUATES</td>
+					</tr>
+					<tr>
+						<td>Are Not Satisfied With Their Education</td>
+					</tr>	
+				</table>
+			</div>
+			<p class="description">
+				Graduates who reported as neither satisfied or dissatisfied tended to state a difference in the teaching and practice of architecture with write-in response such as "Design yes. Real office work, NO!" or "Prepared me in terms of how to think, not in terms of practical skills". 
+			</p>
+			<h3 class="chart_name">Has GSAPP Prepared You For A Career In Your Chosen Field Of Work</h3>
+			<hr size="1" width="350" color="#000000" noshade>
+			<p>
+				<iframe scrolling="no" src="p5_gsapp_prepared.html" class="p5_chart" width="650" height="250" frameborder="0"></iframe>
+			</p>
+			<p class="description">
+				Finally, when asked where do they see themselves professionally in 5 years, 41% of the graduates said that they would like to be owning their own business and 34% of them mentioned teaching; 32% would like to remain in the same company but in a advanced position.
+			</p>
+			<div>
+				<table>
+					<tr>
+						<td class="text">1.6% OF M.ARCH GRADUATES</td>
+					</tr>
+					<tr>
+						<td>Would Like to Retire in The Next 5 Years</td>
+					</tr>	
+				</table>
+			</div>
+			<p class="description">
+				From all the disciplines, though, the ones with the most entrepreneurial spirit seem to be the MS.AAD with more than half of the graduates wanting to have their own businesses in the next five years. The Urban Planners, on the other hand, would mostly like to be in the same company.
+			</p>
+			<h3 class="chart_name">Where Do You See Yourself In The Next 5 Years</h3>
+			<hr size="1" width="350" color="#000000" noshade>
+			<p>
+				<iframe scrolling="no" src="p5_five_years.html" class="p5_chart" width="650" height="290" frameborder="0"></iframe>
+			</p>
+			<hr size="5" width="35" color="#000000" noshade>
+			<h1 class="catagory">CONCLUSION</h1>
+			<p class="description">
+				Concluding the analysis of the survey, GSAPP graduates are mostly employed in the field of their choosing, live on the eastern coast of the United States, and have ambitions of advancing in their respected professions. Although their are outliers, graduates tend to be satisfied with their education and have been consistently employed since graduating. This survey is meant to examine why alumni choose GSAPP for their professional education and how they have shaped their careers in the last 5 years.<br></br>We thank both the GSAPP administration and the alumni network for their support and outreach to the alumni population as well as former Dean Mark Wigley and current Dean Amale Andraos for their support. Please <a class="contact" href="mailto:6mgrad@gmail.com?subject=GSAPP.AP">contact us</a> for more information about the survey, the methods used, or the creation of the website. 
+			</p>
+			<div style="height: 40px; padding:0px; margin:0px;"></div>
+		</div>
+		<div class="footer">
+		<div class="footer_image">
+			<a href ="http://gsapp-ap.com/">
+				<img class="title" src="img/Header3.png" height="30px"></a>
+		</div>
+		<div class="footer_text">
+				<hr size="5" width="85" color="#000000" noshade>
+				<p id="footer_b">A DATA VISUALIZATION AND ANALYSIS BASED ON 5 YEARS OF GSAPP GRADUATES</p>
+				<p id="footer_b">A PROJECT BY: <a class="contact" href="http://juanfrans.com/" target="_blank">JUAN FRANCISCO SALDARRIAGA</a> & <a class="contact" href="http://steven-sanchez.com/" target="_blank">STEVEN SANCHEZ</a></p>
+				<p><a class="contact" href="mailto:6mgrad@gmail.com?subject=GSAPP.AP">contact us for more imformation</a>
+				</p>
+		</div>
+		</div>
+</body>
+</htlm>
