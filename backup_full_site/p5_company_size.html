@@ -17,7 +17,7 @@
 <script type="text/javascript">
 
 var WIDTH = 650;
-var HEIGHT = 350;
+var HEIGHT = 500;
 var leftMargin = 0;
 var column = 1;
 var buttonX = 26;
@@ -29,22 +29,21 @@ var spacing = 25;
 var barHeight = 15;
 var midPoint = 315;
 var midSpace = 25;
-var endY = 300;
+var endY = 215;
 var initValues = [];
 var targetValues = [];
 var drawValues = [];
-var numberInitValues = [];
-var numberTargetValues = [];
-var numberDrawValues = [];
 var startFrame, endFrame;
 var transitionFrames = 60;
 var framesRemaining = 0;
-var maxLength = 400;
 var startX;
-var totalPeeps = [449, 125, 96, 47, 25, 68, 59, 29]	
+var colorValues = [[]];
+var centerX, centerX2;
+var centerY = 140;
+var bufferX = 150;
 
 function preload(){
-	dataTable = loadTable('data/Reasons_Change.csv');
+	dataTable = loadTable('data/Company_Size.csv');
 	console.log('done loading data');
 }
 
@@ -54,31 +53,32 @@ function setup(){
 	fillGSAPP = color(80, 194, 193);
 	fillAP = color(240, 139, 124);
 	textFont("proxima-nova");
-	startX = leftMargin + 200;
+	startX = leftMargin + 130;
+	colorValues = [fillGSAPP, color(130, 207, 206), color(172, 221, 220), color(212, 237, 235), color(251, 222, 213), color(247, 193, 180), color(243,165,151), fillAP ];
 
 	// Setup initial values
-	var maxValue = 0;
+	centerX = WIDTH/2;
+	centerX2 = WIDTH/2;
 	var rectLength = 0;
-	for (var i = 1; i < 11; i++) {
-		maxValue = max(dataTable.getColumn(column)[i], maxValue);
+	var totalPeeps = 0;
+	var totalPeeps2 = 0;
+	for (var i = 1; i < 5; i++) {
+		totalPeeps = totalPeeps + dataTable.getColumn(column)[i]*1;
 	};
-	for (var i = 1; i < 11; i++) {
-		drawValues[i] = map(dataTable.getColumn(column)[i], 0, maxValue, 0, maxLength);
-		numberDrawValues[i] = parseInt(dataTable.getColumn(column)[i]);
+	for (var i = 0; i < 4; i++) {
+		drawValues[i] = map(dataTable.getColumn(column)[i+1], 0, totalPeeps, 0, 360);
 	};
 }
 
 function draw(){
-	background(255, 255, 255);
+	background(255);
 
 	//Buttons
-	textSize(12);
-	noStroke();
 	textSize(12);
 	noFill();
 	stroke(0);
 	strokeWeight(1.5);
-	for (var i = 0; i < 8; i++) {
+	for (var i = 0; i < 10; i++) {
 		ellipse(buttonX+buttonSpacing*i, buttonY, 12, 12);
 	};
 	fill(0);
@@ -101,39 +101,58 @@ function draw(){
 }
 
 function undergradMajorGraph(){
+	var totalPeeps = 0;
+	var labelXbuffer = 10;
+	var labelYbuffer = 10;
+	for (var i = 0; i < 4; i++) {
+		totalPeeps = totalPeeps + dataTable.getColumn(column)[i+1]*1;
+	};
 	noStroke();
 	textSize(12);
-	for (var i = 1; i < 11; i++) {
-		fill(fillGSAPP);
-		rect(startX, endY-i*spacing, drawValues[i], barHeight);
-		textAlign(LEFT);
+	var lastAngle = radians(-90);
+	for (var i = 0; i < drawValues.length; i++) {
+		fill(colorValues[i]);
+		arc(centerX, centerY, 150, 150, lastAngle, lastAngle+radians(drawValues[i]));
 		fill(0);
-		if(dataTable.getColumn(column)[i]>0){
-			text(round(numberDrawValues[i]/totalPeeps[column-1]*100)+"%", leftMargin + startX + drawValues[i] + 5, endY-i*spacing+11);
+		if (centerX + 75 * cos(lastAngle + radians(drawValues[i])/2) < centerX){
+			textAlign(RIGHT);
+			labelXbuffer = -10;
 		}
-		textAlign(RIGHT);
-		text(dataTable.getColumn(0)[i], startX - 5, endY-i*spacing+11);
+		else {
+			textAlign(LEFT);
+			labelXbuffer = 10;
+		}
+		if (centerY + 75 * sin(lastAngle + radians(drawValues[i])/2) < centerY){
+			labelYbuffer = -10;
+		}
+		else {
+			labelYbuffer = 10;
+		}
+		if(dataTable.getColumn(column)[i+1]>0){
+			text(nfc((dataTable.getColumn(column)[i+1]/totalPeeps*100),0)+"%", centerX + 75 * cos(lastAngle + radians(drawValues[i])/2) + labelXbuffer, centerY + 75 * sin(lastAngle + radians(drawValues[i])/2) + labelYbuffer + 12);
+			text(dataTable.getColumn(0)[i+1], centerX + 75 * cos(lastAngle + radians(drawValues[i])/2) + labelXbuffer, centerY + 75 * sin(lastAngle + radians(drawValues[i])/2) + labelYbuffer);
+		}
+		lastAngle += radians(drawValues[i]);
 	};
+	fill(255);
+	ellipse(centerX, centerY, 75, 75);
 }
 
 function updateValues(){
 	for (var i=0; i<drawValues.length; i++){
 		drawValues[i] = lerp(initValues[i], targetValues[i], (framesRemaining/transitionFrames));
-		numberDrawValues[i] = lerp(numberInitValues[i], numberTargetValues[i], (framesRemaining/transitionFrames));
 	}
 }
 
 function recalculateValues(){
 	initValues = drawValues;
-	numberInitValues = numberDrawValues;
-	var maxValue = 0;
 	var rectLength = 0;
-	for (var i = 1; i < 11; i++) {
-		maxValue = max(dataTable.getColumn(column)[i], maxValue);
+	var totalPeeps = 0;
+	for (var i = 1; i < 5; i++) {
+		totalPeeps = totalPeeps + dataTable.getColumn(column)[i]*1;
 	};
-	for (var i = 1; i < 11; i++) {
-		targetValues[i] = map(dataTable.getColumn(column)[i], 0, maxValue, 0, maxLength);
-		numberTargetValues[i] = dataTable.getColumn(column)[i];
+	for (var i = 0; i < 4; i++) {
+		targetValues[i] = map(dataTable.getColumn(column)[i+1], 0, totalPeeps, 0, 360);
 	};
 }
 
@@ -178,6 +197,70 @@ function mousePressed(){
 		recalculateValues();
 		startFrame = frameCount;		
 	}
+	if (mouseX > buttonX+buttonSpacing*8-6 && mouseX < buttonX+buttonSpacing*8+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
+		column = 9;
+		recalculateValues();
+		startFrame = frameCount;		
+	}
+	if (mouseX > buttonX+buttonSpacing*9-6 && mouseX < buttonX+buttonSpacing*9+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
+		column = 10;
+		recalculateValues();
+		startFrame = frameCount;		
+	}
+}
+
+function touchStarted(){
+	if (touchX > buttonX-6 && touchX < buttonX+6 && touchY > buttonY-6 && touchY < buttonY+6){
+		column = 1;
+		recalculateValues();
+		startFrame = frameCount;
+	}
+	if (touchX > buttonX+buttonSpacing-6 && touchX < buttonX+buttonSpacing+6 && touchY > buttonY-6 && touchY < buttonY+6){
+		column = 2;
+		recalculateValues();
+		startFrame = frameCount;
+	}
+	if (touchX > buttonX+buttonSpacing*2-6 && touchX < buttonX+buttonSpacing*2+6 && touchY > buttonY-6 && touchY < buttonY+6){
+		column = 3;
+		recalculateValues();
+		startFrame = frameCount;	
+	}
+	if (touchX > buttonX+buttonSpacing*3-6 && touchX < buttonX+buttonSpacing*3+6 && touchY > buttonY-6 && touchY < buttonY+6){
+		column = 4;
+		recalculateValues();
+		startFrame = frameCount;	
+	}
+	if (touchX > buttonX+buttonSpacing*4-6 && touchX < buttonX+buttonSpacing*4+6 && touchY > buttonY-6 && touchY < buttonY+6){
+		column = 5;
+		recalculateValues();
+		startFrame = frameCount;	
+	}
+	if (touchX > buttonX+buttonSpacing*5-6 && touchX < buttonX+buttonSpacing*5+6 && touchY > buttonY-6 && touchY < buttonY+6){
+		column = 6;
+		recalculateValues();
+		startFrame = frameCount;	
+	}
+	if (touchX > buttonX+buttonSpacing*6-6 && touchX < buttonX+buttonSpacing*6+6 && touchY > buttonY-6 && touchY < buttonY+6){
+		column = 7;
+		recalculateValues();
+		startFrame = frameCount;	
+	}
+	if (touchX > buttonX+buttonSpacing*7-6 && touchX < buttonX+buttonSpacing*7+6 && touchY > buttonY-6 && touchY < buttonY+6){
+		column = 8;
+		recalculateValues();
+		startFrame = frameCount;		
+	}
+	if (touchX > buttonX+buttonSpacing*8-6 && touchX < buttonX+buttonSpacing*8+6 && touchY > buttonY-6 && touchY < buttonY+6){
+		column = 9;
+		recalculateValues();
+		startFrame = frameCount;		
+	}
+	if (touchX > buttonX+buttonSpacing*9-6 && touchX < buttonX+buttonSpacing*9+6 && touchY > buttonY-6 && touchY < buttonY+6){
+		column = 10;
+		recalculateValues();
+		startFrame = frameCount;		
+	}
+	return false;
 }
 
 function checkButtonHover(){

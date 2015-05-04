@@ -16,35 +16,34 @@
 </head>
 <script type="text/javascript">
 
-var WIDTH = 650;
-var HEIGHT = 350;
-var leftMargin = 0;
-var column = 1;
-var buttonX = 26;
-var buttonY = 25;
-var buttonSpacing = 80;
-var fillGSAPP;
+var WIDTH = 650;   
+var HEIGHT = 600;	
+var leftMargin = 0;	
+var column = 1; 	
+var buttonX = 26;	
+var buttonY = 25;	
+var buttonSpacing = 80;	
+var fillGSAPP;	
 var fillAP;
-var spacing = 25;
-var barHeight = 15;
-var midPoint = 315;
-var midSpace = 25;
-var endY = 300;
-var initValues = [];
-var targetValues = [];
-var drawValues = [];
-var numberInitValues = [];
+var spacing = 25;	
+var barHeight = 15;	
+var midSpace = 25;	
+var initValues = [];	
+var targetValues = [];	
+var drawValues = [];	
+var numberInitValues = [];	
 var numberTargetValues = [];
 var numberDrawValues = [];
-var startFrame, endFrame;
+var startFrame, endFrame; 
 var transitionFrames = 60;
 var framesRemaining = 0;
-var maxLength = 400;
-var startX;
+var maxLength = 450;	
+var startX;				
+var startY = 40;
 var totalPeeps = [449, 125, 96, 47, 25, 68, 59, 29]	
 
 function preload(){
-	dataTable = loadTable('data/Reasons_Change.csv');
+	undergradMajorTable = loadTable('data/Job_WorkType.csv'); //function preload
 	console.log('done loading data');
 }
 
@@ -54,22 +53,22 @@ function setup(){
 	fillGSAPP = color(80, 194, 193);
 	fillAP = color(240, 139, 124);
 	textFont("proxima-nova");
-	startX = leftMargin + 200;
+	startX = leftMargin + 150;
 
 	// Setup initial values
 	var maxValue = 0;
 	var rectLength = 0;
-	for (var i = 1; i < 11; i++) {
-		maxValue = max(dataTable.getColumn(column)[i], maxValue);
+	for (var i = 1; i < 19; i++) {
+		maxValue = max(undergradMajorTable.getColumn(column)[i], maxValue);
 	};
-	for (var i = 1; i < 11; i++) {
-		drawValues[i] = map(dataTable.getColumn(column)[i], 0, maxValue, 0, maxLength);
-		numberDrawValues[i] = parseInt(dataTable.getColumn(column)[i]);
+	for (var i = 1; i < 19; i++) {
+		drawValues[i] = map(undergradMajorTable.getColumn(column)[i], 0, maxValue, 0, maxLength);
+		numberDrawValues[i] = parseInt(undergradMajorTable.getColumn(column)[i]); // re-caulcaites each column to the set 
 	};
 }
 
 function draw(){
-	background(255, 255, 255);
+	background(255);
 
 	//Buttons
 	textSize(12);
@@ -78,24 +77,24 @@ function draw(){
 	noFill();
 	stroke(0);
 	strokeWeight(1.5);
-	for (var i = 0; i < 8; i++) {
+	for (var i = 0; i < 19; i++) {
 		ellipse(buttonX+buttonSpacing*i, buttonY, 12, 12);
 	};
 	fill(0);
 	noStroke();
 	ellipse(buttonX+buttonSpacing*(column-1), buttonY, 7, 7);
 	textStyle(NORMAL);
-	for (var i = 1; i < 9; i++) {
-		text(dataTable.getColumn(i)[0], buttonX+10+buttonSpacing*(i-1), buttonY+3);
+	for (var i = 1; i < 19; i++) {
+		text(undergradMajorTable.getColumn(i)[0], buttonX+10+buttonSpacing*(i-1), buttonY+3);
 	};
 
 	if(frameCount > 0){
 		undergradMajorGraph();
-	}
+	} 
 
 	framesRemaining = frameCount - startFrame;
 	if (framesRemaining < transitionFrames){
-		updateValues();
+		updateValues(); 
 	}
 	checkButtonHover();
 }
@@ -103,37 +102,38 @@ function draw(){
 function undergradMajorGraph(){
 	noStroke();
 	textSize(12);
-	for (var i = 1; i < 11; i++) {
+	for (var i = 1; i < 19; i++) {
 		fill(fillGSAPP);
-		rect(startX, endY-i*spacing, drawValues[i], barHeight);
+		rect(startX, startY+i*spacing, drawValues[i], barHeight);
 		textAlign(LEFT);
 		fill(0);
-		if(dataTable.getColumn(column)[i]>0){
-			text(round(numberDrawValues[i]/totalPeeps[column-1]*100)+"%", leftMargin + startX + drawValues[i] + 5, endY-i*spacing+11);
+		if(undergradMajorTable.getColumn(column)[i]>0){
+			text(nfc((numberDrawValues[i]/totalPeeps[column-1]*100),1)+"%", leftMargin + startX + drawValues[i] + 5, startY+i*spacing+11); //nfc, one after decimal 
 		}
 		textAlign(RIGHT);
-		text(dataTable.getColumn(0)[i], startX - 5, endY-i*spacing+11);
+		text(undergradMajorTable.getColumn(0)[i], startX - 5, startY+i*spacing+11); //plot catogries 
 	};
 }
+
 
 function updateValues(){
 	for (var i=0; i<drawValues.length; i++){
 		drawValues[i] = lerp(initValues[i], targetValues[i], (framesRemaining/transitionFrames));
-		numberDrawValues[i] = lerp(numberInitValues[i], numberTargetValues[i], (framesRemaining/transitionFrames));
+		numberDrawValues[i] = lerp(numberInitValues[i], numberTargetValues[i], (framesRemaining/transitionFrames)); //lerp find perceantage value 
 	}
 }
-
+// where the bar wants to go 
 function recalculateValues(){
-	initValues = drawValues;
-	numberInitValues = numberDrawValues;
-	var maxValue = 0;
+	initValues = drawValues; //recaluted start point 
+	numberInitValues = numberDrawValues; //recalutlate start point
+	var maxValue = 0;	
 	var rectLength = 0;
-	for (var i = 1; i < 11; i++) {
-		maxValue = max(dataTable.getColumn(column)[i], maxValue);
+	for (var i = 1; i < 19; i++) {
+		maxValue = max(undergradMajorTable.getColumn(column)[i], maxValue);
 	};
-	for (var i = 1; i < 11; i++) {
-		targetValues[i] = map(dataTable.getColumn(column)[i], 0, maxValue, 0, maxLength);
-		numberTargetValues[i] = dataTable.getColumn(column)[i];
+	for (var i = 1; i < 19; i++) {
+		targetValues[i] = map(undergradMajorTable.getColumn(column)[i], 0, maxValue, 0, maxLength);
+		numberTargetValues[i] = undergradMajorTable.getColumn(column)[i];
 	};
 }
 

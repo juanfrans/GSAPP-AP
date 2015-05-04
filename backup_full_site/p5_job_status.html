@@ -20,6 +20,9 @@ var WIDTH = 650;
 var HEIGHT = 500;
 var leftMargin = 0;
 var column = 1;
+var column2 = 1;
+var columnY = 0;
+var column3 = 1;
 var buttonX = 26;
 var buttonY = 25;
 var buttonSpacing = 80;
@@ -27,19 +30,26 @@ var fillGSAPP;
 var fillAP;
 var spacing = 25;
 var barHeight = 15;
+var midPoint = 315;
+var midSpace = 25;
 var initValues = [];
 var targetValues = [];
 var drawValues = [];
+var initValues2 = [];
+var targetValues2 = [];
+var drawValues2 = [];
 var startFrame, endFrame;
-var transitionFrames = 60.0;
+var transitionFrames = 60;
 var framesRemaining = 0;
-var maxLength = 450;
 var startX;
-var startY = 70;
-var column2 = 1;
+var colorValues = [[]];
+var centerX, centerX2;
+var centerY = 195;
+var bufferX = 150;
 
 function preload(){
-	dataTable = loadTable('data/Salary_Major_Year.csv');
+	dataTable2 = loadTable('data/Status_Job.csv');
+	dataTable = loadTable('data/Number_Jobs.csv');
 	console.log('done loading data');
 }
 
@@ -49,23 +59,32 @@ function setup(){
 	fillGSAPP = color(80, 194, 193);
 	fillAP = color(240, 139, 124);
 	textFont("proxima-nova");
-	startX = leftMargin + 100;
+	startX = leftMargin + 130;
+	colorValues = [fillGSAPP, color(130, 207, 206), color(172, 221, 220), color(212, 237, 235), color(251, 222, 213), color(247, 193, 180), color(243,165,151), fillAP ];
+	colorValues2 = [fillGSAPP, color(130, 207, 206), color(172, 221, 220), color(212, 237, 235), color(251, 222, 213), color(247, 193, 180), color(243,165,151), fillAP ];
 
 	// Setup initial values
-	var maxValue = 0;
+	centerX = WIDTH/2 + bufferX;
+	centerX2 = WIDTH/2 - bufferX;
 	var rectLength = 0;
-	var totalPeeps = 0
-	for (var i = 1; i < 10; i++) {
-		maxValue = max(dataTable.getColumn(column)[i], maxValue);
-		totalPeeps = totalPeeps + dataTable.getColumn(column)[i]*1;
+	var totalPeeps = 0;
+	var totalPeeps2 = 0;
+	for (var i = 1; i < 5; i++) {
+		totalPeeps = totalPeeps + dataTable.getColumn(column3)[i+5*columnY]*1;
 	};
-	for (var i = 1; i < 10; i++) {
-		drawValues[i] = map(dataTable.getColumn(column)[i], 0, maxValue, 0, maxLength);
+	for (var i = 0; i < 4; i++) {
+		drawValues[i] = map(dataTable.getColumn(column3)[i+1+5*columnY], 0, totalPeeps, 0, 360);
+	};
+		for (var i = 1; i < 4; i++) {
+		totalPeeps2 = totalPeeps2 + dataTable2.getColumn(column3)[i+4*columnY]*1;
+	};
+	for (var i = 0; i < 3; i++) {
+		drawValues2[i] = map(dataTable2.getColumn(column3)[i+1+4*columnY], 0, totalPeeps2, 0, 360);
 	};
 }
 
 function draw(){
-	background(255, 255, 255);
+	background(239, 239, 239);
 
 	//Buttons
 	textSize(12);
@@ -80,18 +99,18 @@ function draw(){
 	};
 	fill(0);
 	noStroke();
-	ellipse(buttonX+buttonSpacing*((column-1)/6), buttonY, 7, 7);
+	ellipse(buttonX+buttonSpacing*(column-1), buttonY, 7, 7);
 	ellipse(buttonX+buttonSpacing*(column2-1), buttonY+30, 7, 7);
 	textStyle(NORMAL);
 	for (var i = 0; i < 9; i++) {
-		text(dataTable.getColumn(i*6+1)[0], buttonX+10+buttonSpacing*(i), buttonY+3);
+		text(dataTable2.getColumn(i+1)[0], buttonX+10+buttonSpacing*(i), buttonY+3);
 	};
-	for (var i = 2; i < 7; i++) {
-		text(dataTable.getColumn(i)[0], buttonX+10+buttonSpacing*(i-1), buttonY+33);
+	for (var i = 0; i < 7; i++) {
+		text(dataTable2.getColumn(i+1)[4], buttonX+10+buttonSpacing*(i), buttonY+33);
 	};
-	text("All Years", buttonX+10, buttonY+33);
+
 	if(frameCount > 0){
-		drawGraph();
+		undergradMajorGraph();
 	}
 
 	framesRemaining = frameCount - startFrame;
@@ -99,128 +118,236 @@ function draw(){
 		updateValues();
 	}
 	checkButtonHover();
+	fill(0);
+	noStroke();
+	textAlign(CENTER);
+	text('EMPLOYMENT STATUS', WIDTH/2-bufferX, 320);
+	text('NUMBER OF JOBS SINCE GRADUATING', WIDTH/2+bufferX, 320);
 }
 
-function drawGraph(){
-	var totalPeeps = 0
-	for (var i = 1; i < 10; i++) {
-		totalPeeps = totalPeeps + dataTable.getColumn(column+column2-1)[i]*1;
+function undergradMajorGraph(){
+	var totalPeeps = 0;
+	var totalPeeps2 = 0;
+	var labelXbuffer = 10;
+	var labelYbuffer = 10;
+	for (var i = 0; i < 4; i++) {
+		totalPeeps = totalPeeps + dataTable.getColumn(column3)[i+1+5*columnY]*1;
+	};
+	for (var i = 0; i < 3; i++) {
+		totalPeeps2 = totalPeeps2 + dataTable2.getColumn(column3)[i+1+4*columnY]*1;
 	};
 	noStroke();
 	textSize(12);
-	for (var i = 1; i < 10; i++) {
-		fill(fillGSAPP);
-		rect(startX, startY+i*spacing, drawValues[i], barHeight);
-		textAlign(LEFT);
+	var lastAngle = radians(-90);
+	for (var i = 0; i < drawValues.length; i++) {
+		fill(colorValues[i]);
+		arc(centerX, centerY, 150, 150, lastAngle, lastAngle+radians(drawValues[i]));
 		fill(0);
-		if(dataTable.getColumn(column+column2-1)[i]>0){
-			text(nfc((dataTable.getColumn(column+column2-1)[i]/totalPeeps*100),1)+"%", leftMargin + startX + drawValues[i] + 5, startY+i*spacing+11);
+		if (centerX + 75 * cos(lastAngle + radians(drawValues[i])/2) < centerX){
+			textAlign(RIGHT);
+			labelXbuffer = -10;
 		}
-		textAlign(RIGHT);
-		text(dataTable.getColumn(0)[i], startX - 5, startY+i*spacing+11);
+		else {
+			textAlign(LEFT);
+			labelXbuffer = 10;
+		}
+		if (centerY + 75 * sin(lastAngle + radians(drawValues[i])/2) < centerY){
+			labelYbuffer = -10;
+		}
+		else {
+			labelYbuffer = 10;
+		}
+		if (centerY + 75 * sin(lastAngle + radians(drawValues[i])/2) < centerY && centerX + 75 * cos(lastAngle + radians(drawValues[i])/2) < centerX && centerX + 75 * cos(lastAngle + radians(drawValues[i])/2) > centerX - 15){
+			textAlign(LEFT);
+			labelYbuffer = - 20;
+		}
+		else{
+		}
+		if(dataTable.getColumn(column3)[i+1+5*columnY]>0){
+			text(nfc((dataTable.getColumn(column3)[i+1+5*columnY]/totalPeeps*100),1)+"%", centerX + 75 * cos(lastAngle + radians(drawValues[i])/2) + labelXbuffer, centerY + 75 * sin(lastAngle + radians(drawValues[i])/2) + labelYbuffer + 12);
+			text(dataTable.getColumn(0)[i+1], centerX + 75 * cos(lastAngle + radians(drawValues[i])/2) + labelXbuffer, centerY + 75 * sin(lastAngle + radians(drawValues[i])/2) + labelYbuffer);
+		}
+		lastAngle += radians(drawValues[i]);
 	};
+	fill(239, 239, 239);
+	ellipse(centerX, centerY, 75, 75);
+	lastAngle = radians(-90);
+	for (var i = 0; i < drawValues2.length; i++) {
+		fill(colorValues[i]);
+		arc(centerX2, centerY, 150, 150, lastAngle, lastAngle+radians(drawValues2[i]));
+		fill(0);
+		if (centerX2 + 75 * cos(lastAngle + radians(drawValues2[i])/2) < centerX2){
+			textAlign(RIGHT);
+			labelXbuffer = -10;
+		}
+		else {
+			textAlign(LEFT);
+			labelXbuffer = 10;
+		}
+		if (centerY + 75 * sin(lastAngle + radians(drawValues2[i])/2) < centerY){
+			labelYbuffer = -10;
+		}
+		else {
+			labelYbuffer = 10;
+		}
+		if (centerY + 75 * sin(lastAngle + radians(drawValues2[i])/2) < centerY && centerX2 + 75 * cos(lastAngle + radians(drawValues2[i])/2) < centerX2 && centerX2 + 75 * cos(lastAngle + radians(drawValues2[i])/2) > centerX2 - 15){
+			textAlign(LEFT);
+			labelYbuffer = - 20;
+		}
+		else{
+		}
+		if(dataTable2.getColumn(column3)[i+1+4*columnY]>0){
+			text(nfc((dataTable2.getColumn(column3)[i+1+4*columnY]/totalPeeps2*100),1)+"%", centerX2 + 75 * cos(lastAngle + radians(drawValues2[i])/2) + labelXbuffer, centerY + 75 * sin(lastAngle + radians(drawValues2[i])/2) + labelYbuffer + 12);
+			if(i == 1){
+				textLeading(12);
+				textAlign(TOP);
+				text(dataTable2.getColumn(0)[i+1], centerX2 + 75 * cos(lastAngle + radians(drawValues2[i])/2) + labelXbuffer, centerY + 75 * sin(lastAngle + radians(drawValues2[i])/2) + labelYbuffer-36, 75, 100);
+			}
+			else{
+				text(dataTable2.getColumn(0)[i+1], centerX2 + 75 * cos(lastAngle + radians(drawValues2[i])/2) + labelXbuffer, centerY + 75 * sin(lastAngle + radians(drawValues2[i])/2) + labelYbuffer);
+			}
+		}
+		lastAngle += radians(drawValues2[i]);
+	};
+	fill(239, 239, 239);
+	ellipse(centerX2, centerY, 75, 75);
 }
 
 function updateValues(){
 	for (var i=0; i<drawValues.length; i++){
 		drawValues[i] = lerp(initValues[i], targetValues[i], (framesRemaining/transitionFrames));
 	}
+	for (var i=0; i<drawValues2.length; i++){
+		drawValues2[i] = lerp(initValues2[i], targetValues2[i], (framesRemaining/transitionFrames));
+	}
 }
 
 function recalculateValues(){
 	initValues = drawValues;
-	var maxValue = 0;
+	initValues2 = drawValues2;
 	var rectLength = 0;
-	var totalPeeps = 0
-	for (var i = 1; i < 10; i++) {
-		maxValue = max(dataTable.getColumn(column+column2-1)[i], maxValue);
-		totalPeeps = totalPeeps + dataTable.getColumn(column+column2-1)[i]*1;
+	var totalPeeps = 0;
+	var totalPeeps2 = 0;
+	for (var i = 1; i < 5; i++) {
+		totalPeeps = totalPeeps + dataTable.getColumn(column3)[i+5*columnY]*1;
 	};
-	for (var i = 1; i < 10; i++) {
-		targetValues[i] = map(dataTable.getColumn(column+column2-1)[i], 0, maxValue, 0, maxLength);
+	for (var i = 0; i < 4; i++) {
+		targetValues[i] = map(dataTable.getColumn(column3)[i+1+5*columnY], 0, totalPeeps, 0, 360);
+	};
+	for (var i = 1; i < 4; i++) {
+		totalPeeps2 = totalPeeps2 + dataTable2.getColumn(column3)[i+4*columnY]*1;
+	};
+	for (var i = 0; i < 3; i++) {
+		targetValues2[i] = map(dataTable2.getColumn(column3)[i+1+4*columnY], 0, totalPeeps2, 0, 360);
 	};
 }
 
 function mousePressed(){
 	if (mouseX > buttonX-6 && mouseX < buttonX+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
 		column = 1;
+		column3 = 1;
 		recalculateValues();
 		startFrame = frameCount;
 	}
 	if (mouseX > buttonX+buttonSpacing-6 && mouseX < buttonX+buttonSpacing+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
 		column2 = 1;
-		column = 7;
+		column = 2;
+		columnY = 0;
+		column3 = 2;
 		recalculateValues();
 		startFrame = frameCount;
 	}
 	if (mouseX > buttonX+buttonSpacing*2-6 && mouseX < buttonX+buttonSpacing*2+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
 		column2 = 1;
-		column = 13;
+		column = 3;
+		columnY = 0;
+		column3 = 3;
 		recalculateValues();
 		startFrame = frameCount;
 	}
 	if (mouseX > buttonX+buttonSpacing*3-6 && mouseX < buttonX+buttonSpacing*3+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
 		column2 = 1;
-		column = 19;
+		column = 4;
+		columnY = 0;
+		column3 = 4;
 		recalculateValues();
 		startFrame = frameCount;
 	}
 	if (mouseX > buttonX+buttonSpacing*4-6 && mouseX < buttonX+buttonSpacing*4+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
 		column2 = 1;
-		column = 25;
+		column = 5;
+		columnY = 0;
+		column3 = 5;
 		recalculateValues();
 		startFrame = frameCount;	
 	}
 	if (mouseX > buttonX+buttonSpacing*5-6 && mouseX < buttonX+buttonSpacing*5+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
 		column2 = 1;
-		column = 31;
+		column = 6;
+		columnY = 0;
+		column3 = 6;
 		recalculateValues();
 		startFrame = frameCount;	
 	}
 	if (mouseX > buttonX+buttonSpacing*6-6 && mouseX < buttonX+buttonSpacing*6+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
 		column2 = 1;
-		column = 37;
+		column = 7;
+		columnY = 0;
+		column3 = 7;
 		recalculateValues();
 		startFrame = frameCount;	
 	}
 	if (mouseX > buttonX+buttonSpacing*7-6 && mouseX < buttonX+buttonSpacing*7+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
 		column2 = 1;
-		column = 43;
+		column = 8;
+		columnY = 0;
+		column3 = 8;
 		recalculateValues();
 		startFrame = frameCount;
 	}
 	if (mouseX > buttonX-6 && mouseX < buttonX+6 && mouseY > buttonY+26 && mouseY < buttonY+36){
 		column2 = 1;
+		column3 = 1;
 		recalculateValues();
 		startFrame = frameCount;
 	}
 	if (mouseX > buttonX+buttonSpacing-6 && mouseX < buttonX+buttonSpacing+6 && mouseY > buttonY+26 && mouseY < buttonY+36){
 		column = 1;
 		column2 = 2;
+		columnY = 1;
+		column3 = 2;
 		recalculateValues();
 		startFrame = frameCount;
 	}
 	if (mouseX > buttonX+buttonSpacing*2-6 && mouseX < buttonX+buttonSpacing*2+6 && mouseY > buttonY+26 && mouseY < buttonY+36){
 		column = 1;
 		column2 = 3;
+		columnY = 1;
+		column3 = 3;
 		recalculateValues();
 		startFrame = frameCount;
 	}
 	if (mouseX > buttonX+buttonSpacing*3-6 && mouseX < buttonX+buttonSpacing*3+6 && mouseY > buttonY+26 && mouseY < buttonY+36){
 		column = 1;
 		column2 = 4;
+		columnY = 1;
+		column3 = 4;
 		recalculateValues();
 		startFrame = frameCount;
 	}
 	if (mouseX > buttonX+buttonSpacing*4-6 && mouseX < buttonX+buttonSpacing*4+6 && mouseY > buttonY+26 && mouseY < buttonY+36){
 		column = 1;
 		column2 = 5;
+		columnY = 1;
+		column3 = 5;
 		recalculateValues();
 		startFrame = frameCount;
 	}
 	if (mouseX > buttonX+buttonSpacing*5-6 && mouseX < buttonX+buttonSpacing*5+6 && mouseY > buttonY+26 && mouseY < buttonY+36){
 		column = 1;
 		column2 = 6;
+		columnY = 1;
+		column3 = 6;
 		recalculateValues();
 		startFrame = frameCount;
 	}
