@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<script src="//use.typekit.net/hgl4qxi.js"></script>
+	<script>try{Typekit.load();}catch(e){}</script>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<script type="text/javascript" src="p5/p5.js"></script>
+	<style>
+	html, body{
+		margin: 0;
+		padding: 0;
+		background: white;
+	}
+	</style>
+</head>
+<script type="text/javascript">
+
+var WIDTH = 650;
+var HEIGHT = 250;
+var leftMargin = 0;
+var column = 1;
+var data = 0;
+var buttonX = 26;
+var buttonY = 25;
+var buttonSpacing = 110;
+var fillGSAPP;
+var fillAP;
+var valueGSAPPA = [];
+var valueGSAPPB = [];
+var valueGSAPPC = [];
+var valueSurveyA = [];
+var valueSurveyB = [];
+var valueSurveyC = [];
+var numberValueGSAPPA = [];
+var numberValueGSAPPB = [];
+var numberValueGSAPPC = [];
+var numberValueSurveyA = [];
+var numberValueSurveyB = [];
+var numberValueSurveyC = [];
+var startFrame, endFrame;
+var transitionFrames = 60;
+var maxCircleRadius, maxArea;
+var framesRemaining = 0;
+var circleStartY = 150;
+var circleStartX = 50;
+var maxCircleRadius = 75;
+
+function preload(){
+	totalGraduatesTable = loadTable('data/Total_Graduates.csv');
+	surveyGraduatesTable = loadTable('data/Degrees.csv');
+	console.log('done loading data');
+}
+
+function setup(){
+	createCanvas(WIDTH, HEIGHT);
+	colorMode(RGB, 255, 255, 255, 100);
+	fillGSAPP = color(80, 194, 193);
+	fillAP = color(240, 139, 124);
+	textFont("proxima-nova");
+
+	// Setup starting values
+	maxArea = PI*pow((maxCircleRadius/2),2);
+	var cirlceArea = 0;
+	var maxGraduates = 0;
+	var totalGraduates = 0;
+	for (var i = 1; i < 8; i++) {
+		maxGraduates = max(maxGraduates, totalGraduatesTable.getColumn(column)[i]);
+		totalGraduates = totalGraduates + totalGraduatesTable.getColumn(column)[i]*1;
+	};
+	for (var i = 1; i < 8; i++) {
+		circleArea = map(totalGraduatesTable.getColumn(column)[i], 0, maxGraduates, 0, maxArea);
+		valueGSAPPC[i-1] = sqrt(circleArea/PI)*2;
+		numberValueGSAPPC[i-1] = parseInt(totalGraduatesTable.getColumn(column)[i]);
+	};
+	cirlceArea = 0;
+	maxGraduates = 0;
+	totalGraduates = 0;
+	for (var i = 1; i < 8; i++) {
+		maxGraduates = max(maxGraduates, totalGraduatesTable.getColumn(column)[i+8]);
+		totalGraduates = totalGraduates + totalGraduatesTable.getColumn(column)[i+8]*1;
+	};
+	for (var i = 1; i < 8; i++) {
+		circleArea = map(totalGraduatesTable.getColumn(column)[i+8], 0, maxGraduates, 0, maxArea);
+		valueSurveyC[i-1] = sqrt(circleArea/PI)*2;
+		numberValueSurveyC[i-1] = parseInt(totalGraduatesTable.getColumn(column)[i+8]);
+	};
+}
+
+function draw(){
+	background(255, 255, 255);
+
+	//Buttons
+	textSize(12);
+	noFill();
+	stroke(0);
+	strokeWeight(1.5);
+	for (var i = 0; i < 3; i++) {
+		ellipse(buttonX+buttonSpacing*i, buttonY, 12, 12);
+	};
+	for (var i = 0; i < 6; i++) {
+		ellipse(buttonX+buttonSpacing*i, buttonY+20, 12, 12);
+	};
+
+	fill(0);
+	noStroke();
+	textStyle(NORMAL);
+	text("GSAPP", buttonX+10, buttonY+3);
+	text("Our Survey", buttonX+buttonSpacing+10, buttonY+3);
+	text("Comparison", buttonX+buttonSpacing*2+10, buttonY+3);
+	ellipse(buttonX+buttonSpacing*(column-1), buttonY+20, 7, 7);
+	ellipse(buttonX+buttonSpacing*(data), buttonY, 7, 7);
+	textStyle(NORMAL);
+	for (var i = 1; i < 7; i++) {
+		text(totalGraduatesTable.getColumn(i)[0], buttonX+10+buttonSpacing*(i-1), buttonY+23);
+	};
+
+	if(frameCount > 0){
+		if (data < 2){
+			circleChart();
+		}
+		else{
+			circleChart2();
+		}
+	}
+
+	framesRemaining = frameCount - startFrame;
+	if (framesRemaining < transitionFrames){
+		updateValues();
+	}
+	checkButtonHover();
+}
+
+function circleChart2(){
+	var maxCircleRadius = 75;
+	var maxArea = PI*pow((maxCircleRadius/2),2);
+	var cirlceArea = 0;
+	var circleRadius = 0;
+	var maxGraduates = 0;
+	var major;
+	var totalGraduates = 0;
+	var circleBottom = 0;
+
+	for (var i = 1; i < 8; i++) {
+		maxGraduates = max(maxGraduates, totalGraduatesTable.getColumn(column)[i]);
+	};
+	for (var i = 1; i < 8; i++) {
+		totalGraduates = totalGraduates + totalGraduatesTable.getColumn(column)[i]*1;
+	};
+
+	fill(0);
+	noStroke();
+	textSize(12);
+	textAlign(CENTER);
+	for (var i = 1; i < 8; i++) {
+		major = totalGraduatesTable.getColumn(0)[i];
+		text(major, circleStartX+90*(i-1), circleStartY-50);
+		text(numberValueSurveyC[i-1]+"/"+numberValueGSAPPC[i-1], circleStartX+90*(i-1), circleStartY+55);
+		text("("+round(numberValueSurveyC[i-1]/numberValueGSAPPC[i-1]*100)+"%)", circleStartX+90*(i-1), circleStartY+70);
+	};
+
+	noFill();
+	stroke(0);
+	strokeWeight(0.5);
+	for (var i = 0; i < 7; i++) {
+		line(circleStartX+90*i-25, circleStartY-45, circleStartX+90*i+25, circleStartY-45);
+	};
+	noStroke();
+	for (var i = 0; i < 7; i++) {
+		fill(fillGSAPP);
+		ellipse(circleStartX+90*(i), circleStartY, valueGSAPPC[i], valueGSAPPC[i]);
+		circleBottom = circleStartY + valueGSAPPC[i]/2;
+		fill(fillAP);
+		ellipse(circleStartX+90*(i), circleBottom - valueSurveyC[i]/2, valueSurveyC[i], valueSurveyC[i]);
+	};
+
+}
+
+function circleChart(){
+	var maxArea = PI*pow((maxCircleRadius/2),2);
+	var cirlceArea = 0;
+	var maxGraduates = 0;
+	var major;
+	var totalGraduates = 0;
+
+	for (var i = 1; i < 8; i++) {
+		maxGraduates = max(maxGraduates, totalGraduatesTable.getColumn(column)[i+8*data]);
+	};
+	for (var i = 1; i < 8; i++) {
+		totalGraduates = totalGraduates + totalGraduatesTable.getColumn(column)[i+8*data]*1;
+	};
+	fill(0);
+	noStroke();
+	textSize(12);
+	textAlign(CENTER);
+	if (data == 0){
+		for (var i = 1; i < 8; i++) {
+			major = totalGraduatesTable.getColumn(0)[i];
+			text(major, circleStartX+90*(i-1), circleStartY-50);
+			text(numberValueGSAPPC[i-1]+'', circleStartX+90*(i-1), circleStartY+55);
+			text("("+round(numberValueGSAPPC[i-1]/totalGraduates*100)+"%)", circleStartX+90*(i-1), circleStartY+70);
+		};
+	}
+	if (data == 1){
+		for (var i = 1; i < 8; i++) {
+			major = totalGraduatesTable.getColumn(0)[i];
+			text(major, circleStartX+90*(i-1), circleStartY-50);
+			text(numberValueSurveyC[i-1]+'', circleStartX+90*(i-1), circleStartY+55);
+			text("("+round(numberValueSurveyC[i-1]/totalGraduates*100)+"%)", circleStartX+90*(i-1), circleStartY+70);
+		};
+	}
+	noFill();
+	stroke(0);
+	strokeWeight(0.5);
+	for (var i = 0; i < 7; i++) {
+		line(circleStartX+90*i-25, circleStartY-45, circleStartX+90*i+25, circleStartY-45);
+	};
+	if (data == 0){
+		fill(fillGSAPP);
+	}
+	else {
+		fill(fillAP);
+	}
+	noStroke();
+	if (data == 0){
+		for (var i = 0; i < 7; i++) {
+			ellipse(circleStartX+90*(i), circleStartY, valueGSAPPC[i], valueGSAPPC[i]);
+		};
+	}
+	if (data == 1){
+		for (var i = 0; i < 7; i++) {
+			ellipse(circleStartX+90*(i), circleStartY, valueSurveyC[i], valueSurveyC[i]);
+		};
+	}
+}
+
+function updateValues(){
+	for (var i=0; i<valueGSAPPA.length; i++){
+		valueGSAPPC[i] = lerp(valueGSAPPA[i], valueGSAPPB[i], (framesRemaining/transitionFrames));
+		valueSurveyC[i] = lerp(valueSurveyA[i], valueSurveyB[i], (framesRemaining/transitionFrames));
+		numberValueGSAPPC[i] = round(lerp(numberValueGSAPPA[i], numberValueGSAPPB[i], (framesRemaining/transitionFrames)));
+		numberValueSurveyC[i] = round(lerp(numberValueSurveyA[i], numberValueSurveyB[i], (framesRemaining/transitionFrames)));
+	}
+}
+
+function recalculateValues(){
+	valueGSAPPA = valueGSAPPC;
+	valueSurveyA = valueSurveyC;
+	numberValueGSAPPA = numberValueGSAPPC;
+	numberValueSurveyA = numberValueSurveyC;
+	var cirlceArea = 0;
+	var maxGraduates = 0;
+	var totalGraduates = 0;
+	if(data < 2){
+		for (var i = 1; i < 8; i++) {
+			maxGraduates = max(maxGraduates, totalGraduatesTable.getColumn(column)[i]);
+			totalGraduates = totalGraduates + totalGraduatesTable.getColumn(column)[i]*1;
+		};
+		for (var i = 1; i < 8; i++) {
+			circleArea = map(totalGraduatesTable.getColumn(column)[i], 0, maxGraduates, 0, maxArea);
+			valueGSAPPB[i-1] = sqrt(circleArea/PI)*2;
+			numberValueGSAPPB[i-1] = totalGraduatesTable.getColumn(column)[i];
+		};
+		circleArea = 0;
+		maxGraduates = 0;
+		totalGraduates = 0;
+		for (var i = 1; i < 8; i++) {
+			maxGraduates = max(maxGraduates, totalGraduatesTable.getColumn(column)[i+8]);
+			totalGraduates = totalGraduates + totalGraduatesTable.getColumn(column)[i+8]*1;
+		};
+		for (var i = 1; i < 8; i++) {
+			circleArea = map(totalGraduatesTable.getColumn(column)[i+8], 0, maxGraduates, 0, maxArea);
+			valueSurveyB[i-1] = sqrt(circleArea/PI)*2;
+			numberValueSurveyB[i-1] = totalGraduatesTable.getColumn(column)[i+8];
+		};
+	}
+	else{
+		for (var i = 1; i < 8; i++) {
+			maxGraduates = max(maxGraduates, totalGraduatesTable.getColumn(column)[i]);
+			totalGraduates = totalGraduates + totalGraduatesTable.getColumn(column)[i]*1;
+		};
+		for (var i = 1; i < 8; i++) {
+			circleArea = map(totalGraduatesTable.getColumn(column)[i], 0, maxGraduates, 0, maxArea);
+			valueGSAPPB[i-1] = sqrt(circleArea/PI)*2;
+			numberValueGSAPPB[i-1] = totalGraduatesTable.getColumn(column)[i];
+		};
+		for (var i = 1; i < 8; i++) {
+			circleArea = map(totalGraduatesTable.getColumn(column)[i+8], 0, maxGraduates, 0, maxArea);
+			valueSurveyB[i-1] = sqrt(circleArea/PI)*2;
+			numberValueSurveyB[i-1] = totalGraduatesTable.getColumn(column)[i+8];
+		};
+	}
+}
+
+function mousePressed(){
+	if (mouseX > buttonX-6 && mouseX < buttonX+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
+		data = 0;
+		recalculateValues();
+		startFrame = frameCount;
+	}
+
+	if (mouseX > buttonX+buttonSpacing-6 && mouseX < buttonX+buttonSpacing+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
+		data = 1;
+		recalculateValues();
+		startFrame = frameCount;
+	}
+
+	if (mouseX > buttonX+buttonSpacing*2-6 && mouseX < buttonX+buttonSpacing*2+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
+		data = 2;
+		recalculateValues();
+		startFrame = frameCount;
+	}
+
+	if (mouseX > buttonX-6 && mouseX < buttonX+6 && mouseY > buttonY+20-6 && mouseY < buttonY+20+6){
+		column = 1;
+		recalculateValues();
+		startFrame = frameCount;
+	}
+	if (mouseX > buttonX+buttonSpacing-6 && mouseX < buttonX+buttonSpacing+6 && mouseY > buttonY+20-6 && mouseY < buttonY+20+6){
+		column = 2;
+		recalculateValues();
+		startFrame = frameCount;
+	}
+	if (mouseX > buttonX+buttonSpacing*2-6 && mouseX < buttonX+buttonSpacing*2+6 && mouseY > buttonY+20-6 && mouseY < buttonY+20+6){
+		column = 3;
+		recalculateValues();
+		startFrame = frameCount;
+	}
+	if (mouseX > buttonX+buttonSpacing*3-6 && mouseX < buttonX+buttonSpacing*3+6 && mouseY > buttonY+20-6 && mouseY < buttonY+20+6){
+		column = 4;
+		recalculateValues();
+		startFrame = frameCount;
+	}
+	if (mouseX > buttonX+buttonSpacing*4-6 && mouseX < buttonX+buttonSpacing*4+6 && mouseY > buttonY+20-6 && mouseY < buttonY+20+6){
+		column = 5;
+		recalculateValues();
+		startFrame = frameCount;
+	}
+	if (mouseX > buttonX+buttonSpacing*5-6 && mouseX < buttonX+buttonSpacing*5+6 && mouseY > buttonY+20-6 && mouseY < buttonY+20+6){
+		column = 6;
+		recalculateValues();
+		startFrame = frameCount;
+	}
+}
+
+function checkButtonHover(){
+	if ((mouseX > buttonX-6 && mouseX < buttonX+6 && mouseY > buttonY-6 && mouseY < buttonY+6) || (mouseX > buttonX+buttonSpacing-6 && mouseX < buttonX+buttonSpacing+6 && mouseY > buttonY-6 && mouseY < buttonY+6) || (mouseX > buttonX+buttonSpacing*2-6 && mouseX < buttonX+buttonSpacing*2+6 && mouseY > buttonY-6 && mouseY < buttonY+6) || (mouseX > buttonX-6 && mouseX < buttonX+6 && mouseY > buttonY+14 && mouseY < buttonY+26) || (mouseX > buttonX+buttonSpacing-6 && mouseX < buttonX+buttonSpacing+6 && mouseY > buttonY+14 && mouseY < buttonY+26) || (mouseX > buttonX+buttonSpacing*2-6 && mouseX < buttonX+buttonSpacing*2+6 && mouseY > buttonY+14 && mouseY < buttonY+26) || (mouseX > buttonX+buttonSpacing*3-6 && mouseX < buttonX+buttonSpacing*3+6 && mouseY > buttonY+14 && mouseY < buttonY+26) || (mouseX > buttonX+buttonSpacing*4-6 && mouseX < buttonX+buttonSpacing*4+6 && mouseY > buttonY+14 && mouseY < buttonY+26) || (mouseX > buttonX+buttonSpacing*5-6 && mouseX < buttonX+buttonSpacing*5+6 && mouseY > buttonY+14 && mouseY < buttonY+26)){
+		cursor(HAND);
+	}
+	else{
+		cursor(ARROW);
+	}
+}
+
+</script>
