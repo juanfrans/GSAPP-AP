@@ -17,9 +17,9 @@
 <script type="text/javascript">
 
 var WIDTH = 650;
-var HEIGHT = 1000;
+var HEIGHT = 600;
 var leftMargin = 0;
-var column = 0;
+var column = 1;
 var buttonX = 10;
 var buttonY = 25;
 var buttonSpacing = 66;
@@ -30,22 +30,17 @@ var barHeight = 15;
 var initValues = [];
 var targetValues = [];
 var drawValues = [];
-var softwareValues = [];
 var startFrame, endFrame;
-var transitionFrames = 60.0;
+var transitionFrames = 60;
 var framesRemaining = 0;
 var maxLength = 450;
 var startX;
 var startY = 90;
-var column2 = 0;
-var majors = [];
-var salaries = [];
-var salariesLabels = [];
-var totalPeeps;
-var warning = false;
+var column2 = 1;
 
 function preload(){
-	dataTable = loadTable('data/Software_by_Salary_and_Major.csv');
+	dataTable = loadTable('data/Hours_Work_by_Major.csv');
+	dataTableSalary = loadTable('data/Hours_Work_by_Salary.csv');
 	console.log('done loading data');
 }
 
@@ -55,57 +50,45 @@ function setup(){
 	fillGSAPP = color(80, 194, 193);
 	fillAP = color(240, 139, 124);
 	textFont("proxima-nova");
-	startX = leftMargin + 82;
-
-	majors = ['All Majors', 'M.Arch', 'MS.AAD', 'MS.AUD', 'MS.HP', 'MS.RED', 'MS.UP', 'Other'];
-	salaries = ['All Salaries', 'Less than $30', '$30 - $40', '$40 - $50', '$50 - $60', '$60 - $70', '$70 - $80', '$80 - $90', '$90 - $100', '$100 or more'];
-	salariesLabels = ['All Salaries', '< $30', '$30 - $40', '$40 - $50', '$50 - $60', '$60 - $70', '$70 - $80', '$80 - $90', '$90 - $100', '> $100'];
-
+	startX = leftMargin + 100;
 
 	// Setup initial values
 	var maxValue = 0;
 	var rectLength = 0;
-	var thisSoftwareValue = 0;
-	for (var i = 2; i < 27; i++) {
-		thisSoftwareValue = 0;
-		for (var j = 1; j < dataTable.getRowCount(); j++) {
-			thisSoftwareValue = thisSoftwareValue + dataTable.getColumn(i)[j]*1;
-		};
-		softwareValues[i-2] = thisSoftwareValue;
+	var totalPeeps = 0
+	for (var i = 1; i < 16; i++) {
+		maxValue = max(dataTable.getColumn(column)[i], maxValue);
+		totalPeeps = totalPeeps + dataTable.getColumn(column)[i]*1;
 	};
-	for (var i = 0; i < softwareValues.length; i++) {
-		maxValue = max(softwareValues[i], maxValue);
+	for (var i = 1; i < 16; i++) {
+		drawValues[i-1] = map(dataTable.getColumn(column)[i], 0, maxValue, 0, maxLength);
 	};
-	for (var i = 0; i < softwareValues.length; i++) {
-		drawValues[i] = map(softwareValues[i], 0, maxValue, 0, maxLength);
-	};
-	totalPeeps = dataTable.getRowCount()-1;
 }
 
 function draw(){
-	background(255, 255, 255);
+	background(239, 239, 239);
 
 	//Buttons
 	textSize(10);
 	noFill();
 	stroke(0);
 	strokeWeight(1.5);
-	for (var i = 0; i < majors.length; i++) {
+	for (var i = 0; i < 8; i++) {
 		ellipse(buttonX+buttonSpacing*i, buttonY, 12, 12);
 	};
-	for (var i = 0; i < salaries.length; i++) {
+	for (var i = 0; i < 10; i++) {
 		ellipse(buttonX+buttonSpacing*i, buttonY+30, 12, 12);
 	};
 	fill(0);
 	noStroke();
-	ellipse(buttonX+buttonSpacing*(column), buttonY, 7, 7);
-	ellipse(buttonX+buttonSpacing*(column2), buttonY+30, 7, 7);
+	ellipse(buttonX+buttonSpacing*((column-1)), buttonY, 7, 7);
+	ellipse(buttonX+buttonSpacing*(column2-1), buttonY+30, 7, 7);
 	textStyle(NORMAL);
-	for (var i = 0; i < majors.length; i++) {
-		text(majors[i], buttonX+10+buttonSpacing*(i), buttonY+3);
+	for (var i = 0; i < 8; i++) {
+		text(dataTable.getColumn(i+1)[0], buttonX+10+buttonSpacing*(i), buttonY+3);
 	};
-	for (var i = 0; i < salaries.length; i++) {
-		text(salariesLabels[i], buttonX+10+buttonSpacing*(i), buttonY+33);
+	for (var i = 1; i < 11; i++) {
+		text(dataTableSalary.getColumn(i)[0], buttonX+10+buttonSpacing*(i-1), buttonY+33);
 	};
 	if(frameCount > 0){
 		drawGraph();
@@ -118,32 +101,41 @@ function draw(){
 }
 
 function drawGraph(){
-	if (warning == false){
+	var totalPeeps = 0
+	if (column2 < 2){
+		for (var i = 1; i < 16; i++) {
+			totalPeeps = totalPeeps + dataTable.getColumn(column)[i]*1;
+		};
 		noStroke();
 		textSize(12);
-		for (var i = 2; i < 27; i++) {
+		for (var i = 0; i < drawValues.length; i++) {
 			fill(fillGSAPP);
-			rect(startX, startY+(i-2)*spacing, drawValues[i-2], barHeight);
+			rect(startX, startY+i*spacing, drawValues[i], barHeight);
 			textAlign(LEFT);
 			fill(0);
-			if(softwareValues[i-2]>0){
-				text(nfc((softwareValues[i-2]/totalPeeps*100),1)+"%", leftMargin + startX + drawValues[i-2] + 5, startY+(i-2)*spacing+11);
+			if(dataTable.getColumn(column)[i+1]>0){
+				text(nfc((dataTable.getColumn(column)[i+1]/totalPeeps*100),1)+"%", leftMargin + startX + drawValues[i] + 5, startY+i*spacing+11);
 			}
 			textAlign(RIGHT);
-			text(dataTable.getColumn(i)[0], startX - 5, startY+(i-2)*spacing+11);
+			text(dataTable.getColumn(0)[i+1], startX - 5, startY+i*spacing+11);
 		};
 	}
-	else{
+	else {
+		for (var i = 1; i < 16; i++) {
+			totalPeeps = totalPeeps + dataTableSalary.getColumn(column2)[i]*1;
+		};
 		noStroke();
-		textSize(18);
-		fill(30);
-		text("NO VALUES AVAILABLE", startX + 250, startY + 250);
-		fill(0);
 		textSize(12);
-		for (var i = 2; i < 27; i++) {
+		for (var i = 0; i < drawValues.length; i++) {
+			fill(fillGSAPP);
+			rect(startX, startY+i*spacing, drawValues[i], barHeight);
 			textAlign(LEFT);
+			fill(0);
+			if(dataTableSalary.getColumn(column2)[i+1]>0){
+				text(nfc((dataTableSalary.getColumn(column2)[i+1]/totalPeeps*100),1)+"%", leftMargin + startX + drawValues[i] + 5, startY+i*spacing+11);
+			}
 			textAlign(RIGHT);
-			text(dataTable.getColumn(i)[0], startX - 5, startY+(i-2)*spacing+11);
+			text(dataTableSalary.getColumn(0)[i+1], startX - 5, startY+i*spacing+11);
 		};
 	}
 	checkButtonHover();
@@ -157,201 +149,136 @@ function updateValues(){
 
 function recalculateValues(){
 	initValues = drawValues;
-	var maxValue = 0;
-	var rectLength = 0;
-	totalPeeps = 0
-	var thisSoftwareValue = 0;
-	if(column < 1 && column2 < 1){
-		for (var i = 2; i < 27; i++) {
-			thisSoftwareValue = 0;
-			for (var j = 1; j < dataTable.getRowCount(); j++) {
-				thisSoftwareValue = thisSoftwareValue + dataTable.getColumn(i)[j]*1;
-			}
-		softwareValues[i-2] = thisSoftwareValue;
+	if (column2 < 2){
+		var maxValue = 0;
+		var rectLength = 0;
+		var totalPeeps = 0
+		for (var i = 1; i < 16; i++) {
+			maxValue = max(dataTable.getColumn(column)[i], maxValue);
+			totalPeeps = totalPeeps + dataTable.getColumn(column)[i]*1;
 		};
-		totalPeeps = dataTable.getRowCount()-1;
-	}
-	else if(column2 < 1){
-		for (var i = 2; i < 27; i++) {
-			thisSoftwareValue = 0;
-			for (var j = 1; j < dataTable.getRowCount(); j++) {
-				if(dataTable.getColumn(0)[j] == majors[column]){
-					thisSoftwareValue = thisSoftwareValue + dataTable.getColumn(i)[j]*1;
-				}
-				else{
-				}
-			}
-		softwareValues[i-2] = thisSoftwareValue;
-		};
-		for (var i = 1; i < dataTable.getRowCount(); i++) {
-			if(dataTable.getColumn(0)[i] == majors[column]){
-				totalPeeps = totalPeeps + 1;
-			}
-			else{
-			}
+		for (var i = 1; i < 16; i++) {
+			targetValues[i-1] = map(dataTable.getColumn(column)[i], 0, maxValue, 0, maxLength);
 		};
 	}
-	else if(column < 1){
-		for (var i = 2; i < 27; i++) {
-			thisSoftwareValue = 0;
-			for (var j = 1; j < dataTable.getRowCount(); j++) {
-				if(dataTable.getColumn(1)[j] == salaries[column2]){
-					thisSoftwareValue = thisSoftwareValue + dataTable.getColumn(i)[j]*1;
-				}
-				else{
-				}
-			}
-		softwareValues[i-2] = thisSoftwareValue;
+	else {
+		var maxValue = 0;
+		var rectLength = 0;
+		var totalPeeps = 0
+		for (var i = 1; i < 16; i++) {
+			maxValue = max(dataTableSalary.getColumn(column2)[i], maxValue);
+			totalPeeps = totalPeeps + dataTableSalary.getColumn(column2)[i]*1;
 		};
-		for (var i = 1; i < dataTable.getRowCount(); i++) {
-			if(dataTable.getColumn(1)[i] == salaries[column2]){
-				totalPeeps = totalPeeps + 1;
-			}
-			else{
-			}
-		};
-	}
-	else{
-		for (var i = 2; i < 27; i++) {
-			thisSoftwareValue = 0;
-			for (var j = 1; j < dataTable.getRowCount(); j++) {
-				if(dataTable.getColumn(1)[j] == salaries[column2] && dataTable.getColumn(0)[j] == majors[column]){
-					thisSoftwareValue = thisSoftwareValue + dataTable.getColumn(i)[j]*1;
-				}
-				else{
-				}
-			}
-		softwareValues[i-2] = thisSoftwareValue;
-		};
-		for (var i = 1; i < dataTable.getRowCount(); i++) {
-			if(dataTable.getColumn(1)[i] == salaries[column2] && dataTable.getColumn(0)[i] == majors[column]){
-				totalPeeps = totalPeeps + 1;
-			}
-			else{
-			}
-		}
-	}
-	for (var i = 0; i < softwareValues.length; i++) {
-		maxValue = max(softwareValues[i], maxValue);
-	};
-	if(maxValue<1){
-		warning = true;
-		console.log('no values available');
-	}
-	else{
-		warning = false;
-	}
-	if(warning == false){
-		for (var i = 0; i < softwareValues.length; i++) {
-			targetValues[i] = map(softwareValues[i], 0, maxValue, 0, maxLength);
+		for (var i = 1; i < 16; i++) {
+			targetValues[i-1] = map(dataTableSalary.getColumn(column2)[i], 0, maxValue, 0, maxLength);
 		};
 	}
 }
 
 function mousePressed(){
 	if (mouseX > buttonX-6 && mouseX < buttonX+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
-		column = 0;
+		column = 1;
 		recalculateValues();
 		startFrame = frameCount;
 	}
 	if (mouseX > buttonX+buttonSpacing-6 && mouseX < buttonX+buttonSpacing+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
-		column = 1;
-		column2 = 0;
+		column = 2;
+		column2 = 1;
 		recalculateValues();
 		startFrame = frameCount;
 	}
 	if (mouseX > buttonX+buttonSpacing*2-6 && mouseX < buttonX+buttonSpacing*2+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
-		column = 2;
-		column2 = 0;
+		column = 3;
+		column2 = 1;
 		recalculateValues();
 		startFrame = frameCount;
 	}
 	if (mouseX > buttonX+buttonSpacing*3-6 && mouseX < buttonX+buttonSpacing*3+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
-		column = 3;
-		column2 = 0;
+		column = 4;
+		column2 = 1;
+		recalculateValues();
+		startFrame = frameCount;
+	}
+	if (mouseX > buttonX+buttonSpacing*4-6 && mouseX < buttonX+buttonSpacing*4+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
+		column = 5;
+		column2 = 1;
 		recalculateValues();
 		startFrame = frameCount;	
 	}
-	if (mouseX > buttonX+buttonSpacing*4-6 && mouseX < buttonX+buttonSpacing*4+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
-		column = 4;
-		column2 = 0;
-		recalculateValues();
-		startFrame = frameCount;
-	}
 	if (mouseX > buttonX+buttonSpacing*5-6 && mouseX < buttonX+buttonSpacing*5+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
-		column = 5;	
-		column2 = 0;
+		column = 6;
+		column2 = 1;
 		recalculateValues();
-		startFrame = frameCount;
+		startFrame = frameCount;	
 	}
 	if (mouseX > buttonX+buttonSpacing*6-6 && mouseX < buttonX+buttonSpacing*6+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
-		column = 6;
-		column2 = 0;
+		column = 7;
+		column2 = 1;
 		recalculateValues();
 		startFrame = frameCount;	
 	}
 	if (mouseX > buttonX+buttonSpacing*7-6 && mouseX < buttonX+buttonSpacing*7+6 && mouseY > buttonY-6 && mouseY < buttonY+6){
-		column = 7;
-		column2 = 0;
+		column = 8;
+		column2 = 1;
 		recalculateValues();
 		startFrame = frameCount;
 	}
 	if (mouseX > buttonX-6 && mouseX < buttonX+6 && mouseY > buttonY+26 && mouseY < buttonY+36){
-		column2 = 0;
+		column2 = 1;
 		recalculateValues();
 		startFrame = frameCount;
 	}
 	if (mouseX > buttonX+buttonSpacing-6 && mouseX < buttonX+buttonSpacing+6 && mouseY > buttonY+26 && mouseY < buttonY+36){
-		column2 = 1;
-		column = 0;
+		column2 = 2;
+		column = 1;
 		recalculateValues();
 		startFrame = frameCount;
 	}
 	if (mouseX > buttonX+buttonSpacing*2-6 && mouseX < buttonX+buttonSpacing*2+6 && mouseY > buttonY+26 && mouseY < buttonY+36){
-		column2 = 2;
-		column = 0;
+		column2 = 3;
+		column = 1;
 		recalculateValues();
 		startFrame = frameCount;
 	}
 	if (mouseX > buttonX+buttonSpacing*3-6 && mouseX < buttonX+buttonSpacing*3+6 && mouseY > buttonY+26 && mouseY < buttonY+36){
-		column2 = 3;
-		column = 0;
+		column2 = 4;
+		column = 1;
 		recalculateValues();
 		startFrame = frameCount;
 	}
 	if (mouseX > buttonX+buttonSpacing*4-6 && mouseX < buttonX+buttonSpacing*4+6 && mouseY > buttonY+26 && mouseY < buttonY+36){
-		column2 = 4;
-		column = 0;
+		column2 = 5;
+		column = 1;
 		recalculateValues();
 		startFrame = frameCount;
 	}
 	if (mouseX > buttonX+buttonSpacing*5-6 && mouseX < buttonX+buttonSpacing*5+6 && mouseY > buttonY+26 && mouseY < buttonY+36){
-		column2 = 5;
-		column = 0;
-		recalculateValues();
-		startFrame = frameCount;
-	}
-	if (mouseX > buttonX+buttonSpacing*6-6 && mouseX < buttonX+buttonSpacing*6+6 && mouseY > buttonY+26 && mouseY < buttonY+36){
 		column2 = 6;
-		column = 0;
+		column = 1;
 		recalculateValues();
 		startFrame = frameCount;
 	}
-	if (mouseX > buttonX+buttonSpacing*7-6 && mouseX < buttonX+buttonSpacing*7+6 && mouseY > buttonY+26 && mouseY < buttonY+36){
+		if (mouseX > buttonX+buttonSpacing*6-6 && mouseX < buttonX+buttonSpacing*6+6 && mouseY > buttonY+26 && mouseY < buttonY+36){
 		column2 = 7;
-		column = 0;
+		column = 1;
 		recalculateValues();
 		startFrame = frameCount;
 	}
-	if (mouseX > buttonX+buttonSpacing*8-6 && mouseX < buttonX+buttonSpacing*8+6 && mouseY > buttonY+26 && mouseY < buttonY+36){
+		if (mouseX > buttonX+buttonSpacing*7-6 && mouseX < buttonX+buttonSpacing*7+6 && mouseY > buttonY+26 && mouseY < buttonY+36){
 		column2 = 8;
-		column = 0;
+		column = 1;
 		recalculateValues();
 		startFrame = frameCount;
 	}
-	if (mouseX > buttonX+buttonSpacing*9-6 && mouseX < buttonX+buttonSpacing*9+6 && mouseY > buttonY+26 && mouseY < buttonY+36){
+		if (mouseX > buttonX+buttonSpacing*8-6 && mouseX < buttonX+buttonSpacing*8+6 && mouseY > buttonY+26 && mouseY < buttonY+36){
 		column2 = 9;
-		column = 0;
+		column = 1;
+		recalculateValues();
+		startFrame = frameCount;
+	}
+		if (mouseX > buttonX+buttonSpacing*9-6 && mouseX < buttonX+buttonSpacing*9+6 && mouseY > buttonY+26 && mouseY < buttonY+36){
+		column2 = 10;
+		column = 1;
 		recalculateValues();
 		startFrame = frameCount;
 	}
