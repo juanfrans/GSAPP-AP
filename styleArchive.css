@@ -23,7 +23,7 @@ div.nav_container{
 	position: fixed;
 	top: 0px
 	left: 0;
-	right: 0;
+	right: 0; 
 	height: 40px;
 	width: 100%;
 	background-color: rgba(255,255,255,.90);
@@ -68,7 +68,7 @@ li.nav_link{
 	font-weight: 300;
 }
 
-/****** Content ******/
+/****** Content ******/ 
 
 div.content_intro{
 	background-color: #ffffff;
@@ -170,7 +170,7 @@ p.description {
 	padding-bottom: 35px;
 }
 hr{
-	padding: 0px;
+	padding: 0px;	
 	margin-bottom: 0px;
 	margin-top: 0px;
 }
@@ -181,7 +181,7 @@ table{
 	margin-right: auto;
 	margin-top: 25px;
 	margin-bottom: 25px;
-	text-align: center;
+	text-align: center; 
 }
 td{
 	font-size: 12px;
@@ -195,7 +195,7 @@ td.number{
 	padding-right: 15px;
 	padding-top: 2px;
 	padding-bottom: 2px;
-	margin: 0px;
+	margin: 0px; 
 	line-height: .9;
 	vertical-align: middle;
 }
@@ -206,7 +206,7 @@ td.text{
 	padding-right: 15px;
 	padding-top: 2px;
 	padding-bottom: 2px;
-	margin: 0px;
+	margin: 0px; 
 	line-height: .9;
 	vertical-align: middle;
 }
@@ -230,7 +230,7 @@ td.border{
 div.footer{
 	position: relative;
 	left: 0;
-	right: 0;
+	right: 0; 
 	height: 40px;
 	width: 100%;
 	background-color: rgba(255,255,255,.90);
@@ -270,14 +270,14 @@ div.footer_text{
 
 a:link {
     color: #000000;
-    text-decoration: underline;
+    text-decoration: none;
 }
 a.contact:link{
 	text-decoration: underline;
 }
 a:hover{
 	opacity: .5;
-	text-decoration: underline;
+	text-decoration: none;
 }
 a:visited {
     color: #000000;
